@@ -7,7 +7,9 @@
   "scripts": {
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset tag"
+    "release": "changeset tag",
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0"
