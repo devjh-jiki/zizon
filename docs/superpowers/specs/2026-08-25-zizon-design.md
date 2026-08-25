@@ -94,14 +94,14 @@
 | learning | 기존 |
 | util | 분류가 아닌 유틸 버킷 — 안전장치·git 보조 |
 
-### 6.2 남기는 스킬 — 18개 (기존 유지 15 + 신규 3)
+### 6.2 남기는 스킬 — 19개 (기존 유지 16 + 신규 3)
 
 | 분류 | 스킬 | 상태 |
 |---|---|---|
 | token | `terse-output` `context-budget` `lazy-code` | 이관 |
 | token | `i-have-adhd` | **신규 동기화** (ayghri/i-have-adhd) |
 | design | `anti-slop-frontend` | 이관 |
-| planning | `grill-me` `to-prd` `to-issues` `codebase-design` `domain-modeling` | 이관 |
+| planning | `grill-me` `to-prd` `to-issues` `implement` `codebase-design` `domain-modeling` | 이관 |
 | review | `fe-review` | **신규 작성** |
 | review | `be-review` | `go-backend-review` 개명 + 캐논 슬롯 활성화 |
 | testing | `js-testing` | **신규 작성** |
@@ -109,11 +109,13 @@
 | learning | `open-source-reverse-engineering-coach` `technical-book-coach` | 이관 |
 | util | `git-guardrails` `resolving-merge-conflicts` | 이관 |
 
-### 6.3 제거하는 스킬 — 20개
+### 6.3 제거하는 스킬 — 19개
 
-검산: 기존 35 = 유지 15 + 제거 20. 최종 18 = 유지 15 + 신규 3(`i-have-adhd`, `fe-review`, `js-testing`).
+검산: 기존 35 = 유지 16 + 제거 19. 최종 19 = 유지 16 + 신규 3(`i-have-adhd`, `fe-review`, `js-testing`).
 
-**superpowers 중복 (6)** — `verification-before-completion`(이름 동일) · `handoff`(agentmemory:handoff 와 충돌) · `tdd`(↔test-driven-development) · `diagnosing-bugs`(↔systematic-debugging) · `writing-great-skills`(↔writing-skills) · `implement`(↔executing-plans)
+**superpowers 중복 (5)** — `verification-before-completion`(이름 동일) · `handoff`(agentmemory:handoff 와 충돌) · `tdd`(↔test-driven-development, 66줄 vs 320줄) · `diagnosing-bugs`(↔systematic-debugging, 69줄 vs 283줄) · `writing-great-skills`(↔writing-skills, 95줄 vs 679줄)
+
+네 쌍의 SKILL.md 본문을 대조한 결과 `implement` 는 컷에서 **철회**했다. `executing-plans` 는 *작성된 플랜* 을 체크포인트와 함께 실행하는 반면 `implement` 는 *PRD·이슈* 에서 코드로 가는 다른 진입점이며, 자르면 `to-prd → to-issues → 코드` 사슬이 끊긴다. 나머지 셋은 superpowers 쪽이 4~7배 상세하고 위상이 겹쳐 컷을 유지한다.
 
 **분류 밖 / 내부 중복 (14)** — `biz-opportunity-scout` `marketing-copy` `product-spec-builder` `eval-harness` `improve-codebase-architecture` `prototype` `iterative-retrieval` `grill-with-docs`(↔grill-me) `council` `recency-research` `document-with-research` `setup-pre-commit` `write-blog-post` `design-system`
 
@@ -126,7 +128,7 @@
 | 전역 MCP | 4 | 0 |
 | 플러그인 | 6 | 3 (superpowers, agentmemory, zizon) |
 | 마켓플레이스 | 6 | 3 |
-| 스킬 (zizon) | 35 (미설치) | 18 (설치됨) |
+| 스킬 (zizon) | 35 (미설치) | 19 (설치됨) |
 | 전역 에이전트 | 3 | 3 (로컬 유지, zizon 밖) |
 
 ## 7. 레포 구조
@@ -187,6 +189,8 @@ zizon/
   - `superpowers:test-driven-development` — TDD 루프 **진행**
 - `THIRD_PARTY_NOTICES.md` 에 MIT 고지를 추가한다.
 
+`i-have-adhd` 도 MIT(Copyright (c) 2026 Ayoub Ghriss) 로 확인했다. 마찬가지로 `THIRD_PARTY_NOTICES.md` 에 고지하고, `.github/workflows/sync-upstream-skills.yml` 의 upstream 목록(현재 7개)에 등록해 자동 동기화 대상에 포함한다.
+
 ## 9. 부트스트랩 설계
 
 `bootstrap/manifest.json` 이 원하는 상태를 선언하고 `bootstrap.sh` 가 멱등 적용한다. 재실행해도 결과가 같아야 한다.
@@ -197,7 +201,9 @@ zizon/
 2. **install** — 마켓플레이스 3개 등록 후 플러그인 3개 설치 (superpowers, agentmemory, zizon)
 3. **project-scope** — sentry 를 jihoon-blog·kalyx 의 `.mcp.json` 에, figma 를 mutal 에 배치
 
-**사용 CLI** (전부 비대화형 확인됨): `claude plugin marketplace add|remove|update` · `claude plugin install` · `claude mcp add|remove`
+**사용 CLI**: `claude plugin marketplace add|remove|update` · `claude plugin install` · `claude mcp add|remove`
+
+비대화형 실행은 `claude mcp remove` 만 실제로 확인했고 나머지는 `--help` 로 인터페이스만 확인했다. 특히 `claude plugin install` 은 새 마켓플레이스 신뢰 확인 프롬프트가 뜰 가능성이 있어, 무인 실행 여부를 §11 에서 검증한다.
 
 **시크릿**: 실제 값은 `~/.config/zizon/env` 에 두고 셸 프로파일에서 source 한다. 레포에는 `env.example` 만 커밋한다. `.mcp.json` 에서는 `${FIGMA_API_KEY}` 형태로 참조한다.
 
@@ -222,6 +228,8 @@ zizon/
 - agentmemory 훅이 이벤트당 1회만 실행된다
 - `check-doc-pairs.yml` 통과
 - jihoon-blog 에서 sentry MCP 가, mutal 에서 figma MCP 가 프로젝트 스코프로 잡힌다
+- `claude plugin install` 과 `claude plugin marketplace remove` 가 프롬프트 없이 완주한다
+- **sentry OAuth 승계 확인** — sentry 는 최다 사용(270회) MCP 이고 인증 캐시(`~/.claude/mcp-needs-auth-cache.json`)가 user 스코프의 서버명으로 키잉되어 있다. 프로젝트 스코프로 옮겼을 때 인증이 승계되는지 **jihoon-blog 한 곳에서 먼저** 확인한 뒤 kalyx 에 적용한다. 재인증이 프로젝트마다 필요하다면 강등 자체를 재검토한다.
 
 ## 12. 리스크와 미결
 
