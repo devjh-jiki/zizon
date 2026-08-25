@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateSkills } from './validate.mjs';
@@ -29,7 +29,7 @@ test('name 이 디렉토리명과 다르면 에러', async () => {
   });
   const { errors } = await validateSkills(root);
   assert.equal(errors.length, 1);
-  assert.match(errors[0], /terse-output/);
+  assert.match(errors[0], /불일치/);
 });
 
 test('description 이 없으면 에러', async () => {
@@ -48,4 +48,33 @@ test('허용되지 않은 버킷은 에러', async () => {
   const { errors } = await validateSkills(root);
   assert.equal(errors.length, 1);
   assert.match(errors[0], /nonsense/);
+});
+
+test('SKILL.md 파일이 없으면 에러', async () => {
+  const root = await fixture({
+    'skills/token/missing-file': '---\nname: missing-file\ndescription: Test.\n---\n',
+  });
+  // fixture가 SKILL.md를 만들었으므로 삭제
+  await rm(join(root, 'skills/token/missing-file/SKILL.md'));
+  const { errors } = await validateSkills(root);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /SKILL.md 없음/);
+});
+
+test('frontmatter가 없으면 에러', async () => {
+  const root = await fixture({
+    'skills/token/no-frontmatter': 'name: foo\ndescription: X.\n본문',
+  });
+  const { errors } = await validateSkills(root);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /frontmatter 없음/);
+});
+
+test('name 형식이 잘못되면 에러', async () => {
+  const root = await fixture({
+    'skills/token/Bad_Name': '---\nname: Bad_Name\ndescription: X.\n---\n본문',
+  });
+  const { errors } = await validateSkills(root);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /형식 위반/);
 });
