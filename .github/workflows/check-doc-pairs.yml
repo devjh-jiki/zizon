@@ -25,6 +25,7 @@ jobs:
             case "$1" in
               *CLAUDE.md|*/LICENSE|./LICENSE|*THIRD_PARTY_NOTICES.md) return 0;;
               ./.changeset/*.md) return 0;;
+              ./docs/superpowers/*) return 0;;
               */commands/*.md|./templates/*.md|./templates/*/*.md|./templates/*/*/*.md) return 0;;
               ./README.md|./README.en.md) return 0;;
               *.en.md) return 0;;
