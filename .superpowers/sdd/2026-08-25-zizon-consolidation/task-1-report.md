@@ -72,6 +72,7 @@ $ node --test scripts/validate.test.mjs
   ```
 
 검증됨:
+
 ```bash
 $ pnpm test
 > @dev-hub/skills@0.1.0 test /Users/lsy6234naver.com/Desktop/jihoon/dev-jihoon/dev-hub
@@ -89,8 +90,13 @@ $ pnpm test
 ℹ pass 7
 ℹ fail 0
 …
+```
 
+```bash
 $ pnpm validate
+> @dev-hub/skills@0.1.0 validate /Users/lsy6234naver.com/Desktop/jihoon/dev-jihoon/dev-hub
+> node scripts/validate.mjs
+
 ✗ 허용되지 않은 버킷: skills/business (허용: token, design, planning, review, testing, learning, util)
 ✗ 허용되지 않은 버킷: skills/deprecated (허용: token, design, planning, review, testing, learning, util)
 ✗ 허용되지 않은 버킷: skills/engineering (허용: token, design, planning, review, testing, learning, util)
@@ -98,8 +104,11 @@ $ pnpm validate
 ✗ 허용되지 않은 버킷: skills/misc (허용: token, design, planning, review, testing, learning, util)
 ✗ 허용되지 않은 버킷: skills/personal (허용: token, design, planning, review, testing, learning, util)
 ✗ 허용되지 않은 버킷: skills/productivity (허용: token, design, planning, review, testing, learning, util)
-(기존 구조 감지 - 예상된 결과)
+ ELIFECYCLE  Command failed with exit code 1.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?
 ```
+
+Task 2·3이 기존 버킷을 정리하기 전이므로 이 실패는 예상된 결과다.
 
 ### Step 6: 커밋 ✓
 ```
