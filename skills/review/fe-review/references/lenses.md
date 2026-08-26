@@ -285,44 +285,54 @@ The hook tracks a `requestId` and only commits a settled response if it's still 
 - Is there any evidence (a comment, a type, a test) that callers actually know about this behavior?
 - Does calling this twice with the same input give different results for a reason that isn't in the signature?
 
-**Example — `jihoon-blog/src/lib/google-analytics.ts` + `daily-visitor-baseline.ts` (real, current code)**
+**Example — `jihoon-blog/src/components/CodeCopyButton.tsx` (real, current code)**
 
-```ts
-// src/lib/google-analytics.ts
-export async function getAnalyticsStats(): Promise<AnalyticsStats> {
-  const stats = await getCachedAnalyticsStats();
+```tsx
+export default function CodeCopyButton() {
+  useEffect(() => {
+    const codeBlocks = document.querySelectorAll(".prose pre");
 
-  return {
-    totalPageViews: stats.totalPageViews,
-    todayVisitors: addDailyVisitorBaseline(stats.todayVisitors),
-  };
+    codeBlocks.forEach((pre) => {
+      if (pre.closest(".code-collapse")) return;
+      const preEl = pre as HTMLElement;
+      const code = pre.querySelector("code");
+      const lineCount = (code?.textContent || "").split("\n").length;
+
+      // details/summary로 감싸기
+      const details = document.createElement("details");
+      details.className = "code-collapse";
+      if (lineCount < 30) details.open = true;
+      const summary = document.createElement("summary");
+      preEl.parentNode?.insertBefore(details, preEl);
+      details.appendChild(summary);
+      details.appendChild(preEl);
+
+      // copy 버튼 추가
+      const button = document.createElement("button");
+      button.addEventListener("click", async () => {
+        if (code) await navigator.clipboard.writeText(code.textContent || "");
+      });
+      preEl.appendChild(button);
+    });
+  }, []);
+
+  return null;
 }
 ```
 
-```ts
-// src/lib/daily-visitor-baseline.ts
-export function addDailyVisitorBaseline(
-  activeUsers: number,
-  date: Date = new Date(),
-): number {
-  return activeUsers + getDailyVisitorBaseline(date);
+The name promises a copy button. Mounting `<CodeCopyButton />` does two things the name doesn't cover. First, it renders `null` — none of its real output is React output; everything happens as an `useEffect` DOM mutation. Second, that mutation isn't scoped to the component's own subtree: `document.querySelectorAll(".prose pre")` reaches across the *entire page*, not just wherever this component happens to be mounted, and for every match it restructures the markup by wrapping it in a `<details>/<summary>` fold (collapsed by default at 30+ lines) — a layout change with no trace in the component's name. A caller reading `<CodeCopyButton />` in a JSX tree has no way to predict that it turns every code block on the page into a collapsible, or that it reaches outside its own render output to do it.
+
+After (suggested — illustrative; renames and documents the actual scope, no behavior change):
+
+```tsx
+/**
+ * `.prose` 안의 모든 <pre> 블록에 접이식 래퍼(30줄 이상 기본 접힘)와 복사
+ * 버튼을 붙인다. 이 컴포넌트 자신의 하위 트리가 아니라 페이지 전체를
+ * DOM 레벨에서 훑는다 — 렌더 출력은 없다(항상 `null`).
+ */
+export default function CodeBlockEnhancer() {
+  /* 기존 구현 그대로 */
 }
 ```
 
-`AnalyticsStats.todayVisitors` reads like "today's real visitor count, straight from GA." It isn't: every call silently adds a date-seeded offset (10–40, deterministic per calendar day) before returning. The type is `number`; nothing at the call site (`AnalyticsStats.tsx`, the component that renders this) marks it as adjusted. Whichever reason this exists for — plausibly not exposing a literal "1 visitor today," which could let a specific reader deduce they were that visitor — that reasoning lives nowhere near the function that applies it, and nowhere near its caller either.
-
-After (suggested — illustrative; documents the adjustment where the type is declared, next to where a caller would actually look):
-
-```ts
-export interface AnalyticsStats {
-  totalPageViews: number;
-  /**
-   * GA 실측치가 아니다. 특정 방문자 수(예: "오늘 1명")로 개별 방문자가 추정되지
-   * 않도록 날짜 시드 오프셋(10~40)을 더한 값이다. 실측치가 필요하면
-   * `getCachedAnalyticsStats()` 를 직접 호출한다.
-   */
-  todayVisitors: number;
-}
-```
-
-The fix isn't removing the behavior — it's making it visible at the one place a future caller is guaranteed to look.
+The fix isn't removing the reach — a page-wide enhancer may be exactly what's wanted — it's naming the component for what it actually touches, so nobody has to open the file to find out.

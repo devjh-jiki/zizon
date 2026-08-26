@@ -285,44 +285,54 @@ export type CalculationState =
 - 호출자가 이 동작을 알고 있다는 근거(주석, 타입, 테스트)가 있나?
 - 같은 입력으로 두 번 불렀는데 다른 결과가 나오고, 그 이유가 시그니처에 없나?
 
-**예시 — `jihoon-blog/src/lib/google-analytics.ts` + `daily-visitor-baseline.ts` (실제, 현재 코드)**
+**예시 — `jihoon-blog/src/components/CodeCopyButton.tsx` (실제, 현재 코드)**
 
-```ts
-// src/lib/google-analytics.ts
-export async function getAnalyticsStats(): Promise<AnalyticsStats> {
-  const stats = await getCachedAnalyticsStats();
+```tsx
+export default function CodeCopyButton() {
+  useEffect(() => {
+    const codeBlocks = document.querySelectorAll(".prose pre");
 
-  return {
-    totalPageViews: stats.totalPageViews,
-    todayVisitors: addDailyVisitorBaseline(stats.todayVisitors),
-  };
+    codeBlocks.forEach((pre) => {
+      if (pre.closest(".code-collapse")) return;
+      const preEl = pre as HTMLElement;
+      const code = pre.querySelector("code");
+      const lineCount = (code?.textContent || "").split("\n").length;
+
+      // details/summary로 감싸기
+      const details = document.createElement("details");
+      details.className = "code-collapse";
+      if (lineCount < 30) details.open = true;
+      const summary = document.createElement("summary");
+      preEl.parentNode?.insertBefore(details, preEl);
+      details.appendChild(summary);
+      details.appendChild(preEl);
+
+      // copy 버튼 추가
+      const button = document.createElement("button");
+      button.addEventListener("click", async () => {
+        if (code) await navigator.clipboard.writeText(code.textContent || "");
+      });
+      preEl.appendChild(button);
+    });
+  }, []);
+
+  return null;
 }
 ```
 
-```ts
-// src/lib/daily-visitor-baseline.ts
-export function addDailyVisitorBaseline(
-  activeUsers: number,
-  date: Date = new Date(),
-): number {
-  return activeUsers + getDailyVisitorBaseline(date);
+이름은 복사 버튼 하나를 약속한다. `<CodeCopyButton />` 을 마운트하면 이름이 담지 못하는 두 가지 일이 일어난다. 첫째, 이 컴포넌트는 `null` 을 렌더링한다 — 실제 결과물은 React 출력이 아니라 전부 `useEffect` 안 DOM 변형이다. 둘째, 그 변형은 이 컴포넌트의 하위 트리로 국한되지 않는다: `document.querySelectorAll(".prose pre")` 는 이 컴포넌트가 어디 마운트됐든 상관없이 *페이지 전체*를 훑고, 매치되는 모든 블록을 `<details>/<summary>` 접이식 구조로(30줄 이상이면 기본 접힘) 재구성한다 — 컴포넌트 이름 어디에도 흔적이 없는 레이아웃 변경이다. JSX 트리에서 `<CodeCopyButton />` 을 읽는 사람은 이게 페이지의 모든 코드 블록을 접이식으로 바꾼다는 것도, 자기 렌더 출력 바깥까지 손댄다는 것도 예측할 방법이 없다.
+
+After (제안 — 예시용. 실제 범위를 이름과 문서로 드러낸다. 동작 자체는 바꾸지 않는다):
+
+```tsx
+/**
+ * `.prose` 안의 모든 <pre> 블록에 접이식 래퍼(30줄 이상 기본 접힘)와 복사
+ * 버튼을 붙인다. 이 컴포넌트 자신의 하위 트리가 아니라 페이지 전체를
+ * DOM 레벨에서 훑는다 — 렌더 출력은 없다(항상 `null`).
+ */
+export default function CodeBlockEnhancer() {
+  /* 기존 구현 그대로 */
 }
 ```
 
-`AnalyticsStats.todayVisitors` 는 "GA 에서 온 오늘의 실제 방문자 수"처럼 읽힌다. 아니다: 호출할 때마다 날짜로 시드된 오프셋(10~40, 그날엔 고정값)이 몰래 더해진 뒤 반환된다. 타입은 그냥 `number` 다. 이 값을 렌더링하는 `AnalyticsStats.tsx` 어디에도 이게 보정된 값이라는 표시가 없다. 이 보정이 왜 있는지는 — 아마도 "오늘 1명" 같은 특정 숫자가 그 한 명의 방문자를 특정하지 못하게 막는 목적이겠지만 — 그 이유가 이 값을 적용하는 함수 근처 어디에도, 이 값을 쓰는 호출자 근처 어디에도 적혀 있지 않다.
-
-After (제안 — 예시용. 앞으로 이 값을 볼 사람이 반드시 보게 되는 자리, 즉 타입 선언부에 보정 사실을 남긴다):
-
-```ts
-export interface AnalyticsStats {
-  totalPageViews: number;
-  /**
-   * GA 실측치가 아니다. 특정 방문자 수(예: "오늘 1명")로 개별 방문자가 추정되지
-   * 않도록 날짜 시드 오프셋(10~40)을 더한 값이다. 실측치가 필요하면
-   * `getCachedAnalyticsStats()` 를 직접 호출한다.
-   */
-  todayVisitors: number;
-}
-```
-
-고치는 대상은 동작 자체가 아니라 가시성이다 — 앞으로 이 코드를 보는 사람이 반드시 지나칠 자리에 그 사실을 옮겨 둔다.
+고치는 대상은 닿는 범위가 아니다 — 페이지 전체를 훑는 게 원래 의도일 수도 있다. 고치는 건 그 범위를 이름과 문서에 드러내서, 파일을 열어 보지 않고도 알 수 있게 하는 것이다.
