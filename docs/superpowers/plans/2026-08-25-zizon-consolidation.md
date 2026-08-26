@@ -1142,11 +1142,35 @@ Codex 설치 안내(`npx skills@latest add ...`)와 `.agents/skills` 설명을 �
 - 문서 페어 규칙 면제 목록에 `docs/superpowers/` 를 추가한다 (스펙 §12 의 미결 항목)
 - Verification 절의 Codex 심볼릭 링크 검사를 `pnpm validate && pnpm test` 로 교체한다
 
-- [ ] **Step 3: package.json 이름 변경**
+- [ ] **Step 3: 삭제된 스킬을 가리키는 잔존 참조 전수 수정**
+
+Task 2 가 지운 19개 스킬을 아직 가리키는 곳이 남아 있다. 계획이 만든 잔재이며 어느 태스크에도 배정되지 않았다.
+
+- `skills/README.md` / `skills/README.ko.md` — 버킷 인덱스가 옛 5버킷 구조와 삭제된 16개 스킬을 그대로 나열한다. 7버킷 19스킬 구조로 재작성한다.
+- 스킬 본문의 상호 참조 6곳:
+  - `skills/testing/webapp-testing/SKILL.md` → 없는 `tdd` (의도는 `superpowers:test-driven-development`)
+  - `skills/planning/implement/SKILL.ko.md` → `tdd`
+  - `skills/token/lazy-code/SKILL.ko.md` → `diagnosing-bugs`
+  - `skills/planning/to-issues/SKILL.md` → `prototype`
+  - `skills/design/anti-slop-frontend/SKILL.ko.md` → `design-system`
+  - `skills/token/context-budget/SKILL.ko.md` → `iterative-retrieval`
+  - `skills/planning/codebase-design/SKILL.md` → `improve-codebase-architecture`
+
+살아남은 대응물이 있으면 그쪽으로, 외부 플러그인이 대체하면 `superpowers:<name>` 형태로, 대응물이 없으면 문장째 삭제한다. 한/영 쌍 양쪽을 함께 고친다.
+
+검증:
+```bash
+for d in tdd diagnosing-bugs handoff writing-great-skills verification-before-completion          grill-with-docs council prototype eval-harness design-system document-with-research          write-blog-post setup-pre-commit recency-research iterative-retrieval improve-codebase-architecture; do
+  grep -rln "\b$d\b" skills/ 2>/dev/null | grep -v "$d/" | sed "s/^/$d: /"
+done
+```
+Expected: `superpowers:` 접두사가 붙은 의도적 참조만 남고 나머지는 출력 없음
+
+- [ ] **Step 4: package.json 이름 변경**
 
 `"name": "@dev-hub/skills"` → `"name": "@zizon/skills"`, description 도 갱신한다.
 
-- [ ] **Step 4: 검증**
+- [ ] **Step 5: 검증**
 
 Run: `pnpm validate && pnpm test`
 Expected: 통과
@@ -1154,10 +1178,10 @@ Expected: 통과
 Run: `bash -c 'find . -name "*.md" -not -name "*.ko.md" -not -name "*.en.md" -not -path "./.git/*" -not -path "./.upstream/*" -not -path "*/node_modules/*" -not -path "./docs/superpowers/*" -not -name "CLAUDE.md" -not -name "THIRD_PARTY_NOTICES.md" -not -path "./.changeset/*" -not -path "./templates/*" -not -name "README.md" | while read f; do [ -f "${f%.md}.ko.md" ] || echo "쌍 없음: $f"; done'`
 Expected: 출력 없음
 
-- [ ] **Step 5: 커밋**
+- [ ] **Step 6: 커밋**
 
 ```bash
-git add README.md README.en.md AGENTS.md AGENTS.ko.md package.json
+git add README.md README.en.md AGENTS.md AGENTS.ko.md package.json skills/README.md skills/README.ko.md skills/
 git commit -m "docs: zizon 개명과 새 구조 반영
 
 인덱스·설치 명령·Repository Map 갱신. Codex 안내 삭제(Claude Code
