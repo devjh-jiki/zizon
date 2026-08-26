@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: Drive and test a local web app with Playwright — verify frontend behavior, click through flows, capture screenshots, read console/network logs. Use when the user wants to test a running web app, debug UI behavior, automate a browser flow, says "이 웹앱 테스트", "브라우저로 확인해줘", "playwright 로 클릭 테스트", or needs to verify what a page actually renders. For unit-testing pure logic use tdd; this is for real browser interaction.
+description: Drive and test a local web app with Playwright — verify frontend behavior, click through flows, capture screenshots, read console/network logs. Use when the user wants to test a running web app, debug UI behavior, automate a browser flow, says "이 웹앱 테스트", "브라우저로 확인해줘", "playwright 로 클릭 테스트", or needs to verify what a page actually renders. For unit-testing pure logic use superpowers:test-driven-development; this is for real browser interaction.
 ---
 
 # webapp-testing

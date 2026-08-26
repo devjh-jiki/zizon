@@ -2,73 +2,74 @@
 
 > 한국어: [README.ko.md](./README.ko.md)
 
-A collection of my own agent skills for daily use. Follows the open [Agent Skills](https://agentskills.io) standard and is shared across Claude Code, Codex, and compatible runtimes.
+A collection of my own agent skills for daily use. Follows the open [Agent Skills](https://agentskills.io) standard and ships as the single `zizon` Claude Code plugin.
 
 ## Installation
 
-```bash
-npx skills@latest add devjh-jiki/jiki
 ```
-
-Codex also discovers compatible skills from the repository's `.agents/skills/` adapter when working in this repository.
+/plugin marketplace add devjh-jiki/zizon
+/plugin install zizon@zizon
+```
 
 ## Buckets
 
-| Bucket | Purpose | Listed in README |
-|------|------|-------------|
-| `engineering/` | Daily coding work | O |
-| `productivity/` | Non-code workflows (blogging, etc.) | O |
-| `learning/` | AI / technical knowledge learning coaches | O |
-| `business/` | Founder / product / marketing | O |
-| `misc/` | One-off environment setup | O |
-| `personal/` | My setup only | X |
-| `in-progress/` | Unfinished drafts | X |
-| `deprecated/` | No longer used | X |
+| Bucket | Purpose |
+|------|------|
+| `token/` | Reduce token/context spend — terse output, lazy code, context budgeting |
+| `design/` | Frontend design quality and taste |
+| `planning/` | Turning a discussion into a spec, issues, or a domain model, and executing it |
+| `review/` | Diff review through explicit lenses |
+| `testing/` | Deciding what/how to test |
+| `learning/` | Coaching-style learning from code or books |
+| `util/` | Git safety and conflict resolution |
 
 ## Listed Skills
 
-### Engineering
-
-**User-invoked** (run by a human only via `/command`)
-
-- [improve-codebase-architecture](./engineering/improve-codebase-architecture/SKILL.md) — Scan for deepening opportunities, HTML report, then grill through one
-- [to-prd](./engineering/to-prd/SKILL.md) — Synthesize the current conversation into a PRD (no interview)
-- [to-issues](./engineering/to-issues/SKILL.md) — Break a plan/PRD into vertical-slice issues
-- [grill-with-docs](./engineering/grill-with-docs/SKILL.md) — Grilling that maintains glossary + ADRs as you go
-- [prototype](./engineering/prototype/SKILL.md) — Throwaway prototype to de-risk a design
-- [design-system](./engineering/design-system/SKILL.md) — Design/implement/review a token-based UI design system (Astryx-based, any stack)
-- [anti-slop-frontend](./engineering/anti-slop-frontend/SKILL.md) — Stop AI-built marketing/landing/portfolio frontends from looking templated (read the brief, three dials, avoid LLM defaults, pre-flight)
-- [implement](./engineering/implement/SKILL.md) — Implement an agreed PRD/issues/slices into committed, tested code
+### Token
 
 **Model-invoked** (the agent uses it automatically when it fits the task)
 
-- [tdd](./engineering/tdd/SKILL.md) — Red-green-refactor, one vertical slice at a time
-- [lazy-code](./engineering/lazy-code/SKILL.md) — Force the laziest solution that works (YAGNI ladder, stdlib/native before deps); lite/full/ultra
-- [diagnosing-bugs](./engineering/diagnosing-bugs/SKILL.md) — Disciplined diagnosis loop; tight red-capable feedback loop first
-- [codebase-design](./engineering/codebase-design/SKILL.md) — Vocabulary for designing deep modules
-- [domain-modeling](./engineering/domain-modeling/SKILL.md) — Actively build and sharpen the domain model (glossary + ADRs)
-- [resolving-merge-conflicts](./engineering/resolving-merge-conflicts/SKILL.md) — Resolve a merge/rebase conflict by recovering each side's intent
-- [webapp-testing](./engineering/webapp-testing/SKILL.md) — Drive/test a local web app with Playwright (reconnaissance-then-action)
-- [eval-harness](./engineering/eval-harness/SKILL.md) — Eval-driven development for non-deterministic work: define criteria first, measure with pass@k / pass^k (adapted from affaan-m/ecc)
-- [verification-before-completion](./engineering/verification-before-completion/SKILL.md) — Never claim done without proof: run build/types/lint/tests/security/diff and read the output (adapted from obra/superpowers + affaan-m/ecc)
-- [iterative-retrieval](./engineering/iterative-retrieval/SKILL.md) — Assemble just-enough context for a subagent via a dispatch→evaluate→refine loop with relevance scoring (adapted from affaan-m/ecc)
+- [terse-output](./token/terse-output/SKILL.md) — Ultra-compressed communication mode; lite/full/ultra (adapted from JuliusBrussee/caveman)
+- [context-budget](./token/context-budget/SKILL.md) — Audit standing context overhead across agents/skills/MCP/rules and rank what to cut (adapted from affaan-m/ecc)
+- [lazy-code](./token/lazy-code/SKILL.md) — Force the laziest solution that works (YAGNI ladder, stdlib/native before deps); lite/full/ultra (adapted from DietrichGebert/ponytail)
 
-### Productivity
+**User-invoked** (run by a human only via `/command`)
 
-**User-invoked**
+- [i-have-adhd](./token/i-have-adhd/SKILL.md) — Reformat every response to lead with the next action, cap lists at 5, cut the fluff
 
-- [write-blog-post](./productivity/write-blog-post/SKILL.md) — Write/refine drafts, learnings, and experiences into jihoon-style Korean technical blog posts (includes style and SEO guides)
-- [grill-me](./productivity/grill-me/SKILL.md) — Relentless interview to stress-test a plan, design, decision, or business idea (inspired by mattpocock/skills)
-- [handoff](./productivity/handoff/SKILL.md) — Compact a conversation into a handoff doc for another agent
-- [writing-great-skills](./productivity/writing-great-skills/SKILL.md) — Reference for writing/editing skills well
-- [terse-output](./productivity/terse-output/SKILL.md) — Ultra-compressed output that cuts tokens while keeping accuracy; lite/full/ultra (inspired by JuliusBrussee/caveman)
+### Design
 
 **Model-invoked**
 
-- [document-with-research](./productivity/document-with-research/SKILL.md) — Produce high-quality Markdown docs: research open data, verify claims, design structure, write, and refine existing material for readability and cross-document linking
-- [recency-research](./productivity/recency-research/SKILL.md) — Research the last ~30 days of community signal on a topic (Reddit, HN, GitHub, X, web), scored by engagement (inspired by mvanhorn/last30days-skill)
-- [council](./productivity/council/SKILL.md) — Convene a four-voice council (Architect/Skeptic/Pragmatist/Critic) as parallel subagents for ambiguous decisions, anti-anchored (adapted from affaan-m/ecc)
-- [context-budget](./productivity/context-budget/SKILL.md) — Audit standing context overhead across agents/skills/MCP/rules and rank what to cut (adapted from affaan-m/ecc)
+- [anti-slop-frontend](./design/anti-slop-frontend/SKILL.md) — Stop AI-built marketing/landing/portfolio frontends from looking templated (read the brief, three dials, avoid LLM defaults, pre-flight)
+
+### Planning
+
+**Model-invoked**
+
+- [codebase-design](./planning/codebase-design/SKILL.md) — Vocabulary for designing deep modules
+- [domain-modeling](./planning/domain-modeling/SKILL.md) — Actively build and sharpen the domain model (glossary + ADRs)
+
+**User-invoked**
+
+- [grill-me](./planning/grill-me/SKILL.md) — Relentless interview to stress-test a plan, design, decision, or business idea (inspired by mattpocock/skills)
+- [to-prd](./planning/to-prd/SKILL.md) — Synthesize the current conversation into a PRD (no interview)
+- [to-issues](./planning/to-issues/SKILL.md) — Break a plan/PRD into vertical-slice issues
+- [implement](./planning/implement/SKILL.md) — Implement an agreed PRD/issues/slices into committed, tested code
+
+### Review
+
+**Model-invoked**
+
+- [fe-review](./review/fe-review/SKILL.md) — Review a frontend diff through six lenses (requirement traceability, abstraction cost, state placement, interface predictability, async UX, hidden side effects)
+- [be-review](./review/be-review/SKILL.md) — Review a Go backend diff for architecture boundaries, data integrity, error/security discipline, and Go idioms (requires a project canon adapter)
+
+### Testing
+
+**Model-invoked**
+
+- [js-testing](./testing/js-testing/SKILL.md) — Decide what to test and at which level in a JS/TS codebase
+- [webapp-testing](./testing/webapp-testing/SKILL.md) — Drive/test a local web app with Playwright (reconnaissance-then-action)
 
 ### Learning
 
@@ -77,21 +78,15 @@ Codex also discovers compatible skills from the repository's `.agents/skills/` a
 - [open-source-reverse-engineering-coach](./learning/open-source-reverse-engineering-coach/SKILL.md) — A coach for learning architecture, interfaces, and trade-offs by reverse-engineering open source
 - [technical-book-coach](./learning/technical-book-coach/SKILL.md) — Learn technical books and docs through coaching (when English text is pasted, separates Korean translation + coaching)
 
-### Business
+### Util
 
 **Model-invoked**
 
-- [biz-opportunity-scout](./business/biz-opportunity-scout/SKILL.md) — Validate a business opportunity (TAM/SAM/SOM, unit economics, competitive, PMF) with an honest Go/No-Go
-- [marketing-copy](./business/marketing-copy/SKILL.md) — Turn a product/feature into Korean marketing copy
-- [product-spec-builder](./business/product-spec-builder/SKILL.md) — Turn a rough idea into a buildable PRD via a short interview
+- [resolving-merge-conflicts](./util/resolving-merge-conflicts/SKILL.md) — Resolve a merge/rebase conflict by recovering each side's intent
 
-### Misc
+**User-invoked / Claude Code hook**
 
-**Model-invoked**
-
-- [setup-pre-commit](./misc/setup-pre-commit/SKILL.md) — Set up Husky pre-commit hooks with lint-staged/Prettier/typecheck/tests (JS/TS only)
-
-Runtime-specific skills such as Claude Code's [git-guardrails](../runtimes/claude-code/skills/git-guardrails/SKILL.md) live under `runtimes/`.
+- [git-guardrails](./util/git-guardrails/SKILL.md) — Set up a Claude Code PreToolUse hook that blocks dangerous git commands (Claude Code only)
 
 ## Upstream sync
 

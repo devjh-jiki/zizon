@@ -10,9 +10,8 @@ description: >
   reviewing a marketing/landing/portfolio UI and the goal is that it look
   intentional and premium — or when the user says "AI 티 안 나게", "슬롭 같지 않게",
   "템플릿 같지 않게", "감각적으로", "anti-slop", "make it not look AI", "good taste",
-  "premium frontend". This is taste + AI-tell detection for marketing surfaces;
-  for a systematic token-based design system across an app, use design-system
-  instead. NOT for dashboards, data tables, or multi-step product UI.
+  "premium frontend". This is taste + AI-tell detection for marketing surfaces.
+  NOT for dashboards, data tables, or multi-step product UI.
 ---
 
 # Anti-Slop Frontend
@@ -20,8 +19,6 @@ description: >
 Most AI frontend output is bad because the model jumps to a default aesthetic instead of reading the brief. This skill is the discipline that stops that: read the room, pick a real direction, and actively avoid the tells that mark a page as machine-made.
 
 **Scope:** landing pages, portfolios, marketing sites, redesigns. Not dashboards, not data tables, not multi-step product flows. Every rule here is *contextual* — read the brief, then pull only what fits. Nothing fires automatically.
-
-> For a systematic, token-based design system spanning a whole app (base → semantic tokens, components, theming), use the `design-system` skill. This skill is about **taste and anti-slop detection on marketing surfaces**.
 
 ## 1. Read the room before anything else
 

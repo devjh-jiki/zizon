@@ -11,8 +11,7 @@ description: >
   "how much does my config cost before I even type", "do I have room to add
   another MCP server". This audits the STANDING overhead of a CONFIG/SETUP
   present before you type anything — not the token cost of an ongoing
-  conversation's messages, not the context you feed a subagent (that is
-  iterative-retrieval), and not shortening the model's replies (that is
+  conversation's messages, and not shortening the model's replies (that is
   terse-output).
 ---
 

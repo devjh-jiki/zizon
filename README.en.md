@@ -1,4 +1,4 @@
-# jiki
+# zizon
 
 > 한국어: [README.md](./README.md)
 
@@ -12,57 +12,38 @@ The goal is to eliminate "where did I write that down again?".
 
 | Area | Path | Description |
 |------|------|-------------|
-| Skills | [`skills/`](./skills) | My own agent skills. Versioned + upstream auto-sync. Available in Claude Code and Codex. |
-| Runtimes | [`runtimes/`](./runtimes) | Runtime-specific adapters and configuration for Claude Code, Codex, OpenCode, and others. |
-| MCP | [`mcp/`](./mcp) | MCP setups per tool. Copy-paste anywhere. |
+| Skills | [`skills/`](./skills) | My own agent skills. 7 buckets, 19 skills. Installed as the Claude Code plugin `zizon`. |
+| Bootstrap | [`bootstrap/`](./bootstrap) | Idempotent scripts that reproduce machine setup (marketplaces, plugins, MCP servers, hooks) from a declarative manifest. |
 | Prompts | [`prompts/`](./prompts) | Frequently used prompt commands. |
 | Learning / AI | [`learning/ai/`](./learning/ai) | AI learning roadmap + resources + log, from a frontend developer's view. |
 | Snippets | [`snippets/`](./snippets) | Frequently used code/config snippets. |
 
 ## Install skills
 
-### Claude Code
-
-Install the skills from the Claude Code plugin marketplace.
+Install from the Claude Code plugin marketplace.
 
 ```
-/plugin marketplace add devjh-jiki/jiki
-/plugin install learning-skills@jiki-skills
-/plugin install writing-skills@jiki-skills
-/plugin install business-skills@jiki-skills
-/plugin install engineering-skills@jiki-skills
-/plugin install misc-skills@jiki-skills
+/plugin marketplace add devjh-jiki/zizon
+/plugin install zizon@zizon
 ```
 
-### Codex and other agents
-
-Install with the skills CLI:
-
-```bash
-npx skills@latest add devjh-jiki/jiki
-```
-
-When this repository is opened directly in Codex, compatible skills are discovered automatically through the relative symlinks in `.agents/skills/`. Repository guidance lives in [`AGENTS.md`](./AGENTS.md).
-
-### Recommended external plugin
+### Recommended external plugins
 
 [`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) creates architecture, flowchart, sequence, data-model, and other technical diagrams as standalone HTML/SVG/PNG. It is not copied into this repository. Install the upstream plugin directly so its update and verification workflow remains intact.
-
-Claude Code:
 
 ```text
 /plugin marketplace add cathrynlavery/diagram-design
 /plugin install diagram-design@diagram-design
 ```
 
-Codex:
+[`pbakaus/impeccable`](https://github.com/pbakaus/impeccable) is a design-quality tool with its own commands and detector rules that catch frontend output looking like AI-generated design slop. It is also not copied into this repository — install the upstream plugin directly so its update and verification workflow remains intact.
 
-```bash
-codex plugin marketplace add cathrynlavery/diagram-design
-codex plugin add diagram-design@diagram-design
+```text
+/plugin marketplace add pbakaus/impeccable
+/plugin install impeccable@impeccable
 ```
 
-This plugin owns diagram artifacts. Use [`design-system`](./skills/engineering/design-system) for application UI tokens and components, then map those tokens into diagram-design's style guide when needed.
+For taste judgment on marketing/landing/portfolio UI, reach for [`anti-slop-frontend`](./skills/design/anti-slop-frontend) first, then double-check with impeccable's detector rules when needed.
 
 ### Trust levels
 
@@ -72,49 +53,33 @@ Skills are labeled by verification stage:
 - **Review** — under evaluation; promoted to Available once verified.
 - **Private** — personal-setup only; not in the marketplace.
 
-| Skill | Level | Description |
-|-------|-------|-------------|
-| [write-blog-post](./skills/productivity/write-blog-post) | Available | Turn a draft/learning into a polished Korean tech blog post in the jihoon voice (style + SEO guides). |
-| [document-with-research](./skills/productivity/document-with-research) | Available | Produce high-quality Markdown docs — from researching/verifying open data to designing structure, writing, and refining existing material. |
-| [grill-me](./skills/productivity/grill-me) | Available | Relentless interview to stress-test a plan, decision, or business idea before committing. |
-| [open-source-reverse-engineering-coach](./skills/learning/open-source-reverse-engineering-coach) | Available | Learn an open-source project by interactive reverse-engineering. |
-| [technical-book-coach](./skills/learning/technical-book-coach) | Available | Coach-style learning from technical books/docs (KO translation + coaching). |
-| [biz-opportunity-scout](./skills/business/biz-opportunity-scout) | Available | Validate a business opportunity (TAM/SAM/SOM, unit economics, PMF) with a Go/No-Go. |
-| [marketing-copy](./skills/business/marketing-copy) | Available | Turn a product/feature into Korean marketing copy. |
-| [product-spec-builder](./skills/business/product-spec-builder) | Available | Turn a rough idea into a buildable PRD. |
-| [tdd](./skills/engineering/tdd) | Available | Red-green-refactor TDD (adapted from mattpocock). |
-| [diagnosing-bugs](./skills/engineering/diagnosing-bugs) | Available | Disciplined bug diagnosis loop (adapted from mattpocock). |
-| [codebase-design](./skills/engineering/codebase-design) | Available | Vocabulary for designing deep modules (adapted from mattpocock). |
-| [improve-codebase-architecture](./skills/engineering/improve-codebase-architecture) | Available | Scan for deepening opportunities + report (adapted from mattpocock). |
-| [to-prd](./skills/engineering/to-prd) | Available | Synthesize a conversation into a PRD (adapted from mattpocock). |
-| [to-issues](./skills/engineering/to-issues) | Available | Break a plan/PRD into vertical-slice issues (adapted from mattpocock). |
-| [domain-modeling](./skills/engineering/domain-modeling) | Available | Build domain model, glossary, ADRs (adapted from mattpocock). |
-| [grill-with-docs](./skills/engineering/grill-with-docs) | Available | Grilling that also produces docs (adapted from mattpocock). |
-| [prototype](./skills/engineering/prototype) | Available | Throwaway prototype to de-risk a design (adapted from mattpocock). |
-| [design-system](./skills/engineering/design-system) | Available | Design/implement/review a token-based UI design system (Astryx-based, any stack). |
-| [anti-slop-frontend](./skills/engineering/anti-slop-frontend) | Available | Stop AI-built frontends from looking templated: brief read, three dials, avoid LLM defaults, pre-flight (adapted from Leonxlnx/taste-skill). |
-| [lazy-code](./skills/engineering/lazy-code) | Available | Force the laziest working solution via a YAGNI ladder; lite/full/ultra (adapted from DietrichGebert/ponytail). |
-| [implement](./skills/engineering/implement) | Available | Implement a PRD/issues/slices into committed, tested code (adapted from mattpocock). |
-| [resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts) | Available | Resolve merge/rebase conflicts by recovering intent (adapted from mattpocock). |
-| [webapp-testing](./skills/engineering/webapp-testing) | Available | Test a local web app with Playwright (adapted from anthropics). |
-| [handoff](./skills/productivity/handoff) | Available | Create a session handoff doc (adapted from mattpocock). |
-| [writing-great-skills](./skills/productivity/writing-great-skills) | Available | Reference for writing great skills (adapted from mattpocock). |
-| [terse-output](./skills/productivity/terse-output) | Available | Ultra-compressed output that cuts tokens while keeping accuracy; lite/full/ultra (adapted from JuliusBrussee/caveman). |
-| [recency-research](./skills/productivity/recency-research) | Available | Research the last ~30 days of community signal on a topic (Reddit/HN/GitHub/X/web), engagement-scored (adapted from mvanhorn/last30days-skill). |
-| [eval-harness](./skills/engineering/eval-harness) | Available | Eval-driven development for non-deterministic work: define criteria first, measure with pass@k/pass^k (adapted from affaan-m/ecc). |
-| [verification-before-completion](./skills/engineering/verification-before-completion) | Available | Never claim done without proof: run build/types/lint/tests/security/diff and read the output (adapted from obra/superpowers + affaan-m/ecc). |
-| [iterative-retrieval](./skills/engineering/iterative-retrieval) | Available | Assemble just-enough subagent context via a dispatch→evaluate→refine loop with relevance scoring (adapted from affaan-m/ecc). |
-| [go-backend-review](./skills/engineering/go-backend-review) | Review | Four-lens Go backend diff review above machine gates, with a project-canon adapter contract. |
-| [council](./skills/productivity/council) | Available | Convene a four-voice council as parallel subagents for ambiguous decisions, anti-anchored (adapted from affaan-m/ecc). |
-| [context-budget](./skills/productivity/context-budget) | Available | Audit standing context overhead across agents/skills/MCP/rules and rank what to cut (adapted from affaan-m/ecc). |
-| [git-guardrails](./runtimes/claude-code/skills/git-guardrails) | Available | Block dangerous git commands via a hook (Claude Code only, adapted from mattpocock). |
-| [setup-pre-commit](./skills/misc/setup-pre-commit) | Available | Set up Husky pre-commit hooks (JS/TS only, adapted from mattpocock). |
+| Skill | Bucket | Level | Description |
+|-------|--------|-------|-------------|
+| [terse-output](./skills/token/terse-output) | token | Available | Ultra-compressed output that cuts tokens while keeping accuracy; lite/full/ultra (adapted from JuliusBrussee/caveman). |
+| [context-budget](./skills/token/context-budget) | token | Available | Audit standing context overhead across agents/skills/MCP/rules and rank what to cut. |
+| [lazy-code](./skills/token/lazy-code) | token | Available | Force the laziest working solution via a YAGNI ladder; lite/full/ultra (adapted from DietrichGebert/ponytail). |
+| [i-have-adhd](./skills/token/i-have-adhd) | token | Available | Lead every reply with the next action, cap lists at 5, cut the fluff. |
+| [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | Stop AI-built frontends from looking templated: brief read, three dials, avoid LLM defaults, pre-flight (adapted from Leonxlnx/taste-skill). |
+| [grill-me](./skills/planning/grill-me) | planning | Available | Relentless interview to stress-test a plan, decision, or business idea. |
+| [to-prd](./skills/planning/to-prd) | planning | Available | Synthesize the current conversation into a PRD, no interview (adapted from mattpocock). |
+| [to-issues](./skills/planning/to-issues) | planning | Available | Break a plan/PRD into vertical-slice issues (adapted from mattpocock). |
+| [implement](./skills/planning/implement) | planning | Available | Implement an agreed PRD/issues/slices into committed, tested code (adapted from mattpocock). |
+| [codebase-design](./skills/planning/codebase-design) | planning | Available | Vocabulary for designing deep modules (adapted from mattpocock). |
+| [domain-modeling](./skills/planning/domain-modeling) | planning | Available | Build and sharpen a domain model, glossary, and ADRs (adapted from mattpocock). |
+| [fe-review](./skills/review/fe-review) | review | Available | Review a frontend diff through six lenses (requirement traceability, abstraction cost, state placement, interface predictability, async UX, hidden side effects). |
+| [be-review](./skills/review/be-review) | review | Available | Review a Go backend diff for architecture boundaries, data integrity, error/security discipline, and Go idioms (project-canon adapter contract). |
+| [js-testing](./skills/testing/js-testing) | testing | Available | Decide what to test and at which level in a JS/TS codebase. |
+| [webapp-testing](./skills/testing/webapp-testing) | testing | Available | Test a local web app with Playwright (adapted from anthropics). |
+| [open-source-reverse-engineering-coach](./skills/learning/open-source-reverse-engineering-coach) | learning | Available | Learn an open-source project by interactive reverse-engineering. |
+| [technical-book-coach](./skills/learning/technical-book-coach) | learning | Available | Coach-style learning from technical books/docs (KO translation + coaching). |
+| [git-guardrails](./skills/util/git-guardrails) | util | Available | Block dangerous git commands via a hook (Claude Code only, adapted from mattpocock). |
+| [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | Resolve merge/rebase conflicts by recovering intent (adapted from mattpocock). |
 
 ## Related repos (Organization)
 
 | Repo | Public | Description |
 |------|--------|-------------|
-| [`jiki`](https://github.com/devjh-jiki/jiki) (this repo) | Public | Index hub |
+| [`zizon`](https://github.com/devjh-jiki/zizon) (this repo) | Public | Index hub |
 | [`trending-newsletter`](https://github.com/devjh-jiki/trending-newsletter) | Public | GitHub trending KO newsletter (3 lenses: dev / founder / marketing) |
 | [`ai-playground`](https://github.com/devjh-jiki/ai-playground) | Public | Practice projects from AI learning |
 | `vault` | Private | Side-project wiki + daily/travel + learning notes |

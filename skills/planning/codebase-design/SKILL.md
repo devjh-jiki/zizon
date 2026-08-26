@@ -1,13 +1,13 @@
 ---
 name: codebase-design
-description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, judge whether a module is too shallow or over-abstracted, make code more testable or AI-navigable, or says "모듈 설계", "인터페이스 설계", "너무 얕은/깊은", "테스트하기 쉽게", "아키텍처 설계", or when another skill needs the deep-module vocabulary. This is for designing a module's shape and interface — for a large multi-module restructure of an existing codebase, hand off to improve-codebase-architecture (which uses this vocabulary). Adapted from mattpocock/skills.
+description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, judge whether a module is too shallow or over-abstracted, make code more testable or AI-navigable, or says "모듈 설계", "인터페이스 설계", "너무 얕은/깊은", "테스트하기 쉽게", "아키텍처 설계", or when another skill needs the deep-module vocabulary. This is for designing a module's shape and interface. Adapted from mattpocock/skills.
 ---
 
 # Codebase Design
 
 Design **deep modules**: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface. Use this language and these principles wherever code is being designed or restructured. The aim is leverage for callers, locality for maintainers, and testability for everyone.
 
-This skill works at the scale of *one module's shape and interface*. It runs two ways: on its own when someone is designing or judging a single module, and as the shared vocabulary another skill reaches for (e.g. `improve-codebase-architecture` uses these terms while restructuring). Two boundaries keep it in its lane: if there's no concrete module in view yet — just a vague "improve the architecture" — pin down which module or seam is in question before applying the vocabulary, rather than inventing one. And if the real task is a multi-module restructure of an existing codebase (mapping deepening opportunities across many seams, sequencing the work), hand off to `improve-codebase-architecture`, which drives that at the right scale using this same language.
+This skill works at the scale of *one module's shape and interface*. It runs two ways: on its own when someone is designing or judging a single module, and as the shared vocabulary another skill reaches for while restructuring. One boundary keeps it in its lane: if there's no concrete module in view yet — just a vague "improve the architecture" — pin down which module or seam is in question before applying the vocabulary, rather than inventing one.
 
 ## Glossary
 

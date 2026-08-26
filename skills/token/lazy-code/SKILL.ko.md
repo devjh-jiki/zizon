@@ -10,7 +10,7 @@ description: >
   "최소한으로", "오버엔지니어링 하지 마", "제일 단순하게", "lazy", "yagni",
   "minimal", "do less" 라고 하거나 bloat·보일러플레이트·불필요한 의존성에 대해
   불평할 때도 사용. 코딩이 아닌 요청(일반 지식, 산문, 번역, 요약), 기존 코드를 그저
-  설명만 하는 경우, 수정 없이 왜 실패하는지만 진단하는 경우(그건 diagnosing-bugs)에는
+  설명만 하는 경우, 수정 없이 왜 실패하는지만 진단하는 경우(그건 superpowers:systematic-debugging)에는
   쓰지 않는다.
 argument-hint: "[lite|full|ultra]"
 ---

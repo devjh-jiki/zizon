@@ -13,7 +13,7 @@ description: >
   or complains about bloat, boilerplate, or unnecessary dependencies. Do NOT use
   for non-coding requests (general knowledge, prose, translation, summaries), for
   merely explaining existing code, or for diagnosing why something fails without a
-  fix (that's diagnosing-bugs).
+  fix (that's superpowers:systematic-debugging).
 argument-hint: "[lite|full|ultra]"
 ---
 
