@@ -1091,9 +1091,16 @@ Expected: agentmemory 를 가리키는 훅이 없다
 
 새 세션을 열고 agentmemory 가 이벤트당 1회만 동작하는지 확인한다.
 
-- [ ] **Step 6: 스킬 노출 확인**
+- [ ] **Step 6: 스킬 노출 확인 — 디렉토리형 선언의 진짜 게이트**
 
-새 세션에서 스킬 목록에 zizon 스킬 19개가 뜨는지 확인한다.
+Run: `claude plugin details zizon@zizon`
+Expected: 컴포넌트 인벤토리에 스킬 19개가 잡힌다.
+
+`claude plugin validate` 는 매니페스트 **스키마만** 검사하고 `skills` 경로가 실제로 스킬을 담고 있는지는 보지 않는다 (`./does-not-exist/` 로 바꿔도 통과함이 실측됨). 따라서 `"skills": ["./skills/"]` 디렉토리형이 실제로 동작하는지 확인하는 지점은 여기다.
+
+19개가 아니면 `.claude-plugin/marketplace.json` 의 `skills` 를 개별 경로 19개 나열로 바꾸고 재설치한다.
+
+이어서 새 세션에서 스킬 목록에 zizon 스킬 19개가 보이는지 확인한다.
 
 - [ ] **Step 7: 실패 시 롤백 경로**
 
