@@ -799,6 +799,12 @@ Expected: 통과, 스킬 19개
 Run: `find skills -name SKILL.md | wc -l`
 Expected: `19`
 
+Run (THIRD_PARTY_NOTICES 의 모든 인용 경로가 실재하는지 — Task 5 가 `js-testing` 을 선참조해 두었다):
+```bash
+grep -o '`skills/[a-z-]*/[a-z0-9-]*`' THIRD_PARTY_NOTICES.md | tr -d '`' | sort -u   | while read p; do [ -f "$p/SKILL.md" ] || echo "죽은 경로: $p"; done
+```
+Expected: 출력 없음
+
 - [ ] **Step 5: 커밋**
 
 ```bash
