@@ -6,5 +6,25 @@
   "license": "MIT",
   "homepage": "https://github.com/devjh-jiki/zizon",
   "repository": "https://github.com/devjh-jiki/zizon",
-  "skills": ["./skills/"]
+  "skills": [
+    "./skills/design/anti-slop-frontend",
+    "./skills/learning/open-source-reverse-engineering-coach",
+    "./skills/learning/technical-book-coach",
+    "./skills/planning/codebase-design",
+    "./skills/planning/domain-modeling",
+    "./skills/planning/grill-me",
+    "./skills/planning/implement",
+    "./skills/planning/to-issues",
+    "./skills/planning/to-prd",
+    "./skills/review/be-review",
+    "./skills/review/fe-review",
+    "./skills/testing/js-testing",
+    "./skills/testing/webapp-testing",
+    "./skills/token/context-budget",
+    "./skills/token/i-have-adhd",
+    "./skills/token/lazy-code",
+    "./skills/token/terse-output",
+    "./skills/util/git-guardrails",
+    "./skills/util/resolving-merge-conflicts"
+  ]
 }
