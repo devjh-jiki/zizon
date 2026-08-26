@@ -17,6 +17,11 @@
 #   7) 유효한 JSON 이지만 의존 키가 리네임됨   → 위와 동일(리뷰어의 Case B 재현)
 #   8) 정상 manifest (대조군)                 → 가드가 과민하지 않고 평소대로 동작
 #
+# round 4 는 네 번째 문(설치 명령의 exit 0 이 실제 로드 성공을 보장하지 않는 것)을
+# 실사용 중 재현했다(zizon 재현 사례) — 케이스 9 가 그걸 검증한다:
+#   9) `plugin install` 은 exit 0, `plugin list` 는 Status: ✘ failed to load
+#      → FAILURES 증가, 스크립트 exit != 0 (이전엔 exit 0 으로 통과됐다)
+#
 # 스텁 claude 는 실제 claude 바이너리를 절대 호출하지 않는다 — PATH 맨 앞에 가짜
 # claude 실행파일을 두고, 매니페스트도 이 테스트 전용 임시 파일을 쓴다. 실제 사용자
 # 환경/설치는 전혀 건드리지 않는다.
@@ -259,8 +264,47 @@ if printf '%s' "$out8" | grep -q '검증 실패\|로드/검증에 실패'; then
   FAIL=1
 fi
 
+# ── 케이스 9 (round 4): 설치 명령은 exit 0 인데 실제로는 로드에 실패한 플러그인 ──
+# round 4 리뷰가 잡아낸 문제: `claude plugin install` 이 exit 0 을 반환해도
+# 매니페스트 충돌 등으로 실제 로드는 실패할 수 있다(zizon 재현 사례). 기존
+# ensure_present 는 명령의 exit 코드만 보고 재조회 없이 통과시켜, "설치는 됐다고
+# 뜨지만 로드는 실패한" 상태를 성공으로 오판했다 — 이 스텁은 `plugin install` 을
+# 무조건 성공시키고, `plugin list` 는 그 플러그인을 "Status: ✘ failed to load"
+# 로 보고하게 해서 이 경로를 재현한다.
+manifest_failedload='{
+  "marketplaces": { "keep": [], "remove": [] },
+  "plugins": { "keep": ["zizon@zizon"], "remove": [] },
+  "mcpServers": { "userScope": { "remove": [] } },
+  "projectScoped": {},
+  "settings": { "removeHooks": { "reason": "test", "matchCommand": "agentmemory" } }
+}'
+stub_failedload='#!/usr/bin/env bash
+case "$1" in
+  --version) exit 0 ;;
+  plugin)
+    case "$2" in
+      install) exit 0 ;;
+      list) printf "Installed plugins:\n\n  ❯ zizon@zizon\n    Version: 0.2.0\n    Scope: user\n    Status: ✘ failed to load\n    Error: conflicting manifests\n"; exit 0 ;;
+      marketplace) exit 0 ;;
+      uninstall) exit 1 ;;
+    esac ;;
+  mcp) exit 0 ;;
+esac
+exit 1
+'
+result="$(run_case case9_failedload "$manifest_failedload" "$stub_failedload")"
+out9="${result%$'\x1e'*}"; status9="${result##*$'\x1e'}"
+assert_exit "$status9" 1 "케이스9(로드 실패): 스크립트 exit code"
+assert_contains "$out9" "[실패]" "케이스9(로드 실패): 실패 로그 출력"
+assert_contains "$out9" "zizon@zizon 설치 명령은 성공했지만 로드되지 않았다" "케이스9(로드 실패): 사유 명시"
+assert_contains "$out9" "실패: 1건" "케이스9(로드 실패): FAILURES 카운트 1"
+if printf '%s' "$out9" | grep -q '완료\.'; then
+  echo "FAIL: 케이스9(로드 실패) — 완료. 를 출력하면 안 되는데 나옴" >&2
+  FAIL=1
+fi
+
 if [ "$FAIL" -ne 0 ]; then
   echo "bootstrap-helpers.test.sh: 실패" >&2
   exit 1
 fi
-echo "bootstrap-helpers.test.sh: 8개 케이스 모두 통과"
+echo "bootstrap-helpers.test.sh: 9개 케이스 모두 통과"

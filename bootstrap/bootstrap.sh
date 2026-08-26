@@ -138,6 +138,33 @@ plugin_installed() {
   printf '%s\n' "$out" | sed -n 's/^[[:space:]]*❯[[:space:]]*//p' | grep -qxF -- "$1" && return 0
   return 1
 }
+plugin_loaded() {
+  # round 4 리뷰가 잡아낸 문제: `claude plugin install` 은 매니페스트 충돌 등으로
+  # 실제 로드가 실패해도 exit 0 을 반환한다(zizon 재현 사례 — plugin.json 과
+  # marketplace.json 이 동시에 skills 를 선언해 "conflicting manifests" 로
+  # 거부됐는데도 install 명령 자체는 성공으로 끝났다). plugin_installed 는 이름의
+  # 존재만 보고 그 옆의 Status 줄은 보지 않아 이 실패를 놓친다. 이 헬퍼는 이름이
+  # 일치하는 블록의 Status 줄까지 읽어 "✔ enabled" 인지 확인한다.
+  local out status name_status
+  set +e; out="$(claude plugin list 2>&1)"; status=$?; set -e
+  if [ "$status" -ne 0 ]; then
+    printf '%s\n' "$out"
+    return 2
+  fi
+  name_status="$(printf '%s\n' "$out" | awk -v n="$1" '
+    /^[[:space:]]*❯/ { line=$0; sub(/^[[:space:]]*❯[[:space:]]*/, "", line); want=(line==n); next }
+    want && /Status:/ { print; want=0 }
+  ')"
+  if [ -z "$name_status" ]; then
+    echo "(목록에 없음)"
+    return 1
+  fi
+  if printf '%s\n' "$name_status" | grep -q '✔ enabled'; then
+    return 0
+  fi
+  printf '%s\n' "$name_status"
+  return 1
+}
 marketplace_configured() {
   local out status
   set +e; out="$(claude plugin marketplace list 2>&1)"; status=$?; set -e
@@ -252,6 +279,21 @@ while IFS=$'\t' read -r name source; do
   fi
 done < <(manifest_pairs MK)
 while IFS= read -r p; do [ -n "$p" ] && ensure_present plugin_installed "$p" claude plugin install "$p"; done < <(manifest_field PK)
+
+# ensure_present 는 `claude plugin install` 의 exit 코드가 0 이면 재조회 없이
+# 바로 통과시킨다 — zizon 재현 사례처럼 설치 명령 자체는 성공해도 로드가
+# 실패하는 경우를 놓친다. keep 목록 전체를 대상으로 Status 줄까지 다시 읽어,
+# "이름이 목록에 존재하는가" 가 아니라 "실제로 로드됐는가" 를 별도로 검증한다.
+if [ "$DRY_RUN" != 1 ]; then
+  while IFS= read -r p; do
+    [ -z "$p" ] && continue
+    set +e; load_out="$(plugin_loaded "$p")"; load_status=$?; set -e
+    if [ "$load_status" -ne 0 ]; then
+      echo "  [실패] $p 설치 명령은 성공했지만 로드되지 않았다: $load_out" >&2
+      FAILURES=$((FAILURES + 1))
+    fi
+  done < <(manifest_field PK)
+fi
 
 echo "── 2/3 purge ──"
 while IFS= read -r p; do [ -n "$p" ] && ensure_absent plugin_installed "$p" claude plugin uninstall "$p"; done < <(manifest_field PR)
