@@ -70,9 +70,9 @@ A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<re
 - Copyright: Copyright (c) 2026 Ayoub Ghriss
 - Adapted: the ten output rules, the five reading facts, the "when to break the rules" exception list, and the
   pre-send check are preserved in substance from the upstream `skills/i-have-adhd/SKILL.md`. Frontmatter rewritten
-  to this repo's `name` + `description` contract; converted from a user-invoked slash-command skill
-  (`disable-model-invocation: true`, `/i-have-adhd`) to a model-invoked skill that auto-triggers on the
-  description.
+  to this repo's `name` + `description` contract. User-invocation is preserved from upstream:
+  `disable-model-invocation: true` stays set, so the skill only activates via `/i-have-adhd` (or an equivalent
+  explicit ask), never automatically.
 
 ### skills/testing/js-testing
 

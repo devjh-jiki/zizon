@@ -1,6 +1,7 @@
 ---
 name: i-have-adhd
-description: Use when responses bury the actionable step under explanation — reformats output to lead with the next action, number multi-step work, and cut preamble and closing pleasantries.
+description: Reformats every response for the rest of the session to lead with the next action, number multi-step work, cap lists at 5, and cut preamble and closing pleasantries — for a reader who needs the actionable step up front, not buried in explanation. Invoke with "/i-have-adhd", "ADHD 모드", "그냥 다음에 뭐 할지만 말해줘", or "skip the fluff, what's next". Stays active until the user says "stop adhd mode" or "normal mode".
+disable-model-invocation: true
 ---
 
 # i-have-adhd
@@ -134,4 +135,4 @@ Then verify: if the reader reads only the first line and the last line, do they 
 
 ## Attribution
 
-Adapted from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT) — all ten output-formatting rules, the five reading facts, the break-the-rules exceptions, and the pre-send check are preserved verbatim in substance. Converted from a user-invoked slash-command skill (`disable-model-invocation: true`, `/i-have-adhd`) to a model-invoked skill for this repo — frontmatter rewritten to the zizon `name` + `description` contract so it auto-triggers when output buries the action. See THIRD_PARTY_NOTICES.md.
+Adapted from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT) — all ten output-formatting rules, the five reading facts, the break-the-rules exceptions, and the pre-send check are preserved verbatim in substance. User-invocation is preserved from upstream: `disable-model-invocation: true` stays set, so this skill only activates via `/i-have-adhd` (or an equivalent explicit ask), never automatically. Frontmatter rewritten to the zizon `name` + `description` contract. See THIRD_PARTY_NOTICES.md.

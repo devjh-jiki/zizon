@@ -1,6 +1,7 @@
 ---
 name: i-have-adhd
-description: 응답이 실행 가능한 다음 행동을 설명 속에 파묻을 때 사용한다 — 다음 행동을 첫 줄에 두고, 다단계 작업에 번호를 매기고, 서두와 맺음 인사를 없애도록 출력 형식을 바꾼다.
+description: 남은 세션 동안 모든 응답을 다음 행동을 첫 줄에 두고, 다단계 작업에 번호를 매기고, 목록은 5개로 제한하고, 서두·맺음 인사를 없애도록 재구성한다 — 설명 속에 파묻히지 않고 바로 실행 가능한 다음 행동이 필요한 독자를 위한 것. "/i-have-adhd", "ADHD 모드", "그냥 다음에 뭐 할지만 말해줘", "군더더기 빼고 다음은?" 으로 호출한다. 사용자가 "stop adhd mode" 또는 "normal mode" 라고 말할 때까지 유지된다. (영어 원본 SKILL.md 의 한국어 번역본)
+disable-model-invocation: true
 ---
 
 # i-have-adhd (ADHD 친화 출력)
@@ -134,4 +135,4 @@ ADHD 를 가진 독자를 위해 출력을 정형화한다. 단순히 짧게 쓰
 
 ## 출처
 
-[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT) 에서 각색 — 10가지 출력 규칙, 다섯 가지 읽기 사실, 규칙을 깨는 예외, 전송 전 체크리스트를 실질적으로 그대로 보존했다. 이 레포에 맞게 사용자-호출 슬래시 명령 스킬(`disable-model-invocation: true`, `/i-have-adhd`)에서 모델-호출 스킬로 전환 — frontmatter 를 zizon 의 `name` + `description` 규약으로 다시 써서, 출력이 행동을 파묻을 때 자동으로 발동하게 했다. THIRD_PARTY_NOTICES.md 참고.
+[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT) 에서 각색 — 10가지 출력 규칙, 다섯 가지 읽기 사실, 규칙을 깨는 예외, 전송 전 체크리스트를 실질적으로 그대로 보존했다. 사용자-호출 방식은 원본 그대로 유지: `disable-model-invocation: true` 를 그대로 두어, 이 스킬은 `/i-have-adhd`(또는 이에 준하는 명시적 요청)로만 발동하고 자동으로는 절대 켜지지 않는다. frontmatter 는 zizon 의 `name` + `description` 규약으로 다시 썼다. THIRD_PARTY_NOTICES.md 참고.
