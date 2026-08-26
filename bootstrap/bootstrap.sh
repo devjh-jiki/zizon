@@ -260,7 +260,7 @@ while IFS= read -r s; do [ -n "$s" ] && ensure_absent mcp_in_user_scope "$s" cla
 run_required node "$ROOT/bootstrap/strip-hooks.mjs"
 
 echo "── 3/3 project scope ──"
-echo "프로젝트 스코프 MCP 는 각 레포의 .mcp.json 으로 관리한다. manifest 의 projectScoped 를 참고해 수동 배치하거나, Task 10 의 검증을 먼저 수행할 것."
+echo "프로젝트 스코프 MCP 는 각 레포 자체의 .mcp.json 에 커밋되어 있다. 레포를 clone 하면 설정이 함께 따라오므로 별도 수동 배치가 필요 없다."
 
 if [ "$FAILURES" -gt 0 ]; then
   echo "실패: ${FAILURES}건 — 위 [실패] 로그를 확인할 것. claude plugin list / claude mcp list 로 실제 상태를 점검하라." >&2
