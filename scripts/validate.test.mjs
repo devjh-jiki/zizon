@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { validateSkills, validateMarketplace } from './validate.mjs';
+import { validateSkills, validateMarketplace, validatePluginSkills } from './validate.mjs';
 
 async function fixture(skills) {
   const root = await mkdtemp(join(tmpdir(), 'zizon-'));
@@ -119,4 +119,52 @@ test('marketplace 가 없는 스킬을 가리키면 에러', async () => {
   const { errors } = await validateMarketplace(root, join(root, 'marketplace.json'));
   assert.equal(errors.length, 1);
   assert.match(errors[0], /ghost/);
+});
+
+test('plugin.json 이 디스크와 정확히 일치하면 에러 없다', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+    'skills/design/anti-slop-frontend': '---\nname: anti-slop-frontend\ndescription: X.\n---\n본문',
+  });
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    skills: ['./skills/token/terse-output', './skills/design/anti-slop-frontend'],
+  }));
+  const { errors } = await validatePluginSkills(root, join(root, 'plugin.json'));
+  assert.deepEqual(errors, []);
+});
+
+test('plugin.json 이 디스크에 없는 경로를 나열하면 에러', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+  });
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    skills: ['./skills/token/terse-output', './skills/token/ghost'],
+  }));
+  const { errors } = await validatePluginSkills(root, join(root, 'plugin.json'));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /ghost/);
+});
+
+test('디스크에 있는데 plugin.json 에 없는 스킬은 에러', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+    'skills/design/anti-slop-frontend': '---\nname: anti-slop-frontend\ndescription: X.\n---\n본문',
+  });
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    skills: ['./skills/token/terse-output'],
+  }));
+  const { errors } = await validatePluginSkills(root, join(root, 'plugin.json'));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /anti-slop-frontend/);
+});
+
+test('plugin.json 이 디렉토리 형식이면 내용과 무관하게 에러 없다', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+  });
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    skills: ['./skills/'],
+  }));
+  const { errors } = await validatePluginSkills(root, join(root, 'plugin.json'));
+  assert.deepEqual(errors, []);
 });

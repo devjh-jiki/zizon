@@ -80,11 +80,58 @@ export async function validateMarketplace(root, manifestPath) {
   return { errors };
 }
 
+// plugin.json 의 skills 가 개별 경로 나열 형식(디렉토리형 "./skills/" 가 zizon 의
+// 중첩 버킷 구조를 스캔하지 못해 round 2 에서 19개 경로 나열로 바꿨다)일 때, 그
+// 목록과 디스크의 실제 skills/<bucket>/<name>/ 을 서로 대조한다. 어느 쪽도 이걸
+// 검사하지 않으면 스킬을 추가/삭제하고 plugin.json 갱신을 잊어도 아무 에러 없이
+// 조용히 드리프트한다 — 이 태스크에서 나온 다섯 개 버그가 전부 "아무도 재확인하지
+// 않는 계층"에서 나왔다는 지적에 따라 추가.
+export async function validatePluginSkills(root, pluginPath) {
+  const errors = [];
+  const plugin = JSON.parse(await readFile(pluginPath, 'utf8'));
+  const listed = plugin.skills ?? [];
+
+  // 디렉토리 형식("./skills/" 같이 '/'로 끝나는 항목)이면 그 아래 전부를
+  // 포괄하는 것으로 보고 대조를 건너뛴다 — 매니페스트 형식이 나중에 다시
+  // 디렉토리형으로 바뀌어도 이 검사가 오탐으로 깨지지 않게 한다.
+  if (listed.some((rel) => rel.endsWith('/'))) {
+    return { errors };
+  }
+
+  const listedSet = new Set();
+  for (const rel of listed) {
+    listedSet.add(rel.replace(/^\.\//, '').replace(/\/$/, ''));
+    try {
+      await stat(join(root, rel, 'SKILL.md'));
+    } catch {
+      errors.push(`plugin.json 에 나열됐지만 디스크에 없음: ${rel}`);
+    }
+  }
+
+  const skillsRoot = join(root, 'skills');
+  for (const bucket of await listDirs(skillsRoot)) {
+    for (const name of await listDirs(join(skillsRoot, bucket))) {
+      try {
+        await stat(join(skillsRoot, bucket, name, 'SKILL.md'));
+      } catch {
+        continue; // SKILL.md 부재는 validateSkills 가 이미 잡는다
+      }
+      const rel = `skills/${bucket}/${name}`;
+      if (!listedSet.has(rel)) {
+        errors.push(`디스크에 있지만 plugin.json 에 없음: ${rel}`);
+      }
+    }
+  }
+
+  return { errors };
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const root = process.cwd();
   const a = await validateSkills(root);
   const b = await validateMarketplace(root, join(root, '.claude-plugin/marketplace.json'));
-  const errors = [...a.errors, ...b.errors];
+  const c = await validatePluginSkills(root, join(root, '.claude-plugin/plugin.json'));
+  const errors = [...a.errors, ...b.errors, ...c.errors];
   if (errors.length) {
     for (const e of errors) console.error(`✗ ${e}`);
     process.exit(1);
