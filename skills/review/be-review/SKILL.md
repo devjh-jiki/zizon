@@ -1,5 +1,5 @@
 ---
-name: go-backend-review
+name: be-review
 description: Use when reviewing Go backend code changes (API services, workers, data layers) for architecture boundaries, data integrity, error/security discipline, and Go idioms - e.g. "review this Go diff", "backend review", "Go 코드 리뷰해줘", "백엔드 diff 봐줘". Runs as the judgment tier above machine gates. Requires a project adapter that injects the project's canonical checklist; without one, review with generic lenses only and say so explicitly. NOT for style/formatting nits (gofmt and golangci-lint own those), NOT for non-Go code, NOT a replacement for CI gates such as architecture linters or API-breaking checks.
 ---
 

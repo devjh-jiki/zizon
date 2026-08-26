@@ -1,5 +1,5 @@
 ---
-name: go-backend-review
+name: be-review
 description: Go 백엔드 코드 변경(API 서비스, 워커, 데이터 계층)을 아키텍처 경계·데이터 무결성·오류/보안 규율·Go 관용구 관점에서 리뷰할 때 사용 - 예: "review this Go diff", "backend review", "Go 코드 리뷰해줘", "백엔드 diff 봐줘". 기계 게이트 위의 판단 계층으로 동작한다. 프로젝트 정본 체크리스트를 주입하는 어댑터가 필요하며, 없으면 범용 렌즈만으로 리뷰하고 그 사실을 명시할 것. 스타일·포맷 지적(gofmt·golangci-lint의 몫), Go 이외 코드, 아키텍처 린터나 API Breaking 검사 같은 CI 게이트의 대체 용도가 아님.
 ---
 
