@@ -1071,7 +1071,21 @@ cp ~/.claude/settings.json /tmp/before-settings.json
 
 Run: `bash bootstrap/bootstrap.sh --dev`
 
-- [ ] **Step 3: 결과 확인**
+- [ ] **Step 3: agentmemory user 스코프 MCP 실측 — 제거 가능한가**
+
+플러그인이 `.mcp.json` 을 갖고 있지만 `plugin.json` 에 `mcpServers` 필드가 없어, 현재 툴이 플러그인에서 오는지 user 스코프 등록에서 오는지 이름만으로는 판별되지 않는다. 추측하지 말고 실측한다.
+
+```bash
+python3 -c "import json;d=json.load(open('$HOME/.claude.json'));print(json.dumps(d['mcpServers']['agentmemory']))" > /tmp/am-backup.json
+claude mcp remove agentmemory -s user
+```
+
+새 세션에서 `mcp__agentmemory__*` 툴이 여전히 보이는지 확인한다.
+
+- **보인다** → 플러그인이 제공하는 것이므로 영구 제거. `bootstrap/manifest.json` 의 `mcpServers.userScope.remove` 에 `"agentmemory"` 를 추가한다. 전역 MCP 0개 달성.
+- **안 보인다** → user 스코프 등록이 load-bearing 이다. `/tmp/am-backup.json` 을 근거로 `claude mcp add` 로 복구하고, 스펙 §6.4 의 최종 수치를 "전역 MCP 1개(agentmemory)" 로 정정한다.
+
+- [ ] **Step 4: 결과 확인**
 
 Run: `claude plugin list`
 Expected: 정확히 3개 — superpowers, agentmemory, zizon
