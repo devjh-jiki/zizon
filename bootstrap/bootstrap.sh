@@ -48,24 +48,57 @@ jq_pairs() {
 }
 
 # ── 상태 재조회 헬퍼 ──────────────────────────────────────────────────────
-# CLI 실패 메시지의 문구를 추정해서 "이미 목표 상태"인지 판단하지 않는다 (그 방식은
-# claude 바이너리 자체가 없을 때 나오는 "command not found" 도 우연히 무해한 문구와
-# 겹칠 수 있어 위험하다고 지적받았다). 대신 명령이 실패하면 실제 상태를 다시 물어봐서 목표가 이미
-# 달성됐는지 확인한다. 세 헬퍼 모두 "그 항목이 지금 존재하는가?" 를 종료코드로 답한다
-# (0 = 존재함). ensure_absent/ensure_present 가 이 답을 보고 이미 목표 상태인지(무해)를 정한다.
-installed_plugins() { claude plugin list 2>/dev/null | sed -n 's/^[[:space:]]*❯[[:space:]]*//p'; }
-configured_marketplaces() { claude plugin marketplace list 2>/dev/null | sed -n 's/^[[:space:]]*❯[[:space:]]*//p'; }
-plugin_installed() { installed_plugins | grep -qxF -- "$1"; }
-marketplace_configured() { configured_marketplaces | grep -qxF -- "$1"; }
+# CLI 실패 메시지의 문구를 추정해서 "이미 목표 상태"인지 판단하지 않는다. round 1 은
+# 그렇게 했다가, 조회 자체가 실패했을 때(예: ~/.claude.json 손상)도 "출력이 비어있음
+# = 부재함" 으로 잘못 읽는 문제가 남아있었다 — claude --version 은 그 파일을 안 읽어서
+# 사전가드는 통과하지만, plugin list/marketplace list/mcp get 은 전부 비정상 종료하고,
+# 빈 출력을 grep 하면 "없음" 과 구분이 안 됐다. 그래서 present(0)/absent(1)/unknown(2)
+# 세 상태를 종료코드로 명시적으로 구분한다:
+#   - list 계열(plugin list, marketplace list)은 정상 상황에서 결과가 비어 있어도
+#     반드시 exit 0 이다(실측 확인: "No plugins installed"/"No marketplaces configured"
+#     도 exit 0). 그러므로 이 둘의 exit 이 0 이 아니면 무조건 unknown(2) — "없다" 로
+#     읽지 않는다.
+#   - mcp get 은 "그 이름의 서버가 없다" 를 exit 1 + "No MCP server named" 문구로
+#     정상적으로 표현한다(실측 확인). 이 특정 조합만 absent(1) 로 인정하고, 그 외의
+#     비정상 종료(예: 설정 파일 손상으로 인한 종료)는 unknown(2) 으로 본다.
+# 각 헬퍼 내부의 `set +e`/`set -e` 는 필수다 — 없으면 claude 가 비정상 종료할 때
+# `set -e` 가 그 즉시 함수를 통째로 죽여 return 2 조차 실행되지 못하고, 그 raw exit
+# 코드가 호출부로 새어나가 의미를 왜곡한다(직접 재현해 확인함, fix 보고서 참고).
+plugin_installed() {
+  local out status
+  set +e; out="$(claude plugin list 2>&1)"; status=$?; set -e
+  if [ "$status" -ne 0 ]; then
+    printf '%s\n' "$out"
+    return 2
+  fi
+  printf '%s\n' "$out" | sed -n 's/^[[:space:]]*❯[[:space:]]*//p' | grep -qxF -- "$1" && return 0
+  return 1
+}
+marketplace_configured() {
+  local out status
+  set +e; out="$(claude plugin marketplace list 2>&1)"; status=$?; set -e
+  if [ "$status" -ne 0 ]; then
+    printf '%s\n' "$out"
+    return 2
+  fi
+  printf '%s\n' "$out" | sed -n 's/^[[:space:]]*❯[[:space:]]*//p' | grep -qxF -- "$1" && return 0
+  return 1
+}
 mcp_in_user_scope() {
-  local out
-  out="$(claude mcp get "$1" 2>&1)" || return 1
-  printf '%s\n' "$out" | grep -q 'Scope: User config'
+  local out status
+  set +e; out="$(claude mcp get "$1" 2>&1)"; status=$?; set -e
+  if [ "$status" -eq 0 ]; then
+    printf '%s\n' "$out" | grep -q 'Scope: User config' && return 0
+    return 1
+  fi
+  printf '%s\n' "$out" | grep -q 'No MCP server named' && return 1
+  printf '%s\n' "$out"
+  return 2
 }
 
 # ensure_absent <검증함수> <검증인자> <실행할 커맨드...>
 #   커맨드가 실패하면 검증함수로 "그 항목이 아직도 있는가" 재조회한다.
-#   없으면(검증함수가 1) 이미 목표 상태였던 것 — 무해. 있으면 진짜 실패.
+#   1(확인된 부재) 만 무해. 0(여전히 존재) 과 2(재조회 자체 실패=unknown) 는 둘 다 실패로 센다.
 ensure_absent() {
   local check="$1" arg="$2"; shift 2
   if [ "$DRY_RUN" = 1 ]; then echo "[dry-run] $*"; return 0; fi
@@ -76,17 +109,23 @@ ensure_absent() {
     [ -n "$out" ] && echo "$out"
     return 0
   fi
-  if ! "$check" "$arg"; then
+  local check_out check_status
+  set +e; check_out="$("$check" "$arg")"; check_status=$?; set -e
+  if [ "$check_status" -eq 1 ]; then
     echo "  (재조회 결과 이미 부재함 — 목표 상태, 건너뜀) exit=$status: $out"
     return 0
   fi
-  echo "  [실패] exit=$status: $out (재조회 결과 여전히 존재함)" >&2
+  if [ "$check_status" -eq 0 ]; then
+    echo "  [실패] exit=$status: $out (재조회 결과 여전히 존재함)" >&2
+  else
+    echo "  [실패] exit=$status: $out (상태 재조회 자체가 실패 — unknown 은 실패로 간주) 재조회 출력: $check_out" >&2
+  fi
   FAILURES=$((FAILURES + 1))
 }
 
 # ensure_present <검증함수> <검증인자> <실행할 커맨드...>
 #   커맨드가 실패하면 검증함수로 "그 항목이 이미 있는가" 재조회한다.
-#   있으면(검증함수가 0) 이미 목표 상태였던 것 — 무해. 없으면 진짜 실패.
+#   0(확인된 존재) 만 무해. 1(여전히 부재) 과 2(unknown) 는 둘 다 실패로 센다.
 ensure_present() {
   local check="$1" arg="$2"; shift 2
   if [ "$DRY_RUN" = 1 ]; then echo "[dry-run] $*"; return 0; fi
@@ -97,11 +136,17 @@ ensure_present() {
     [ -n "$out" ] && echo "$out"
     return 0
   fi
-  if "$check" "$arg"; then
+  local check_out check_status
+  set +e; check_out="$("$check" "$arg")"; check_status=$?; set -e
+  if [ "$check_status" -eq 0 ]; then
     echo "  (재조회 결과 이미 존재함 — 목표 상태, 건너뜀) exit=$status: $out"
     return 0
   fi
-  echo "  [실패] exit=$status: $out (재조회 결과 여전히 부재함)" >&2
+  if [ "$check_status" -eq 1 ]; then
+    echo "  [실패] exit=$status: $out (재조회 결과 여전히 부재함)" >&2
+  else
+    echo "  [실패] exit=$status: $out (상태 재조회 자체가 실패 — unknown 은 실패로 간주) 재조회 출력: $check_out" >&2
+  fi
   FAILURES=$((FAILURES + 1))
 }
 
