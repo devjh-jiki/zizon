@@ -1,0 +1,28 @@
+{
+  "marketplaces": {
+    "keep": [
+      { "name": "claude-plugins-official", "source": "anthropics/claude-plugins-official" },
+      { "name": "agentmemory", "source": "rohitg00/agentmemory" },
+      { "name": "zizon", "source": "devjh-jiki/zizon" }
+    ],
+    "remove": ["understand-anything", "karpathy-skills", "claude-video", "gitkraken"]
+  },
+  "plugins": {
+    "keep": ["superpowers@claude-plugins-official", "agentmemory@agentmemory", "zizon@zizon"],
+    "remove": [
+      "understand-anything@understand-anything",
+      "andrej-karpathy-skills@karpathy-skills",
+      "watch@claude-video",
+      "gitkraken-hooks@gitkraken"
+    ]
+  },
+  "mcpServers": { "userScope": { "remove": ["serena", "figma", "sentry"] } },
+  "projectScoped": {
+    "~/Desktop/jihoon-blog": { "sentry": { "type": "http", "url": "https://mcp.sentry.dev/mcp" } },
+    "~/Desktop/kalyx": { "sentry": { "type": "http", "url": "https://mcp.sentry.dev/mcp" } },
+    "~/Desktop/jihoon/mutal": {
+      "figma": { "command": "npx", "args": ["-y", "figma-developer-mcp", "--stdio"], "env": { "FIGMA_API_KEY": "${FIGMA_API_KEY}" } }
+    }
+  },
+  "settings": { "removeHooks": { "reason": "agentmemory 플러그인이 ${CLAUDE_PLUGIN_ROOT} 로 이미 등록함 — settings.json 사본은 이중 실행", "matchCommand": "agentmemory" } }
+}
