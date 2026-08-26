@@ -53,11 +53,41 @@ export async function validateSkills(root) {
   return { errors };
 }
 
+export async function validateMarketplace(root, manifestPath) {
+  const errors = [];
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  for (const plugin of manifest.plugins ?? []) {
+    for (const rel of plugin.skills ?? []) {
+      if (rel.endsWith('/')) {
+        // 디렉토리 형식('./skills/') — 하위에 SKILL.md 가 하나라도 있어야 한다
+        const dir = join(root, rel);
+        const found = [];
+        for (const bucket of await listDirs(dir)) {
+          for (const name of await listDirs(join(dir, bucket))) {
+            try { await stat(join(dir, bucket, name, 'SKILL.md')); found.push(name); } catch {}
+          }
+        }
+        if (!found.length) errors.push(`marketplace 디렉토리에 스킬이 없음: ${rel} (${plugin.name})`);
+        continue;
+      }
+      try {
+        await stat(join(root, rel, 'SKILL.md'));
+      } catch {
+        errors.push(`marketplace 가 없는 스킬을 가리킴: ${rel} (${plugin.name})`);
+      }
+    }
+  }
+  return { errors };
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { errors } = await validateSkills(process.cwd());
+  const root = process.cwd();
+  const a = await validateSkills(root);
+  const b = await validateMarketplace(root, join(root, '.claude-plugin/marketplace.json'));
+  const errors = [...a.errors, ...b.errors];
   if (errors.length) {
     for (const e of errors) console.error(`✗ ${e}`);
     process.exit(1);
   }
-  console.log('✓ 스킬 검증 통과');
+  console.log('✓ 스킬·마켓플레이스 검증 통과');
 }

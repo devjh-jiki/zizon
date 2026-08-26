@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { validateSkills } from './validate.mjs';
+import { validateSkills, validateMarketplace } from './validate.mjs';
 
 async function fixture(skills) {
   const root = await mkdtemp(join(tmpdir(), 'zizon-'));
@@ -77,4 +77,46 @@ test('name 형식이 잘못되면 에러', async () => {
   const { errors } = await validateSkills(root);
   assert.equal(errors.length, 1);
   assert.match(errors[0], /형식 위반/);
+});
+
+test('marketplace 의 skills 경로가 실재하면 통과', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+  });
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', skills: ['./skills/token/terse-output'] }],
+  }));
+  const { errors } = await validateMarketplace(root, join(root, 'marketplace.json'));
+  assert.deepEqual(errors, []);
+});
+
+test('디렉토리 형식 ./skills/ 은 하위에 스킬이 있으면 통과', async () => {
+  const root = await fixture({
+    'skills/token/terse-output': '---\nname: terse-output\ndescription: Be terse.\n---\n본문',
+  });
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', skills: ['./skills/'] }],
+  }));
+  const { errors } = await validateMarketplace(root, join(root, 'marketplace.json'));
+  assert.deepEqual(errors, []);
+});
+
+test('디렉토리 형식인데 하위에 스킬이 없으면 에러', async () => {
+  const root = await fixture({});
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', skills: ['./skills/'] }],
+  }));
+  const { errors } = await validateMarketplace(root, join(root, 'marketplace.json'));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /스킬이 없음/);
+});
+
+test('marketplace 가 없는 스킬을 가리키면 에러', async () => {
+  const root = await fixture({});
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', skills: ['./skills/token/ghost'] }],
+  }));
+  const { errors } = await validateMarketplace(root, join(root, 'marketplace.json'));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /ghost/);
 });
