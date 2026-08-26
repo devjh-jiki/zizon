@@ -78,7 +78,14 @@ A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<re
 
 - Source: https://github.com/goldbergyoni/javascript-testing-best-practices
 - License: MIT
-- Note: entry added ahead of Task 8, which creates the skill directory.
+- Copyright: Copyright (c) 2019 Yoni Goldberg
+- Adapted: not a transcription. Of the source's 50+ practices, only the subset where the right
+  answer is genuinely contextual (and reasonable engineers disagree) is distilled into judgment
+  calls: test-level selection, the three-part test name, black-box discipline, test data via
+  factories instead of shared fixtures, snapshot pitfalls, and coverage pitfalls. Settled-consensus
+  and tool-specific practices from the source are intentionally omitted. Frontmatter and prose are
+  original to this repo; a Korean edition (`readme.kr.md`) was consulted to match terminology in
+  `SKILL.ko.md`.
 
 ## Notes
 
