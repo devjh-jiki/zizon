@@ -53,10 +53,11 @@ Sort findings by severity: `file:line / P0 (breaks correctness or leaks data) | 
 This skill is a **core**. Each project must supply an adapter (for example, a project-scoped agent file) that injects:
 
 1. The project's definition-of-done checklist for backend changes.
-2. Canonical domain enums, versioning formats, and forbidden patterns.
-3. Where review output is written, and whether it may be committed.
+2. Canonical domain enums, versioning formats, forbidden patterns, and any required response/log formats the generic lenses only describe in the abstract (e.g. the exact error envelope, the exact correlation-key set).
+3. The review's default target scope: which diff, directory, and stack to review.
+4. Where review output is written, and whether it may be committed.
 
-If no adapter context is present, say "generic lenses only, no project canon injected" at the top of the review and proceed with lenses 1-4. Reference implementation: the jjan monorepo's `be-reviewer` agent, which injects its docs repo's decision records (DDR) and backend completion criteria.
+If no adapter context is present, say "generic lenses only, no project canon injected" at the top of the review and proceed with lenses 1-4. Reference implementation: the jjan monorepo's `be-reviewer` agent, which injects its own `docs/` (decision records and backend completion criteria) plus a default review scope of `services/backend`.
 
 ## What not to do
 
