@@ -288,32 +288,58 @@ The hook tracks a `requestId` and only commits a settled response if it's still 
 **Example — `jihoon-blog/src/components/CodeCopyButton.tsx` (real, current code)**
 
 ```tsx
+// ... "use client"; import { useEffect } from "react";
 export default function CodeCopyButton() {
   useEffect(() => {
     const codeBlocks = document.querySelectorAll(".prose pre");
 
     codeBlocks.forEach((pre) => {
+      // 이미 처리된 블록은 스킵
       if (pre.closest(".code-collapse")) return;
+
       const preEl = pre as HTMLElement;
+
+      // 코드 언어 감지
       const code = pre.querySelector("code");
+      // ... langClass, lang — summary.textContent 에서만 쓰인다
+
+      // 줄 수 계산
       const lineCount = (code?.textContent || "").split("\n").length;
 
       // details/summary로 감싸기
       const details = document.createElement("details");
       details.className = "code-collapse";
-      if (lineCount < 30) details.open = true;
+
+      // 30줄 미만이면 기본 열림
+      if (lineCount < 30) {
+        details.open = true;
+      }
+
       const summary = document.createElement("summary");
+      // ... summary.className, summary.textContent = lang
+
+      // pre를 details 안으로 이동
       preEl.parentNode?.insertBefore(details, preEl);
       details.appendChild(summary);
       details.appendChild(preEl);
 
       // copy 버튼 추가
+      // ... preEl.style.position/marginTop/borderTopLeftRadius/borderTopRightRadius 대입 4개
+
       const button = document.createElement("button");
+      // ... button.className, button.textContent = "COPY", button.title
+
       button.addEventListener("click", async () => {
-        if (code) await navigator.clipboard.writeText(code.textContent || "");
+        if (code) {
+          await navigator.clipboard.writeText(code.textContent || "");
+          // ... "COPY" → "DONE" 표시 후 setTimeout 으로 2초 뒤 원복
+        }
       });
+
       preEl.appendChild(button);
     });
+
+    // ... 언마운트 클린업: return () => { .copy-button 전부 제거 }
   }, []);
 
   return null;
