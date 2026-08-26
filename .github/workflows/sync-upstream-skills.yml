@@ -54,6 +54,10 @@ jobs:
             repo: superpowers
             ref: main
             path: skills
+          - owner: ayghri
+            repo: i-have-adhd
+            ref: main
+            path: skills
           # 추가하고 싶은 검증된 레포를 여기 등록
           # - owner: anthropics
           #   repo: skills
