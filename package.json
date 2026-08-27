@@ -1,13 +1,15 @@
 {
-  "name": "@dev-hub/skills",
+  "name": "@zizon/skills",
   "version": "0.1.0",
   "private": true,
-  "description": "공용 에이전트 스킬과 런타임별 어댑터 모음 - 버저닝 + upstream 동기화",
+  "description": "zizon — 개인 에이전트 스킬 모음 (7버킷 19개), 단일 Claude Code 플러그인 - 버저닝 + upstream 동기화",
   "license": "MIT",
   "scripts": {
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset tag"
+    "release": "changeset tag",
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/*.test.mjs && bash scripts/bootstrap-helpers.test.sh"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0"

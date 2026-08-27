@@ -1,113 +1,15 @@
 {
-  "name": "jiki-skills",
-  "owner": {
-    "name": "devjh-jiki",
-    "url": "https://github.com/devjh-jiki"
-  },
-  "metadata": {
-    "description": "jiki agent skills marketplace",
-    "version": "0.1.0"
-  },
+  "name": "zizon",
+  "owner": { "name": "devjh-jiki", "url": "https://github.com/devjh-jiki" },
+  "metadata": { "description": "zizon — 개인 에이전트 자산 단일 소스", "version": "0.2.0" },
   "plugins": [
     {
-      "name": "writing-skills",
+      "name": "zizon",
       "source": "./",
-      "version": "0.1.0",
-      "description": "Writing & decision skills: polished Korean tech blog posts, high-quality Markdown documentation with research, decision/idea grilling, four-voice decision councils, session handoffs, writing great skills, terse token-efficient output, context-budget setup audits, and recent-community research (adapted from mattpocock/skills, JuliusBrussee/caveman, mvanhorn/last30days-skill & affaan-m/ecc).",
-      "author": {
-        "name": "devjh-jiki",
-        "url": "https://github.com/devjh-jiki"
-      },
-      "strict": false,
-      "skills": [
-        "./skills/productivity/write-blog-post",
-        "./skills/productivity/document-with-research",
-        "./skills/productivity/grill-me",
-        "./skills/productivity/handoff",
-        "./skills/productivity/writing-great-skills",
-        "./skills/productivity/terse-output",
-        "./skills/productivity/recency-research",
-        "./skills/productivity/council",
-        "./skills/productivity/context-budget"
-      ]
-    },
-    {
-      "name": "engineering-skills",
-      "source": "./",
-      "version": "0.1.0",
-      "description": "Engineering skills: TDD, bug diagnosis, deep-module & domain design, architecture improvement, PRD/issue synthesis, grill-with-docs, prototyping, implementation, merge-conflict resolution, webapp testing, lazy/YAGNI code minimization, anti-slop frontend taste, eval-driven development (pass@k), verification-before-completion gates, iterative context retrieval, and Go backend review with a project-canon adapter slot (adapted from mattpocock/skills, anthropics/skills, DietrichGebert/ponytail, Leonxlnx/taste-skill, obra/superpowers & affaan-m/ecc).",
-      "author": {
-        "name": "devjh-jiki",
-        "url": "https://github.com/devjh-jiki"
-      },
-      "strict": false,
-      "skills": [
-        "./skills/engineering/tdd",
-        "./skills/engineering/diagnosing-bugs",
-        "./skills/engineering/codebase-design",
-        "./skills/engineering/domain-modeling",
-        "./skills/engineering/improve-codebase-architecture",
-        "./skills/engineering/to-prd",
-        "./skills/engineering/to-issues",
-        "./skills/engineering/grill-with-docs",
-        "./skills/engineering/prototype",
-        "./skills/engineering/design-system",
-        "./skills/engineering/implement",
-        "./skills/engineering/resolving-merge-conflicts",
-        "./skills/engineering/webapp-testing",
-        "./skills/engineering/lazy-code",
-        "./skills/engineering/anti-slop-frontend",
-        "./skills/engineering/eval-harness",
-        "./skills/engineering/verification-before-completion",
-        "./skills/engineering/iterative-retrieval",
-        "./skills/engineering/go-backend-review"
-      ]
-    },
-    {
-      "name": "learning-skills",
-      "source": "./",
-      "version": "0.1.0",
-      "description": "Learning coach skills: reverse-engineer open source and learn from technical books interactively.",
-      "author": {
-        "name": "devjh-jiki",
-        "url": "https://github.com/devjh-jiki"
-      },
-      "strict": false,
-      "skills": [
-        "./skills/learning/open-source-reverse-engineering-coach",
-        "./skills/learning/technical-book-coach"
-      ]
-    },
-    {
-      "name": "business-skills",
-      "source": "./",
-      "version": "0.1.0",
-      "description": "Founder/product/marketing skills: opportunity validation, marketing copy, product spec building.",
-      "author": {
-        "name": "devjh-jiki",
-        "url": "https://github.com/devjh-jiki"
-      },
-      "strict": false,
-      "skills": [
-        "./skills/business/biz-opportunity-scout",
-        "./skills/business/marketing-copy",
-        "./skills/business/product-spec-builder"
-      ]
-    },
-    {
-      "name": "misc-skills",
-      "source": "./",
-      "version": "0.1.0",
-      "description": "Environment setup skills: Claude Code git guardrails (block dangerous commands) and Husky pre-commit hooks (adapted from mattpocock/skills).",
-      "author": {
-        "name": "devjh-jiki",
-        "url": "https://github.com/devjh-jiki"
-      },
-      "strict": false,
-      "skills": [
-        "./runtimes/claude-code/skills/git-guardrails",
-        "./skills/misc/setup-pre-commit"
-      ]
+      "version": "0.2.0",
+      "description": "토큰절약·디자인·계획·리뷰·테스트·학습 스킬 19개. Claude Code 전용.",
+      "author": { "name": "devjh-jiki", "url": "https://github.com/devjh-jiki" },
+      "strict": false
     }
   ]
 }

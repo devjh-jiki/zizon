@@ -6,3 +6,6 @@ node_modules/
 !.env.example
 dist/
 .upstream/*/.git/
+
+# SDD 작업 워크스페이스 — 구현체 보고서·리뷰 패키지가 쌓이는 스크래치 영역
+.superpowers/

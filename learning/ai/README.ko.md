@@ -55,7 +55,7 @@
 - Building Agents with MCP (영상)
 - MCP with Anthropic (코스)
 - AI Agents with MCP — Kyle Stratis (책)
-- **산출물**: MCP 서버 1개 → [`mcp/`](../../mcp/README.ko.md) 에 반영
+- **산출물**: MCP 서버 1개
 
 ### 단계 5 — RAG / 메모리
 
@@ -71,7 +71,7 @@
 - AI Engineering (책)
 - The LLM Engineering Handbook (책)
 - Designing Machine Learning Systems (책)
-- **산출물**: 기술 블로그 글 (write-blog-post 스킬 활용)
+- **산출물**: 기술 블로그 글
 
 ---
 
@@ -147,4 +147,4 @@
 
 - 각 단계마다 **읽기 → 작은 실습 → 기록** 사이클.
 - 실습은 `ai-playground` 레포에 단계별 폴더로.
-- 기록은 [`journal.md`](./journal.ko.md) 에 날짜별로. 블로그감이 되면 `write-blog-post` 스킬로 글 작성.
+- 기록은 [`journal.md`](./journal.ko.md) 에 날짜별로. 블로그감이 되면 글로 작성.

@@ -1,4 +1,4 @@
-# jiki
+# zizon
 
 > English: [README.en.md](./README.en.md)
 
@@ -12,57 +12,38 @@
 
 | 영역 | 위치 | 설명 |
 |------|------|------|
-| Skills | [`skills/`](./skills) | 나만의 에이전트 스킬. 버저닝 + upstream 자동 동기화. Claude Code와 Codex에서 사용 가능 |
-| Runtimes | [`runtimes/`](./runtimes) | Claude Code, Codex, OpenCode 등 런타임별 전용 어댑터와 설정 |
-| MCP | [`mcp/`](./mcp) | 도구별 MCP 세팅. 어디에나 복붙 |
+| Skills | [`skills/`](./skills) | 나만의 에이전트 스킬. 7개 버킷, 19개. Claude Code 플러그인(zizon)으로 설치 |
+| Bootstrap | [`bootstrap/`](./bootstrap) | 머신 셋업(마켓플레이스·플러그인·MCP 서버·hook)을 선언적 manifest 로 재현하는 멱등 적용 스크립트 |
 | Prompts | [`prompts/`](./prompts) | 자주 쓰는 프롬프트 명령어 |
 | Learning / AI | [`learning/ai/`](./learning/ai) | 프론트엔드 개발자 관점 AI 학습 로드맵 + 자료 + 기록 |
 | Snippets | [`snippets/`](./snippets) | 자주 쓰는 코드/설정 스니펫 |
 
 ## 스킬 설치
 
-### Claude Code
-
-Claude Code 플러그인 마켓플레이스에서 설치할 수 있습니다.
+Claude Code 플러그인 마켓플레이스에서 설치합니다.
 
 ```
-/plugin marketplace add devjh-jiki/jiki
-/plugin install learning-skills@jiki-skills
-/plugin install writing-skills@jiki-skills
-/plugin install business-skills@jiki-skills
-/plugin install engineering-skills@jiki-skills
-/plugin install misc-skills@jiki-skills
+/plugin marketplace add devjh-jiki/zizon
+/plugin install zizon@zizon
 ```
-
-### Codex 및 기타 에이전트
-
-skills CLI로 설치할 수 있습니다.
-
-```bash
-npx skills@latest add devjh-jiki/jiki
-```
-
-이 레포를 Codex에서 직접 열면 `.agents/skills/`의 상대 심볼릭 링크를 통해 Codex 호환 스킬을 자동으로 발견합니다. 레포 작업 규칙은 [`AGENTS.md`](./AGENTS.md)에 있습니다.
 
 ### 외부 추천 플러그인
 
 [`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design)은 아키텍처, 플로차트, 시퀀스, 데이터 모델 등 기술 다이어그램을 독립 HTML/SVG/PNG로 만드는 플러그인입니다. 이 레포에는 복사하지 않으며, 원본 플러그인을 직접 설치해 업데이트와 검증 체계를 그대로 따르는 방식을 권장합니다.
-
-Claude Code:
 
 ```text
 /plugin marketplace add cathrynlavery/diagram-design
 /plugin install diagram-design@diagram-design
 ```
 
-Codex:
+[`pbakaus/impeccable`](https://github.com/pbakaus/impeccable)은 프론트엔드 산출물이 AI 특유의 디자인 슬롭처럼 보이지 않게 잡아내는 감지 규칙과 전용 명령을 제공하는 디자인 품질 도구입니다. 이 레포에도 복사하지 않으며, 원본을 직접 설치해 업데이트와 검증 체계를 그대로 따르는 방식을 권장합니다.
 
-```bash
-codex plugin marketplace add cathrynlavery/diagram-design
-codex plugin add diagram-design@diagram-design
+```text
+/plugin marketplace add pbakaus/impeccable
+/plugin install impeccable@impeccable
 ```
 
-이 플러그인은 다이어그램 산출물 전용입니다. 앱 UI 토큰과 컴포넌트는 [`design-system`](./skills/engineering/design-system)을 사용하고, 필요할 때 그 토큰을 diagram-design의 스타일 가이드에 매핑하세요.
+마케팅/랜딩/포트폴리오 UI 의 취향 판단은 [`anti-slop-frontend`](./skills/design/anti-slop-frontend) 스킬을 먼저 쓰고, 필요하면 impeccable 의 감지 규칙으로 다시 한번 확인하세요.
 
 ### 신뢰도 라벨
 
@@ -72,49 +53,33 @@ codex plugin add diagram-design@diagram-design
 - **Review** — 평가 중. 검증되면 Available 로 승격.
 - **Private** — 개인 셋업 전용. 마켓플레이스 미포함.
 
-| 스킬 | 단계 | 설명 |
-|------|------|------|
-| [write-blog-post](./skills/productivity/write-blog-post) | Available | 초안·학습을 jihoon 스타일 한국어 기술 블로그 글로 작성 (문체·SEO 가이드) |
-| [document-with-research](./skills/productivity/document-with-research) | Available | 오픈데이터 조사·검증부터 구조 설계·작성·기존 문서 다듬기까지, 고품질 마크다운 문서 산출 |
-| [grill-me](./skills/productivity/grill-me) | Available | 계획·의사결정·사업 아이디어를 스트레스 테스트하는 집요한 인터뷰 |
-| [open-source-reverse-engineering-coach](./skills/learning/open-source-reverse-engineering-coach) | Available | 오픈소스를 인터랙티브 역공학으로 학습 |
-| [technical-book-coach](./skills/learning/technical-book-coach) | Available | 기술 서적·문서 코칭 학습 (한글 번역 + 코칭) |
-| [biz-opportunity-scout](./skills/business/biz-opportunity-scout) | Available | 사업 기회 검증 (TAM/SAM/SOM, 유닛 이코노믹스, PMF) + Go/No-Go |
-| [marketing-copy](./skills/business/marketing-copy) | Available | 제품/기능을 한국어 마케팅 카피로 |
-| [product-spec-builder](./skills/business/product-spec-builder) | Available | 거친 아이디어를 만들 수 있는 PRD 로 |
-| [tdd](./skills/engineering/tdd) | Available | 레드-그린-리팩터 테스트 주도 개발 (mattpocock 참고) |
-| [diagnosing-bugs](./skills/engineering/diagnosing-bugs) | Available | 체계적 버그 진단 루프 (mattpocock 참고) |
-| [codebase-design](./skills/engineering/codebase-design) | Available | 깊은 모듈 설계 어휘 (mattpocock 참고) |
-| [improve-codebase-architecture](./skills/engineering/improve-codebase-architecture) | Available | 아키텍처 심화 기회 스캔 + 리포트 (mattpocock 참고) |
-| [to-prd](./skills/engineering/to-prd) | Available | 대화를 PRD 로 합성 (mattpocock 참고) |
-| [to-issues](./skills/engineering/to-issues) | Available | 계획/PRD 를 수직 슬라이스 이슈로 분해 (mattpocock 참고) |
-| [domain-modeling](./skills/engineering/domain-modeling) | Available | 도메인 모델·용어집·ADR 구축 (mattpocock 참고) |
-| [grill-with-docs](./skills/engineering/grill-with-docs) | Available | 문서까지 만드는 grilling (mattpocock 참고) |
-| [prototype](./skills/engineering/prototype) | Available | 설계 검증용 throwaway 프로토타입 (mattpocock 참고) |
-| [design-system](./skills/engineering/design-system) | Available | 토큰 기반 UI 디자인 시스템 설계·구현·리뷰 (Astryx 베이스, 모든 스택) |
-| [anti-slop-frontend](./skills/engineering/anti-slop-frontend) | Available | AI 티 나는 프론트엔드 방지: 브리프 읽기·세 다이얼·LLM 기본값 회피·프리플라이트 (Leonxlnx/taste-skill 참고) |
-| [lazy-code](./skills/engineering/lazy-code) | Available | YAGNI 사다리로 가장 게으른 해법 강제; lite/full/ultra (DietrichGebert/ponytail 참고) |
-| [implement](./skills/engineering/implement) | Available | PRD/이슈/슬라이스를 커밋된 테스트 코드로 구현 (mattpocock 참고) |
-| [resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts) | Available | merge/rebase 충돌을 의도 복원으로 해소 (mattpocock 참고) |
-| [webapp-testing](./skills/engineering/webapp-testing) | Available | Playwright로 로컬 웹앱 테스트 (anthropics 참고) |
-| [handoff](./skills/productivity/handoff) | Available | 세션 인계 문서 생성 (mattpocock 참고) |
-| [writing-great-skills](./skills/productivity/writing-great-skills) | Available | 스킬을 잘 쓰는 법 레퍼런스 (mattpocock 참고) |
-| [terse-output](./skills/productivity/terse-output) | Available | 정확도 유지하며 토큰 절감하는 초압축 출력; lite/full/ultra (JuliusBrussee/caveman 참고) |
-| [recency-research](./skills/productivity/recency-research) | Available | 최근 ~30일 커뮤니티 신호 리서치 (Reddit/HN/GitHub/X/웹), 인게이지먼트 점수화 (mvanhorn/last30days-skill 참고) |
-| [eval-harness](./skills/engineering/eval-harness) | Available | 비결정적 작업의 eval-driven development: 기준 먼저 정의, pass@k/pass^k 로 측정 (affaan-m/ecc 참고) |
-| [verification-before-completion](./skills/engineering/verification-before-completion) | Available | 증거 없이 done 금지: build/types/lint/tests/security/diff 돌리고 출력 확인 (obra/superpowers + affaan-m/ecc 참고) |
-| [iterative-retrieval](./skills/engineering/iterative-retrieval) | Available | dispatch→evaluate→refine 루프로 서브에이전트에 충분한 컨텍스트 조립 (affaan-m/ecc 참고) |
-| [go-backend-review](./skills/engineering/go-backend-review) | Review | Go 백엔드 diff 4렌즈 리뷰 (기계 게이트 위 판단 계층, 프로젝트 정본 주입 어댑터 계약) |
-| [council](./skills/productivity/council) | Available | 애매한 결정에 4-보이스 council 을 병렬 서브에이전트로 소집, 앵커링 방지 (affaan-m/ecc 참고) |
-| [context-budget](./skills/productivity/context-budget) | Available | 에이전트/스킬/MCP/룰 상시 컨텍스트 오버헤드 감사·순위화 (affaan-m/ecc 참고) |
-| [git-guardrails](./runtimes/claude-code/skills/git-guardrails) | Available | 위험한 git 명령 차단 hook (Claude Code 전용, mattpocock 참고) |
-| [setup-pre-commit](./skills/misc/setup-pre-commit) | Available | Husky pre-commit hook 설치 (JS/TS 전용, mattpocock 참고) |
+| 스킬 | 버킷 | 단계 | 설명 |
+|------|------|------|------|
+| [terse-output](./skills/token/terse-output) | token | Available | 정확도 유지하며 토큰 절감하는 초압축 출력; lite/full/ultra (JuliusBrussee/caveman 적응) |
+| [context-budget](./skills/token/context-budget) | token | Available | 에이전트/스킬/MCP/룰 상시 컨텍스트 오버헤드 감사·순위화 |
+| [lazy-code](./skills/token/lazy-code) | token | Available | YAGNI 사다리로 가장 게으른 해법 강제; lite/full/ultra (DietrichGebert/ponytail 적응) |
+| [i-have-adhd](./skills/token/i-have-adhd) | token | Available | 다음 행동을 맨 위에, 리스트 5개 캡, 군더더기 제거 응답 모드 |
+| [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | AI 티 나는 프론트엔드 방지: 브리프 읽기·세 다이얼·LLM 기본값 회피·프리플라이트 (Leonxlnx/taste-skill 적응) |
+| [grill-me](./skills/planning/grill-me) | planning | Available | 계획·의사결정·사업 아이디어를 스트레스 테스트하는 집요한 인터뷰 |
+| [to-prd](./skills/planning/to-prd) | planning | Available | 현재 대화를 PRD 로 합성 (인터뷰 없음, mattpocock 적응) |
+| [to-issues](./skills/planning/to-issues) | planning | Available | 계획/PRD 를 수직 슬라이스 이슈로 분해 (mattpocock 적응) |
+| [implement](./skills/planning/implement) | planning | Available | 합의된 PRD/이슈/슬라이스를 커밋된 테스트 코드로 구현 (mattpocock 적응) |
+| [codebase-design](./skills/planning/codebase-design) | planning | Available | 깊은 모듈 설계 어휘 (mattpocock 적응) |
+| [domain-modeling](./skills/planning/domain-modeling) | planning | Available | 도메인 모델·용어집·ADR 구축·정밀화 (mattpocock 적응) |
+| [fe-review](./skills/review/fe-review) | review | Available | 프론트엔드 diff 를 6렌즈(요구사항 추적성·추상화 비용·상태 위치·인터페이스 예측가능성·비동기 UX·숨은 부작용)로 리뷰 |
+| [be-review](./skills/review/be-review) | review | Available | Go 백엔드 diff 를 아키텍처 경계·데이터 무결성·에러/보안 규율·Go 관용구로 리뷰 (프로젝트 캐논 어댑터 계약) |
+| [js-testing](./skills/testing/js-testing) | testing | Available | JS/TS 코드베이스에서 무엇을 어느 레벨에서 테스트할지 판단 |
+| [webapp-testing](./skills/testing/webapp-testing) | testing | Available | Playwright로 로컬 웹앱 테스트 (anthropics 적응) |
+| [open-source-reverse-engineering-coach](./skills/learning/open-source-reverse-engineering-coach) | learning | Available | 오픈소스를 인터랙티브 역공학으로 학습 |
+| [technical-book-coach](./skills/learning/technical-book-coach) | learning | Available | 기술 서적·문서 코칭 학습 (한글 번역 + 코칭) |
+| [git-guardrails](./skills/util/git-guardrails) | util | Available | 위험한 git 명령 차단 hook (Claude Code 전용, mattpocock 적응) |
+| [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | merge/rebase 충돌을 의도 복원으로 해소 (mattpocock 적응) |
 
 ## 관련 레포 (Organization)
 
 | 레포 | 공개 | 설명 |
 |------|------|------|
-| [`jiki`](https://github.com/devjh-jiki/jiki) (이 레포) | 공개 | 인덱스 허브 |
+| [`zizon`](https://github.com/devjh-jiki/zizon) (이 레포) | 공개 | 인덱스 허브 |
 | [`trending-newsletter`](https://github.com/devjh-jiki/trending-newsletter) | 공개 | GitHub trending 한글 뉴스레터 (3관점: 개발/창업/마케팅) |
 | [`ai-playground`](https://github.com/devjh-jiki/ai-playground) | 공개 | AI 학습하며 만든 실습 프로젝트 |
 | `vault` | 비공개 | 사이드 wiki + 일상/여행 기록 + 학습 노트 |
