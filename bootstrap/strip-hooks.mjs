@@ -1,6 +1,21 @@
 import { readFile, writeFile, copyFile, rename } from 'node:fs/promises';
 import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// 무엇을 지울지는 하드코딩하지 않는다 — bootstrap/manifest.json 의
+// settings.removeHooks.matchCommand 가 유일한 출처다. 예전엔 이 스크립트가
+// 'agentmemory' 를 직접 문자열로 박아 매니페스트가 선언한 값과 무관하게
+// 동작했다(매니페스트를 바꿔도 아무 효과가 없는 죽은 설정). manifest.json 은
+// 이 파일과 같은 bootstrap/ 디렉터리에 있다.
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const manifestPath = join(scriptDir, 'manifest.json');
+const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+const matchCommand = manifest?.settings?.removeHooks?.matchCommand;
+if (typeof matchCommand !== 'string' || !matchCommand) {
+  console.error(`오류: ${manifestPath} 의 settings.removeHooks.matchCommand 가 비어있거나 문자열이 아니다.`);
+  process.exit(1);
+}
 
 // agentmemory 플러그인이 hooks/hooks.json 을 ${CLAUDE_PLUGIN_ROOT} 로 이미 등록한다
 // (SessionStart/UserPromptSubmit/PreToolUse/PreCompact/Stop/SessionEnd 6개 이벤트,
@@ -17,7 +32,7 @@ let removed = 0;
 const next = {};
 for (const [event, entries] of Object.entries(s.hooks)) {
   const kept = entries.filter(
-    (entry) => !(entry.hooks ?? []).some((h) => (h.command ?? '').includes('agentmemory')),
+    (entry) => !(entry.hooks ?? []).some((h) => (h.command ?? '').includes(matchCommand)),
   );
   removed += entries.length - kept.length;
   if (kept.length) next[event] = kept;
@@ -40,4 +55,4 @@ await copyFile(p, `${p}.bak`);
 const tmp = `${p}.tmp`;
 await writeFile(tmp, JSON.stringify(s, null, 2) + '\n');
 await rename(tmp, p);
-console.log(`agentmemory 중복 훅 ${removed}개 제거 (백업: ${p}.bak)`);
+console.log(`"${matchCommand}" 중복 훅 ${removed}개 제거 (백업: ${p}.bak)`);

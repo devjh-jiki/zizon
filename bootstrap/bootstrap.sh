@@ -81,6 +81,16 @@ m.marketplaces.keep.forEach((x, i) => {
 if (typeof m.mcpServers !== "object" || m.mcpServers === null) fail("mcpServers 키가 없다.");
 if (typeof m.mcpServers.userScope !== "object" || m.mcpServers.userScope === null) fail("mcpServers.userScope 키가 없다.");
 assertStringArray(m.mcpServers.userScope.remove, "mcpServers.userScope.remove");
+if (typeof m.projectScoped !== "object" || m.projectScoped === null) fail("projectScoped 키가 없다.");
+for (const repoPath of Object.keys(m.projectScoped)) {
+  const servers = m.projectScoped[repoPath];
+  if (typeof servers !== "object" || servers === null) {
+    fail("projectScoped[\"" + repoPath + "\"] 이(가) 객체가 아니다.");
+  }
+  if (!Object.keys(servers).length) {
+    fail("projectScoped[\"" + repoPath + "\"] 에 서버가 하나도 없다.");
+  }
+}
 
 const lines = [];
 for (const x of m.plugins.remove) lines.push("PR\t" + x);
@@ -88,6 +98,11 @@ for (const x of m.plugins.keep) lines.push("PK\t" + x);
 for (const x of m.marketplaces.remove) lines.push("MR\t" + x);
 for (const x of m.marketplaces.keep) lines.push("MK\t" + x.name + "\t" + x.source);
 for (const x of m.mcpServers.userScope.remove) lines.push("MU\t" + x);
+for (const repoPath of Object.keys(m.projectScoped)) {
+  for (const serverName of Object.keys(m.projectScoped[repoPath])) {
+    lines.push("PS\t" + repoPath + "\t" + serverName);
+  }
+}
 process.stdout.write(lines.join("\n"));
 '
 
@@ -302,7 +317,43 @@ while IFS= read -r s; do [ -n "$s" ] && ensure_absent mcp_in_user_scope "$s" cla
 run_required node "$ROOT/bootstrap/strip-hooks.mjs"
 
 echo "── 3/3 project scope ──"
-echo "프로젝트 스코프 MCP 는 각 레포 자체의 .mcp.json 에 커밋되어 있다. 레포를 clone 하면 설정이 함께 따라오므로 별도 수동 배치가 필요 없다."
+echo "프로젝트 스코프 MCP 는 각 레포 자체의 .mcp.json 에 커밋되어 있다. 레포를 clone 하면 설정이 함께 따라오므로 별도 수동 배치가 필요 없다. 아래는 확인용 리포트다 — 어떤 파일도 만들거나 고치지 않는다:"
+# manifest.json 의 projectScoped 는 "이 레포는 이 MCP 서버를 자체 .mcp.json 으로
+# 갖고 있어야 한다"는 선언이다. Phase 3 이 예전엔 이 문장만 찍고 아무 것도
+# 검증하지 않아 선언이 죽은 설정이었다 — 여기서는 각 레포 디렉터리와 그 안의
+# .mcp.json 을 실제로 읽어 선언된 서버가 있는지 보고한다. 없다고 여기서
+# 만들어주지는 않는다(그건 각 레포 자신의 책임).
+if [ "$DRY_RUN" = 1 ]; then
+  echo "[dry-run] projectScoped 검증 건너뜀"
+else
+  while IFS=$'\t' read -r repo server; do
+    [ -z "$repo" ] && continue
+    expanded="${repo/#\~/$HOME}"
+    if [ ! -d "$expanded" ]; then
+      echo "  [건너뜀] $repo — 레포 디렉터리가 없음 (기대: \"$server\")"
+      continue
+    fi
+    mcp_file="$expanded/.mcp.json"
+    if [ ! -f "$mcp_file" ]; then
+      echo "  [누락] $repo — .mcp.json 파일이 없음 (기대: \"$server\")"
+      continue
+    fi
+    set +e
+    node -e '
+      const fs = require("fs");
+      const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+      const server = process.argv[2];
+      process.exit(data && data.mcpServers && Object.prototype.hasOwnProperty.call(data.mcpServers, server) ? 0 : 1);
+    ' "$mcp_file" "$server" 2>/dev/null
+    found_status=$?
+    set -e
+    if [ "$found_status" -eq 0 ]; then
+      echo "  [확인됨] $repo — .mcp.json 에 \"$server\" 선언됨"
+    else
+      echo "  [불일치] $repo — .mcp.json 은 있지만 \"$server\" 를 선언하지 않음 (또는 파일이 유효한 JSON 이 아님)"
+    fi
+  done < <(manifest_pairs PS)
+fi
 
 if [ "$FAILURES" -gt 0 ]; then
   echo "실패: ${FAILURES}건 — 위 [실패] 로그를 확인할 것. claude plugin list / claude mcp list 로 실제 상태를 점검하라." >&2
