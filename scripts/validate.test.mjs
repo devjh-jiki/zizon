@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { validateSkills, validateMarketplace, validatePluginSkills } from './validate.mjs';
+import { validateSkills, validateMarketplace, validatePluginSkills, validateMarketplaceNoComponents } from './validate.mjs';
 
 async function fixture(skills) {
   const root = await mkdtemp(join(tmpdir(), 'zizon-'));
@@ -166,5 +166,34 @@ test('plugin.json 이 디렉토리 형식이면 내용과 무관하게 에러 �
     skills: ['./skills/'],
   }));
   const { errors } = await validatePluginSkills(root, join(root, 'plugin.json'));
+  assert.deepEqual(errors, []);
+});
+
+test('marketplace.json 의 plugin 항목이 skills 를 선언하면 에러 (manifest 충돌)', async () => {
+  const root = await fixture({});
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', source: './', skills: ['./skills/token/terse-output'] }],
+  }));
+  const { errors } = await validateMarketplaceNoComponents(join(root, 'marketplace.json'));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /zizon/);
+  assert.match(errors[0], /skills/);
+});
+
+test('marketplace.json 의 plugin 항목이 mcpServers/hooks 등 다른 컴포넌트 키를 선언해도 에러', async () => {
+  const root = await fixture({});
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', source: './', mcpServers: {}, hooks: {} }],
+  }));
+  const { errors } = await validateMarketplaceNoComponents(join(root, 'marketplace.json'));
+  assert.equal(errors.length, 2);
+});
+
+test('marketplace.json 의 plugin 항목에 컴포넌트 키가 없으면 통과', async () => {
+  const root = await fixture({});
+  await writeFile(join(root, 'marketplace.json'), JSON.stringify({
+    plugins: [{ name: 'zizon', source: './', version: '0.2.0', strict: false }],
+  }));
+  const { errors } = await validateMarketplaceNoComponents(join(root, 'marketplace.json'));
   assert.deepEqual(errors, []);
 });

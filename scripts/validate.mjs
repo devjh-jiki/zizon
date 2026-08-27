@@ -80,6 +80,28 @@ export async function validateMarketplace(root, manifestPath) {
   return { errors };
 }
 
+// marketplace.json 의 plugin 항목이 plugin.json 과 같은 컴포넌트 키(skills 등)를
+// 다시 선언하면 Claude Code 가 "conflicting manifests" 로 로드에 실패한다 — 이
+// 브랜치 초반에 실제로 한 번 겪었고 리뷰 두 라운드와 재설치를 태웠다. plugin.json
+// 이 컴포넌트 정의의 유일한 출처여야 하므로, marketplace.json 쪽에 이 키들이
+// 다시 나타나면 그 자체를 에러로 잡는다.
+const COMPONENT_KEYS = ['skills', 'commands', 'agents', 'hooks', 'mcpServers'];
+
+export async function validateMarketplaceNoComponents(manifestPath) {
+  const errors = [];
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  for (const plugin of manifest.plugins ?? []) {
+    for (const key of COMPONENT_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(plugin, key)) {
+        errors.push(
+          `manifest 충돌: marketplace.json 의 plugin "${plugin.name}" 항목이 "${key}" 를 선언함 — plugin.json 과 중복 선언되면 로드 시 "conflicting manifests" 로 실패한다. marketplace.json 에서 제거하라.`
+        );
+      }
+    }
+  }
+  return { errors };
+}
+
 // plugin.json 의 skills 가 개별 경로 나열 형식(디렉토리형 "./skills/" 가 zizon 의
 // 중첩 버킷 구조를 스캔하지 못해 round 2 에서 19개 경로 나열로 바꿨다)일 때, 그
 // 목록과 디스크의 실제 skills/<bucket>/<name>/ 을 서로 대조한다. 어느 쪽도 이걸
@@ -131,7 +153,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const a = await validateSkills(root);
   const b = await validateMarketplace(root, join(root, '.claude-plugin/marketplace.json'));
   const c = await validatePluginSkills(root, join(root, '.claude-plugin/plugin.json'));
-  const errors = [...a.errors, ...b.errors, ...c.errors];
+  const d = await validateMarketplaceNoComponents(join(root, '.claude-plugin/marketplace.json'));
+  const errors = [...a.errors, ...b.errors, ...c.errors, ...d.errors];
   if (errors.length) {
     for (const e of errors) console.error(`✗ ${e}`);
     process.exit(1);
