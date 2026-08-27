@@ -4,7 +4,7 @@
 
 ## 레포 구조
 
-- `skills/` — 7개 버킷(`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`)으로 분류한 런타임 중립 재사용 스킬의 단일 원본. 단일 Claude Code 플러그인 `zizon` 으로 배포합니다.
+- `skills/` — 8개 버킷(`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`, `writing`)으로 분류한 런타임 중립 재사용 스킬의 단일 원본. 단일 Claude Code 플러그인 `zizon` 으로 배포합니다.
 - `bootstrap/` — 머신 셋업(마켓플레이스·플러그인·MCP 서버·hook)을 선언적 manifest 로 재현하는 멱등 적용 스크립트.
 - `scripts/` — `pnpm validate` / `pnpm test` 가 실행하는 검증·테스트 스크립트(`validate.mjs`, `*.test.mjs`, `bootstrap-helpers.test.sh`).
 - `.claude-plugin/` — Claude Code 플러그인(`plugin.json`) 및 마켓플레이스(`marketplace.json`) 메타데이터.
@@ -14,7 +14,7 @@
 
 ## Skill 규칙
 
-모든 스킬은 `skills/<bucket>/<skill-name>/SKILL.md` 에 두며, `<bucket>` 은 정확히 7개 허용 버킷(`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`) 중 하나여야 합니다. 각 스킬은 YAML frontmatter 를 사용합니다.
+모든 스킬은 `skills/<bucket>/<skill-name>/SKILL.md` 에 두며, `<bucket>` 은 정확히 8개 허용 버킷(`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`, `writing`) 중 하나여야 합니다. 각 스킬은 YAML frontmatter 를 사용합니다.
 
 ```yaml
 ---

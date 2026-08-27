@@ -12,7 +12,7 @@ The goal is to eliminate "where did I write that down again?".
 
 | Area | Path | Description |
 |------|------|-------------|
-| Skills | [`skills/`](./skills) | My own agent skills. 7 buckets, 19 skills. Installed as the Claude Code plugin `zizon`. |
+| Skills | [`skills/`](./skills) | My own agent skills. 8 buckets, 22 skills. Installed as the Claude Code plugin `zizon`. |
 | Bootstrap | [`bootstrap/`](./bootstrap) | Idempotent scripts that reproduce machine setup (marketplaces, plugins, MCP servers, hooks) from a declarative manifest. |
 | Prompts | [`prompts/`](./prompts) | Frequently used prompt commands. |
 | Learning / AI | [`learning/ai/`](./learning/ai) | AI learning roadmap + resources + log, from a frontend developer's view. |

@@ -1,8 +1,11 @@
 {
   "name": "zizon",
   "version": "0.2.0",
-  "description": "개인 에이전트 자산 — 토큰절약·디자인·계획·리뷰·테스트·학습 스킬 19개",
-  "author": { "name": "devjh-jiki", "url": "https://github.com/devjh-jiki" },
+  "description": "개인 에이전트 자산 — 토큰절약·디자인·계획·리뷰·테스트·학습·문서 스킬 22개",
+  "author": {
+    "name": "devjh-jiki",
+    "url": "https://github.com/devjh-jiki"
+  },
   "license": "MIT",
   "homepage": "https://github.com/devjh-jiki/zizon",
   "repository": "https://github.com/devjh-jiki/zizon",
@@ -25,6 +28,9 @@
     "./skills/token/lazy-code",
     "./skills/token/terse-output",
     "./skills/util/git-guardrails",
-    "./skills/util/resolving-merge-conflicts"
+    "./skills/util/resolving-merge-conflicts",
+    "./skills/writing/article-writing",
+    "./skills/writing/living-docs-governance",
+    "./skills/writing/writing-domain-docs"
   ]
 }

@@ -18,6 +18,15 @@ Attributions below. Where code or prose was adapted, the upstream license applie
   - `skills/util/resolving-merge-conflicts` ← engineering/resolving-merge-conflicts
   - `skills/planning/grill-me` ← productivity/grill-me
   - `skills/util/git-guardrails` ← misc/git-guardrails-claude-code (includes the `block-dangerous-git.sh` script, copied verbatim)
+
+  Additionally, `skills/writing/writing-domain-docs` is an **original skill** for this repo that borrows one
+  concept from mattpocock: **grounding** (every concept must be grounded — by prerequisite or by an earlier
+  block — before a later block may lean on it), from `in-progress/writing-shape` and `in-progress/writing-beats`.
+  Those upstream skills are interactive (they present candidate openings and wait for the author to choose);
+  this one is non-interactive so an unattended subagent can follow it. Everything else in it — the deletion
+  test, the three-layer split, the heading contract, the shelf-life declaration, the Korean style rules, and
+  the pre-save self-check — was written from failures observed in this repo's own documents, recorded in
+  `skills/writing/writing-domain-docs/baseline-failures.md`.
   A full snapshot of the upstream repo is kept under `.upstream/mattpocock-skills/` for reference and
   attribution tracking (not installed or distributed).
 
@@ -54,8 +63,14 @@ Attributions below. Where code or prose was adapted, the upstream license applie
   pure-prompt concept was extracted and rewritten for this repo (ECC's execution infrastructure — hooks, CLI,
   SQLite state, slash commands — is deliberately NOT vendored, so only the tool-agnostic methodology was taken):
   - `skills/token/context-budget` ← `context-budget` (four-phase setup token-overhead audit)
+  - `skills/writing/article-writing` ← `article-writing` (long-form content in a distinctive voice)
+  - `skills/writing/living-docs-governance` ← `living-docs-governance` (four doc roles, one canonical owner per fact)
   This rewrite dropped ECC-internal skill references and infrastructure hooks, generalized ECC-specific paths to
   tool-agnostic terms, drew boundaries against this repo's neighbouring skills, and added Korean triggers.
+  `article-writing` additionally gained a Korean-cliché ban list; `living-docs-governance` was translated to
+  Korean, had its Chinese triggers replaced with Korean ones, and gained two real incidents from this repo as
+  motivating examples (an intentional deletion wrongly restored because no delete-zone existed, and a headless
+  agent executing instructions found inside a transcript it was asked to summarize).
 
 A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<repo>/` (fetched periodically by
 `.github/workflows/sync-upstream-skills.yml`) for reference and attribution tracking — not installed or distributed.

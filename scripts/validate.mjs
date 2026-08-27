@@ -1,7 +1,7 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const BUCKETS = ['token', 'design', 'planning', 'review', 'testing', 'learning', 'util'];
+export const BUCKETS = ['token', 'design', 'planning', 'review', 'testing', 'learning', 'util', 'writing'];
 
 function parseFrontmatter(text) {
   const m = text.match(/^---\n([\s\S]*?)\n---/);

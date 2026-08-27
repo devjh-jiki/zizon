@@ -12,7 +12,7 @@
 
 | 영역 | 위치 | 설명 |
 |------|------|------|
-| Skills | [`skills/`](./skills) | 나만의 에이전트 스킬. 7개 버킷, 19개. Claude Code 플러그인(zizon)으로 설치 |
+| Skills | [`skills/`](./skills) | 나만의 에이전트 스킬. 8개 버킷, 22개. Claude Code 플러그인(zizon)으로 설치 |
 | Bootstrap | [`bootstrap/`](./bootstrap) | 머신 셋업(마켓플레이스·플러그인·MCP 서버·hook)을 선언적 manifest 로 재현하는 멱등 적용 스크립트 |
 | Prompts | [`prompts/`](./prompts) | 자주 쓰는 프롬프트 명령어 |
 | Learning / AI | [`learning/ai/`](./learning/ai) | 프론트엔드 개발자 관점 AI 학습 로드맵 + 자료 + 기록 |

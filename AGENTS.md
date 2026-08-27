@@ -4,7 +4,7 @@ This repository is a public index hub for reusable developer assets. Keep change
 
 ## Repository Map
 
-- `skills/` — source of truth for runtime-neutral reusable agent skills, grouped into 7 buckets (`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`) and shipped as the single `zizon` Claude Code plugin.
+- `skills/` — source of truth for runtime-neutral reusable agent skills, grouped into 8 buckets (`token`, `design`, `planning`, `review`, `testing`, `learning`, `util`, `writing`) and shipped as the single `zizon` Claude Code plugin.
 - `bootstrap/` — declarative manifest and idempotent scripts that reproduce machine setup (marketplaces, plugins, MCP servers, hooks).
 - `scripts/` — validation and test scripts (`validate.mjs`, `*.test.mjs`, `bootstrap-helpers.test.sh`) run by `pnpm validate` / `pnpm test`.
 - `.claude-plugin/` — Claude Code plugin (`plugin.json`) and marketplace (`marketplace.json`) metadata.
@@ -14,7 +14,7 @@ This repository is a public index hub for reusable developer assets. Keep change
 
 ## Skill Contract
 
-Every skill lives at `skills/<bucket>/<skill-name>/SKILL.md`, where `<bucket>` is one of exactly seven allowed buckets: `token`, `design`, `planning`, `review`, `testing`, `learning`, `util`. Each uses YAML frontmatter:
+Every skill lives at `skills/<bucket>/<skill-name>/SKILL.md`, where `<bucket>` is one of exactly eight allowed buckets: `token`, `design`, `planning`, `review`, `testing`, `learning`, `util`, `writing`. Each uses YAML frontmatter:
 
 ```yaml
 ---
