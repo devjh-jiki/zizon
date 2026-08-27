@@ -1,16 +1,16 @@
 ---
 name: implement
-description: Implement a piece of work from a PRD, a set of issues, or vertical slices — the bridge from an agreed spec to committed code. Use when the user says "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec", or has a written plan ready to execute. This is for executing an already-agreed spec — if the spec is vague or unwritten, use product-spec-builder / to-prd first.
+description: Implement a piece of work from a PRD, a set of issues, or vertical slices — the bridge from an agreed spec to committed code. Use when the user says "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec", or has a written plan ready to execute. This is for executing an already-agreed spec — if the spec is vague or unwritten, use to-prd first.
 disable-model-invocation: true
 ---
 
 # implement
 
-Turn an agreed spec — a PRD, a set of issues, or vertical slices — into committed, tested code. This is the last leg of the `product-spec-builder`/`to-prd` → `to-issues` → **implement** pipeline: the thinking is done; now build it without re-litigating it.
+Turn an agreed spec — a PRD, a set of issues, or vertical slices — into committed, tested code. This is the last leg of the `to-prd` → `to-issues` → **implement** pipeline: the thinking is done; now build it without re-litigating it.
 
 ## Before you start
 
-Confirm you actually have a spec to implement (an **input contract**). If the PRD/issues are vague or missing, don't invent them — say so and point the user at `product-spec-builder` or `to-prd`. Only proceed when there's something concrete to execute against.
+Confirm you actually have a spec to implement (an **input contract**). If the PRD/issues are vague or missing, don't invent them — say so and point the user at `to-prd`. Only proceed when there's something concrete to execute against.
 
 ## Process
 

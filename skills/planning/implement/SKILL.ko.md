@@ -1,16 +1,16 @@
 ---
 name: implement
-description: Implement a piece of work from a PRD, a set of issues, or vertical slices — the bridge from an agreed spec to committed code. Use when the user says "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec", or has a written plan ready to execute. This is for executing an already-agreed spec — if the spec is vague or unwritten, use product-spec-builder / to-prd first.
+description: Implement a piece of work from a PRD, a set of issues, or vertical slices — the bridge from an agreed spec to committed code. Use when the user says "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec", or has a written plan ready to execute. This is for executing an already-agreed spec — if the spec is vague or unwritten, use to-prd first.
 disable-model-invocation: true
 ---
 
 # implement
 
-합의된 스펙 — PRD, 이슈 묶음, 또는 수직 슬라이스 — 을 커밋된 테스트 코드로 바꾼다. `product-spec-builder`/`to-prd` → `to-issues` → **implement** 파이프라인의 마지막 구간이다: 사고는 끝났으니, 다시 논쟁하지 말고 만든다.
+합의된 스펙 — PRD, 이슈 묶음, 또는 수직 슬라이스 — 을 커밋된 테스트 코드로 바꾼다. `to-prd` → `to-issues` → **implement** 파이프라인의 마지막 구간이다: 사고는 끝났으니, 다시 논쟁하지 말고 만든다.
 
 ## 시작 전
 
-구현할 스펙이 실제로 있는지 확인한다(**input contract**). PRD/이슈가 모호하거나 없으면 지어내지 말고 — 그렇게 말하고 `product-spec-builder` 나 `to-prd` 로 안내한다. 실행할 구체적 대상이 있을 때만 진행한다.
+구현할 스펙이 실제로 있는지 확인한다(**input contract**). PRD/이슈가 모호하거나 없으면 지어내지 말고 — 그렇게 말하고 `to-prd` 로 안내한다. 실행할 구체적 대상이 있을 때만 진행한다.
 
 ## 과정
 
