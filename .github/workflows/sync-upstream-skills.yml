@@ -1,13 +1,17 @@
 name: Sync upstream skills
 
 # 검증된 외부 skills 레포(mattpocock/skills 등)의 변경을 주기적으로 감지해
-# 변경분을 .upstream/ 에 반영하고 PR로 제안한다. 사람이 검토 후 선별 머지한다.
+# 변경분을 .upstream/ 에 자동 커밋한다. .upstream/ 은 참조용 스냅샷이라
+# 런타임에 아무것도 소비하지 않으므로(plugin.json 은 skills/ 경로만 싣는다)
+# 사람의 승인 없이 갱신해도 안전하다. 내 skills/ 에 반영할지는 별개 판단이다.
 #
 # 동작 방식:
 #   1. 매주 월요일 + 수동 트리거
 #   2. 각 upstream 레포의 skills/ 를 .upstream/<owner>-<repo>/ 로 복사
-#   3. 변경이 있으면 create-pull-request 가 PR 생성
-#   4. PR 본문에 어떤 파일이 바뀌었는지 표시
+#   3. 변경이 있으면 main 에 직접 커밋·푸시 (없으면 아무것도 하지 않음)
+#
+# 주의: 매트릭스가 여러 upstream 을 도는데 전부 같은 브랜치에 push 하므로
+# max-parallel: 1 로 직렬화한다. 병렬로 두면 non-fast-forward 로 서로 밀려난다.
 #
 # 머지 정책: 자동 머지하지 않는다. 내 기준에 맞는 변경만 골라 내 skills/ 로 반영한다.
 
@@ -18,12 +22,13 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     strategy:
+      # 모든 잡이 같은 브랜치에 push 하므로 직렬 실행이 필요하다
+      max-parallel: 1
       matrix:
         upstream:
           - owner: mattpocock
@@ -66,6 +71,9 @@ jobs:
     steps:
       - name: Checkout zizon
         uses: actions/checkout@v4
+        with:
+          # rebase 재시도 경로가 이력을 필요로 하므로 shallow 로 받지 않는다
+          fetch-depth: 0
 
       - name: Fetch upstream snapshot
         run: |
@@ -78,22 +86,36 @@ jobs:
           cp -R "/tmp/upstream/${{ matrix.upstream.path }}/." "$DEST/"
           rm -rf "$DEST/.git"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          branch: "sync/${{ matrix.upstream.owner }}-${{ matrix.upstream.repo }}"
-          commit-message: "chore(sync): ${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }} 업데이트"
-          title: "🔄 upstream 동기화: ${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }}"
-          body: |
-            ## upstream 변경 감지
+      - name: Commit and push if changed
+        run: |
+          set -euo pipefail
+          DEST=".upstream/${{ matrix.upstream.owner }}-${{ matrix.upstream.repo }}"
 
-            **레포**: [`${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }}`](https://github.com/${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }})
-            **위치**: `.upstream/${{ matrix.upstream.owner }}-${{ matrix.upstream.repo }}/`
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-            아래 변경 파일을 검토하고, **내 기준에 맞는 것만** `skills/` 로 직접 옮기세요.
-            이 PR 자체를 그대로 머지할 필요는 없습니다. (스냅샷 보관 용도)
+          git add -A "$DEST"
+          if git diff --cached --quiet; then
+            echo "변경 없음 — ${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }}"
+            exit 0
+          fi
 
-            > 자동 생성된 PR입니다. 선별 반영 후 닫아도 됩니다.
-          labels: |
-            upstream-sync
-          delete-branch: true
+          echo "변경된 파일:"
+          git diff --cached --name-status
+
+          git commit \
+            -m "chore(sync): ${{ matrix.upstream.owner }}/${{ matrix.upstream.repo }} 스냅샷 갱신" \
+            -m ".upstream/ 은 참조용 스냅샷이다. 이 변경이 곧 내 skills/ 에 반영된다는 뜻은 아니며, 반영 여부는 별도 판단이다."
+
+          # 같은 실행의 앞선 잡이 이미 push 했을 수 있으므로 rebase 후 재시도
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "push 성공 (시도 $attempt)"
+              exit 0
+            fi
+            echo "push 실패 — rebase 후 재시도 ($attempt/3)"
+            git pull --rebase origin main
+          done
+
+          echo "3회 시도 후에도 push 실패" >&2
+          exit 1
