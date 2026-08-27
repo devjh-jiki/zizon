@@ -30,9 +30,8 @@ Attributions below. Where code or prose was adapted, the upstream license applie
   preserved; trimmed of the bundled `with_server.py` helper, with a runtime-portability note and an
   owner/leadership lens added).
 
-- **[buYoung/skills](https://github.com/buYoung/skills)** (MIT) — the `biz-opportunity-scout` skill's
-  framework selection (TAM/SAM/SOM, unit economics, competitive analysis, PMF indicators) and the
-  trust-level labeling approach (Available / Review / Private) are inspired by this repository.
+- **[buYoung/skills](https://github.com/buYoung/skills)** (MIT) — the trust-level labeling approach
+  (Available / Review / Private) is inspired by this repository.
 
 - **[DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)** (MIT) — `skills/token/lazy-code`
   is **adapted** from the `ponytail` skill: the YAGNI ladder, the lite/full/ultra intensity levels, and the
@@ -56,7 +55,7 @@ Attributions below. Where code or prose was adapted, the upstream license applie
   SQLite state, slash commands — is deliberately NOT vendored, so only the tool-agnostic methodology was taken):
   - `skills/token/context-budget` ← `context-budget` (four-phase setup token-overhead audit)
   This rewrite dropped ECC-internal skill references and infrastructure hooks, generalized ECC-specific paths to
-  tool-agnostic terms, drew boundaries against neighbouring dev-hub skills, and added Korean triggers.
+  tool-agnostic terms, drew boundaries against this repo's neighbouring skills, and added Korean triggers.
 
 A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<repo>/` (fetched periodically by
 `.github/workflows/sync-upstream-skills.yml`) for reference and attribution tracking — not installed or distributed.
@@ -72,7 +71,8 @@ A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<re
   pre-send check are preserved in substance from the upstream `skills/i-have-adhd/SKILL.md`. Frontmatter rewritten
   to this repo's `name` + `description` contract. User-invocation is preserved from upstream:
   `disable-model-invocation: true` stays set, so the skill only activates via `/i-have-adhd` (or an equivalent
-  explicit ask), never automatically.
+  explicit ask), never automatically. The "Persistence" section and the reading-facts section (renamed "Why this
+  shape") were also reordered relative to upstream, which leads with Persistence and puts the reading facts second.
 
 ### skills/testing/js-testing
 
