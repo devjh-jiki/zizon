@@ -55,7 +55,7 @@ The provided materials are categorized and reorganized into a stage-by-stage seq
 - Building Agents with MCP (video)
 - MCP with Anthropic (course)
 - AI Agents with MCP — Kyle Stratis (book)
-- **Output**: one MCP server → reflected in [`mcp/`](../../mcp)
+- **Output**: one MCP server
 
 ### Stage 5 — RAG / memory
 
@@ -71,7 +71,7 @@ The provided materials are categorized and reorganized into a stage-by-stage seq
 - AI Engineering (book)
 - The LLM Engineering Handbook (book)
 - Designing Machine Learning Systems (book)
-- **Output**: a technical blog post (using the write-blog-post skill)
+- **Output**: a technical blog post
 
 ---
 
@@ -147,4 +147,4 @@ Things especially useful for frontend practice that were not in the original lis
 
 - A **read → small practice → log** cycle for each stage.
 - Practice goes into the `ai-playground` repo in per-stage folders.
-- Logging goes into [`journal.md`](./journal.md) by date. When something is blog-worthy, write it up with the `write-blog-post` skill.
+- Logging goes into [`journal.md`](./journal.md) by date. When something is blog-worthy, write it up as a post.
