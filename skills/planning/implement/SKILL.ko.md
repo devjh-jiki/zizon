@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Implement a piece of work from a PRD, a set of issues, or vertical slices — the bridge from an agreed spec to committed code. Use when the user says "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec", or has a written plan ready to execute. This is for executing an already-agreed spec — if the spec is vague or unwritten, use to-prd first.
+description: 합의된 스펙 — PRD, 이슈 묶음, 또는 수직 슬라이스 — 을 커밋된 코드로 옮긴다. 사용자가 "이거 구현해줘", "이슈대로 만들어줘", "implement this PRD/issue/slice", "build the spec" 이라고 하거나 실행할 계획이 이미 작성돼 있을 때 사용한다. 이미 합의된 스펙을 실행하는 용도다 — 스펙이 모호하거나 없으면 to-prd 를 먼저 쓴다. 작성된 구현 계획서를 체크포인트를 두고 단계별로 실행하는 것은 superpowers:executing-plans 의 몫이고, 이 스킬은 계획서가 아니라 PRD 나 이슈 목록에서 출발한다.
 disable-model-invocation: true
 ---
 

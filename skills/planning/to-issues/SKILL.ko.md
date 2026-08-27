@@ -1,6 +1,6 @@
 ---
 name: to-issues
-description: 계획, 스펙, 또는 PRD 를 트레이서 불릿 수직 슬라이스로 독립적으로 집을 수 있는 작업 단위로 쪼개고, Markdown 으로 출력하며 사용자가 가진 이슈 트래커에 선택적으로 발행한다. 사용자가 "이슈로 쪼개줘", "작업 단위로 나눠줘", "break this into issues", "slice this PRD", "vertical slices 로 나눠줘" 라고 하거나, 계획을 출시 가능한 증분으로 바꾸고 싶을 때 사용한다. `to-prd` 의 출력을 소비한다. mattpocock/skills 에서 가져옴. (영어 원본 SKILL.md 의 한국어 번역본)
+description: 계획, 스펙, 또는 PRD 를 트레이서 불릿 수직 슬라이스로 독립적으로 집을 수 있는 작업 단위로 쪼개고, Markdown 으로 출력하며 사용자가 가진 이슈 트래커에 선택적으로 발행한다. 사용자가 "이슈로 쪼개줘", "작업 단위로 나눠줘", "break this into issues", "slice this PRD", "vertical slices 로 나눠줘" 라고 하거나, 계획을 출시 가능한 증분으로 바꾸고 싶을 때 사용한다. `to-prd` 의 출력을 소비한다. 순서가 정해진 구현 계획서 한 편이 필요하면 superpowers:writing-plans 를 쓴다 — 이 스킬은 아무 순서로나 집어갈 수 있는 독립 작업 단위를 만든다. mattpocock/skills 에서 가져옴. (영어 원본 SKILL.md 의 한국어 번역본)
 disable-model-invocation: true
 ---
 

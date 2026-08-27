@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: Drive and test a local web app with Playwright — verify frontend behavior, click through flows, capture screenshots, read console/network logs. Use when the user wants to test a running web app, debug UI behavior, automate a browser flow, says "이 웹앱 테스트", "브라우저로 확인해줘", "playwright 로 클릭 테스트", or needs to verify what a page actually renders. For unit-testing pure logic use superpowers:test-driven-development; this is for real browser interaction.
+description: Playwright 로 로컬 웹앱을 구동하고 테스트한다 — 프론트엔드 동작 검증, 플로우 클릭, 스크린샷 캡처, 콘솔/네트워크 로그 확인. 실행 중인 웹앱을 테스트하거나, UI 동작을 디버깅하거나, 브라우저 플로우를 자동화할 때, 또는 "이 웹앱 테스트", "브라우저로 확인해줘", "playwright 로 클릭 테스트" 라고 하거나 페이지가 실제로 무엇을 렌더링하는지 확인해야 할 때 사용한다. 무엇을 어느 층위에서 테스트할지 판단하는 것은 js-testing, red-green-refactor 루프는 superpowers:test-driven-development 의 몫이다. 이 스킬은 실제 브라우저 구동 전용이다.
 ---
 
 # webapp-testing

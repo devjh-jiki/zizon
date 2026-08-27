@@ -1,6 +1,6 @@
 ---
 name: to-issues
-description: Break a plan, spec, or PRD into independently-grabbable work items using tracer-bullet vertical slices, output as Markdown and optionally published to whatever issue tracker the user has. Use when the user says "이슈로 쪼개줘", "작업 단위로 나눠줘", "break this into issues", "slice this PRD", "vertical slices 로 나눠줘", or wants a plan turned into shippable increments. Consumes the output of `to-prd`. Adapted from mattpocock/skills.
+description: Break a plan, spec, or PRD into independently-grabbable work items using tracer-bullet vertical slices, output as Markdown and optionally published to whatever issue tracker the user has. Use when the user says "이슈로 쪼개줘", "작업 단위로 나눠줘", "break this into issues", "slice this PRD", "vertical slices 로 나눠줘", or wants a plan turned into shippable increments. Consumes the output of `to-prd`. For one sequenced implementation plan document use superpowers:writing-plans; this produces independent work items that can be picked up in any order. Adapted from mattpocock/skills.
 disable-model-invocation: true
 ---
 
