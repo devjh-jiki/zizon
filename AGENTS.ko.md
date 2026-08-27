@@ -27,16 +27,16 @@ description: 스킬이 하는 일과 활성화되어야 하는 조건.
 - `name`에는 소문자, 숫자, 하이픈만 사용합니다.
 - 상세 절차는 본문에 두고, 안정적으로 활성화되도록 `description`에 적용 범위를 구체적으로 적습니다.
 - `.claude-plugin/plugin.json` 은 모든 스킬 경로를 개별 나열합니다(현재 19개). 스킬을 추가·삭제·이동하면 파일시스템과 이 목록을 함께 갱신해야 합니다 — 둘이 어긋나면 `pnpm validate` 가 빌드를 실패시킵니다.
-- 공개 스킬은 루트 README 에 등록합니다.
+- 공개 스킬은 **네** 파일에 등록합니다: 루트 README 쌍(`README.md`, `README.en.md`)과 `skills/README` 쌍(`skills/README.md`, `skills/README.ko.md`).
 
 ## 한/영 문서 쌍
 
-루트 README를 제외하면 영어가 단일 원본입니다.
+루트 README를 제외하면 영어가 단일 원본입니다. `.github/workflows/check-doc-pairs.yml` 이 기준입니다 — 레포의 **모든** `*.md` 파일을 검사하며(`README`/`SKILL` 계열만이 아닙니다), 여기엔 `references/` 와 `snippets/` 아래 문서도 포함됩니다:
 
 - `X.md`는 `X.ko.md`와 쌍을 이룹니다.
 - 한쪽을 변경하면 다른 쪽도 같은 의미로 갱신합니다.
 - 루트 문서는 예외로, `README.md`가 한국어이며 `README.en.md`와 쌍을 이룹니다.
-- `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changeset, 코드, 실행 가능한 command template, template, 스니펫, `references/` 아래 보조 파일, `docs/superpowers/` 아래 파일은 번역 쌍이 없어도 됩니다.
+- `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changeset(`.changeset/*.md`), `docs/superpowers/` 아래 파일, gitignore 된 `.superpowers/` 스크래치 워크스페이스, `*/commands/*.md`, `templates/` 아래 Markdown 은 번역 쌍이 없어도 됩니다. `references/` 와 `snippets/` 는 예외가 **아닙니다** — 거기 있는 문서도 다른 문서와 똑같이 쌍이 필요합니다.
 
 문서를 변경한 뒤 `.github/workflows/check-doc-pairs.yml`과 같은 검사를 실행합니다.
 

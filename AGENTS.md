@@ -27,16 +27,16 @@ description: What the skill does and when it should activate.
 - Use lowercase letters, numbers, and hyphens for `name`.
 - Keep detailed procedures in the body and make `description` specific enough for reliable activation.
 - `.claude-plugin/plugin.json` lists all skill paths explicitly (19 as of this writing). Adding, removing, or moving a skill means updating both the filesystem and this list — `pnpm validate` fails the build if they drift apart.
-- Register public skills in the root README files.
+- Register public skills in **four** files: the root README pair (`README.md`, `README.en.md`) and the `skills/README` pair (`skills/README.md`, `skills/README.ko.md`).
 
 ## English/Korean Documentation Pairs
 
-English is the source of truth except for the root README:
+English is the source of truth except for the root README. `.github/workflows/check-doc-pairs.yml` is authoritative — it checks **every** `*.md` file in the repo (not just `README`/`SKILL` files), so this includes docs under `references/` and `snippets/`:
 
 - `X.md` pairs with `X.ko.md`.
 - When either file changes, update the other with the same meaning.
 - Root documentation is the exception: `README.md` is Korean and pairs with `README.en.md`.
-- Pairing is not required for `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changesets, code, executable command templates, templates, snippets, supporting files under `references/`, or files under `docs/superpowers/`.
+- Pairing is not required for `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changesets (`.changeset/*.md`), files under `docs/superpowers/`, files under the gitignored `.superpowers/` scratch workspace, `*/commands/*.md`, and Markdown under `templates/`. `references/` and `snippets/` are **not** exempt — files there need a pair like everything else.
 
 Run the same checks as `.github/workflows/check-doc-pairs.yml` after documentation changes.
 

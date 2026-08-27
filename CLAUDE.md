@@ -51,9 +51,9 @@ description: 무엇을 하는지 + 언제 쓰는지. 1024자 이내. 자동 트�
 - 한국어 파일: `X.ko.md` (예: `README.ko.md`, `SKILL.ko.md`)
 - **한쪽을 수정하면 반드시 다른 쪽도 같은 의미로 수정한다.** 둘은 항상 동기화되어야 한다.
 - 에이전트가 읽고 실행하는 정본은 영어 `SKILL.md`. `SKILL.ko.md` 는 사람이 읽는 번역본이며, frontmatter 의 `name` 은 영어본과 동일하게 유지하되 한국어본은 에이전트 트리거 대상이 아니다.
-- CI(`.github/workflows/check-doc-pairs.yml`)가 쌍 누락을 검사한다. `X.md` 가 있으면 `X.ko.md` 도 있어야 한다(그 반대도). 누락 시 빌드 실패.
+- CI(`.github/workflows/check-doc-pairs.yml`)가 쌍 누락을 검사한다. 이 워크플로우가 기준이다 — 레포의 **모든** `*.md` 파일을 검사하며, `README`/`SKILL` 계열로 국한되지 않는다(`references/`, `snippets/` 아래 문서도 포함). `X.md` 가 있으면 `X.ko.md` 도 있어야 한다(그 반대도). 누락 시 빌드 실패.
 - **예외 — 루트 README**: GitHub 첫 화면 가독성을 위해 루트만 한국어가 메인이다. `README.md`(한국어) + `README.en.md`(영어) 쌍으로 둔다. 이 둘은 `.ko.md` 규칙을 따르지 않는다.
-- 예외(번역 쌍 불필요): `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changeset, 코드·실행 가능한 command template·template·스니펫 파일, `references/` 내부 보조 문서, `docs/superpowers/` 아래 파일은 영어 단일 또는 한국어 단일 허용. 체크 대상은 `README`와 `SKILL` 계열.
+- 예외(번역 쌍 불필요): `CLAUDE.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, Changeset(`.changeset/*.md`), `docs/superpowers/` 아래 파일, gitignore 된 `.superpowers/` 스크래치 워크스페이스, `*/commands/*.md`, `templates/` 아래 Markdown 은 영어 단일 또는 한국어 단일 허용. `references/` 와 `snippets/` 는 예외가 **아니다** — 그 아래 문서도 쌍이 있어야 한다.
 
 ## 신뢰도 라벨 (마켓플레이스 운영)
 
