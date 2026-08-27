@@ -119,6 +119,42 @@ def resolve_requested_sources(args_search: str | None, config: dict) -> list[str
     return None
 
 
+def add_deep_research_source(
+    requested_sources: list[str] | None,
+) -> list[str] | None:
+    """Add Perplexity without replacing the default-source sentinel.
+
+    ``None`` means that the planner can use the normal configured source set.
+    Deep Research enables Perplexity through ``INCLUDE_SOURCES`` separately, so
+    converting this sentinel to ``["perplexity"]`` would suppress every normal
+    source.
+    """
+    if requested_sources is None:
+        return None
+    if "perplexity" in requested_sources:
+        return requested_sources
+    return [*requested_sources, "perplexity"]
+
+
+def enable_deep_research_source(config: dict) -> None:
+    """Enable the exact Perplexity token or reject a hard exclusion."""
+    excluded = {
+        token.strip().lower()
+        for token in str(config.get("EXCLUDE_SOURCES") or "").split(",")
+        if token.strip()
+    }
+    if "perplexity" in excluded:
+        raise ValueError(
+            "--deep-research conflicts with EXCLUDE_SOURCES=perplexity"
+        )
+
+    include = str(config.get("INCLUDE_SOURCES") or "")
+    tokens = [token.strip() for token in include.split(",") if token.strip()]
+    if "perplexity" not in {token.lower() for token in tokens}:
+        tokens.append("perplexity")
+        config["INCLUDE_SOURCES"] = ",".join(tokens)
+
+
 def plan_has_explicit_trustpilot_domain(comp_plan: dict | None) -> bool:
     """True when any --competitors-plan entry pins a trustpilot_domain."""
     if not comp_plan:
@@ -171,6 +207,49 @@ def activate_trustpilot_for_explicit_domain(
 
     if requested_sources is not None and "trustpilot" not in requested_sources:
         requested_sources = [*requested_sources, "trustpilot"]
+    return requested_sources
+
+
+def activate_telegram_for_explicit_sources(
+    config: dict,
+    requested_sources: list[str] | None,
+    *,
+    channels: str,
+) -> list[str] | None:
+    """Activate the opt-in Telegram source when the user pinned channel(s).
+
+    Passing ``--telegram-sources`` is unambiguous intent — silently ignoring it
+    when Telegram is not in ``INCLUDE_SOURCES`` / ``--search`` is the same
+    failure mode as #873 (Trustpilot). Auto-activate the source.
+
+    ``EXCLUDE_SOURCES=telegram`` still wins. Mutates ``config`` in place and
+    returns the (possibly extended) ``requested_sources`` list.
+    """
+    excluded = {
+        token.strip().lower()
+        for token in str(config.get("EXCLUDE_SOURCES") or "").split(",")
+        if token.strip()
+    }
+    if "telegram" in excluded:
+        sys.stderr.write(
+            f"[Telegram] --telegram-sources={channels} ignored: telegram is in EXCLUDE_SOURCES\n"
+        )
+        return requested_sources
+
+    config["TELEGRAM_SOURCES"] = channels
+
+    include = str(config.get("INCLUDE_SOURCES") or "")
+    tokens = [token.strip() for token in include.split(",") if token.strip()]
+    if "telegram" not in {token.lower() for token in tokens}:
+        tokens.append("telegram")
+        config["INCLUDE_SOURCES"] = ",".join(tokens)
+        sys.stderr.write(
+            f"[Telegram] --telegram-sources={channels} activated telegram source "
+            "(add to INCLUDE_SOURCES permanently to skip this auto-enable)\n"
+        )
+
+    if requested_sources is not None and "telegram" not in requested_sources:
+        requested_sources = [*requested_sources, "telegram"]
     return requested_sources
 
 
@@ -677,11 +756,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--x-handle", help="X handle for targeted supplemental search")
     parser.add_argument("--x-related", help="Comma-separated related X handles (searched with lower weight)")
     parser.add_argument("--web-backend", default="auto",
-                        choices=["auto", "brave", "exa", "serper", "parallel", "keyless", "none"],
-                        help="Web search backend (default: auto, tries Brave then Exa then Serper then Parallel; "
-                             "keyless forces the zero-key DuckDuckGo/SearXNG floor)")
+                        choices=["auto", "brave", "exa", "serper", "parallel", "parallel-mcp", "keyless", "none"],
+                        help="Web search backend (default: auto; parallel-mcp explicitly opts into the "
+                             "anonymous hosted MCP; keyless forces the zero-key floor)")
     parser.add_argument("--deep-research", action="store_true",
-                        help="Use Perplexity Deep Research (~$0.90/query) for in-depth analysis. Requires PERPLEXITY_API_KEY or OPENROUTER_API_KEY.")
+                        help="Use at most one Perplexity Deep Research run. Direct PERPLEXITY_API_KEY uses the Agent API background path; OPENROUTER_API_KEY keeps the synchronous Sonar fallback; cannot be combined with competitor or vs-mode.")
     parser.add_argument("--hiring-signals", action="store_true",
                         help="Analyze public jobs/careers postings as evidence-backed company focus signals.")
     parser.add_argument("--plan", help="JSON query plan (skips internal LLM planner). Can be a JSON string or a file path.")
@@ -742,6 +821,16 @@ def build_parser() -> argparse.ArgumentParser:
             "(--amazon-query='Weber grill', not 'Weber' -- a bare brand keyword lands "
             "on an ad-heavy page that can miss the brand's own bestsellers). "
             "Requires the brightdata CLI on PATH and logged in."
+        ),
+    )
+    parser.add_argument(
+        "--telegram-sources",
+        help=(
+            "Comma-separated list of public Telegram channel handles or t.me URLs. "
+            "Auto-activates the opt-in Telegram source for this run. "
+            "Accepts: bare handle (aipost), @handle (@aipost), "
+            "t.me URL (https://t.me/aipost), or preview URL (https://t.me/s/aipost). "
+            "Rejects joinchat links and numeric -100 supergroup IDs."
         ),
     )
     parser.add_argument(
@@ -2758,6 +2847,40 @@ def _run_library_search(
     return 0
 
 
+def _looks_like_entity_topic(topic: str) -> bool:
+    """Whether a topic names a person, company, or product rather than a theme.
+
+    Keys on brevity, not capitalization. People type lowercase: "bentgo",
+    "peter steinberger" and "getenergy.com" are entity searches every bit as
+    much as their title-cased forms, and requiring a capital meant the most
+    common real-world spelling never resolved a handle.
+
+    A short topic is an entity search; a longer one is a theme. "Peter
+    Steinberger", "bentgo" and "getenergy.com" qualify; "best AI coding tools
+    2026" and "how to build agents that scale" do not. Question-shaped topics
+    are themes regardless of length.
+
+    Used only to decide whether resolving an X handle is worth one web search,
+    so a false negative costs the old behavior and a false positive costs a
+    single search.
+    """
+    text = (topic or "").strip()
+    if not text or text.endswith("?"):
+        return False
+    words = [w for w in re.findall(r"[A-Za-z0-9_.@'-]+", text) if w]
+    if not words or len(words) > 4:
+        return False
+    if any(w.startswith("@") for w in words):
+        return True
+    # A theme reads as a phrase built from common words; an entity does not.
+    common = {
+        "best", "top", "how", "why", "what", "when", "vs", "versus", "guide",
+        "tips", "review", "reviews", "news", "latest", "update", "updates",
+        "trends", "tools", "and", "or", "for", "the", "with", "about",
+    }
+    return not any(w.lower() in common for w in words)
+
+
 def main() -> int:
     parser = build_parser()
     # Use parse_known_args so setup sub-flags (--device-auth, --github,
@@ -2930,6 +3053,13 @@ def _main(
 
     # Bare --discover (no domain) is global trending, so the dispatch keys on
     # "flag present" (is not None), never on the domain string's truthiness.
+    if args.deep_research and not topic:
+        sys.stderr.write(
+            "[last30days] --deep-research requires a normal positional topic; "
+            "it cannot be combined with discovery, drill, or cached-only modes.\n"
+        )
+        return 2
+
     if args.discover is not None:
         if topic:
             sys.stderr.write(
@@ -3049,6 +3179,41 @@ def _main(
     if args.lookback_days is None:
         args.lookback_days = 30
 
+    if args.deep_research and not args.diagnose:
+        from lib import planner as _planner
+
+        if not (
+            config.get("PERPLEXITY_API_KEY")
+            or config.get("OPENROUTER_API_KEY")
+        ):
+            print(
+                "Error: --deep-research requires PERPLEXITY_API_KEY or "
+                "OPENROUTER_API_KEY",
+                file=sys.stderr,
+            )
+            return 1
+        comparison_requested = any(
+            value is not None
+            for value in (
+                args.competitors,
+                args.competitors_list,
+                args.competitors_plan,
+            )
+        ) or len(_planner._comparison_entities(topic, uncapped=True)) >= 2
+        if comparison_requested:
+            sys.stderr.write(
+                "Error: --deep-research cannot be combined with competitor or vs-mode. "
+                "It permits one paid Deep Research run per user action; run each topic "
+                "separately.\n"
+            )
+            return 2
+        config["_deep_research"] = True
+        try:
+            enable_deep_research_source(config)
+        except ValueError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 2
+
     # Reject a misspelled configured register before remote submission or any
     # local source retrieval. Excluded modes resolve to default and remain
     # unaffected by the register setting.
@@ -3080,6 +3245,7 @@ def _main(
         and env.read_secret_env("LAST30DAYS_API_KEY")
         and os.environ.get("LAST30DAYS_API_BASE")
         and not resolved_corpus_dirs
+        and not args.deep_research
     ):
         if _freshness_enabled(args, config):
             if args.verify_freshness is True:
@@ -3114,6 +3280,8 @@ def _main(
         return hosted.run_hosted(topic, depth, **hosted_kwargs)
 
     requested_sources = resolve_requested_sources(args.search, config)
+    if args.deep_research:
+        requested_sources = add_deep_research_source(requested_sources)
     # Explicit --trustpilot-domain is user intent: activate the opt-in source
     # before diagnose/run so the flag cannot silently no-op (#873). Auto-resolve
     # hints are applied later and must not call this path.
@@ -3126,11 +3294,28 @@ def _main(
             requested_sources,
             reason=f"--trustpilot-domain={cli_trustpilot_domain}",
         )
+    # Explicit --telegram-sources is user intent: activate the opt-in source
+    # before diagnose/run so the flag cannot silently no-op (same pattern as
+    # Trustpilot #873). Sets TELEGRAM_SOURCES in config for pipeline.
+    cli_telegram_sources = (
+        args.telegram_sources.strip() if args.telegram_sources else ""
+    )
+    if cli_telegram_sources:
+        requested_sources = activate_telegram_for_explicit_sources(
+            config,
+            requested_sources,
+            channels=cli_telegram_sources,
+        )
     diag = pipeline.diagnose(config, requested_sources, safe=args.diagnose)
 
     if args.diagnose:
         print(json.dumps(diag, indent=2, sort_keys=True))
         return 0
+
+    # Competitor sub-runs shallow-copy this config. The shared object makes the
+    # paid Perplexity cap command-wide and thread-safe across that fanout. Keep
+    # this runtime-only object out of the safe diagnose configuration contract.
+    config["_perplexity_paid_budget"] = pipeline.PaidSourceBudget()
 
     if not topic:
         parser.print_usage(sys.stderr)
@@ -3153,7 +3338,11 @@ def _main(
             sys.stderr.write(refuse_msg)
             return 2
 
-    if args.emit == "html" and synthesis_md is not None:
+    if (
+        args.emit == "html"
+        and synthesis_md is not None
+        and not args.deep_research
+    ):
         cached = _load_last_report_cache(
             topic,
             ttl_seconds=_report_cache_ttl_seconds(config),
@@ -3236,6 +3425,28 @@ def _main(
         # without WebSearch (OpenClaw, Codex, raw CLI).
         repos_from_auto_resolve = False
         trustpilot_domain_is_hint = False
+        # Resolve automatically for entity-shaped topics even without the flag.
+        # A person or company topic whose handle the user did not supply is the
+        # case where first-party evidence is hardest to protect: the handle is
+        # absent from the topic and may never appear in retrieved mentions, so
+        # nothing downstream can identify the subject's own posts. One web
+        # search closes that. If it returns nothing, pipeline.run skips the X
+        # relevance floor entirely — a noisier report beats losing evidence.
+        # Skipped when a handle was already supplied, when an external plan
+        # owns resolution, or in mock runs.
+        if (
+            not args.auto_resolve
+            and not external_plan
+            and not args.x_handle
+            and not args.mock
+            and _looks_like_entity_topic(topic)
+        ):
+            args.auto_resolve = True
+            sys.stderr.write(
+                "[AutoResolve] entity-shaped topic with no --x-handle; "
+                "resolving the subject's handle so its own posts are not pruned\n"
+            )
+
         if args.auto_resolve and not external_plan:
             from lib import resolve
             resolution = resolve.auto_resolve(topic, config)
@@ -3245,6 +3456,8 @@ def _main(
             if resolution.get("x_handle") and not args.x_handle:
                 args.x_handle = resolution["x_handle"]
                 sys.stderr.write(f"[AutoResolve] X handle: @{args.x_handle}\n")
+            # Empty x_handle is intentional: do not invent a lexical stand-in.
+            # pipeline.run treats an unidentified subject as "skip the X floor".
             if resolution.get("github_user") and not args.github_user:
                 args.github_user = resolution["github_user"]
                 sys.stderr.write(f"[AutoResolve] GitHub user: @{args.github_user}\n")
@@ -3298,17 +3511,6 @@ def _main(
                     f"{','.join(original_github_repos)} -> {','.join(github_repos)}\n"
                 )
 
-        # --deep-research: auto-enable perplexity source and set deep flag
-        if args.deep_research:
-            if not (config.get("PERPLEXITY_API_KEY") or config.get("OPENROUTER_API_KEY")):
-                print("Error: --deep-research requires PERPLEXITY_API_KEY or OPENROUTER_API_KEY", file=sys.stderr)
-                sys.exit(1)
-            config["_deep_research"] = True
-            # Auto-enable perplexity in INCLUDE_SOURCES
-            include = config.get("INCLUDE_SOURCES") or ""
-            if "perplexity" not in include.lower():
-                config["INCLUDE_SOURCES"] = f"{include},perplexity" if include else "perplexity"
-
         # Polymarket disambiguation: if user passed --polymarket-keywords,
         # store on config so the polymarket adapter can filter matches.
         if args.polymarket_keywords:
@@ -3352,6 +3554,10 @@ def _main(
             comp_explicit=comp_explicit,
             comp_plan=comp_plan,
         )
+        if comp_enabled:
+            config["_perplexity_paid_budget"] = pipeline.PaidSourceBudget(
+                owner=topic,
+            )
 
         # Plan alone with zero peers (empty/invalid JSON object, or all entries
         # skipped) must not fall through to discover-N with a misleading abort.
