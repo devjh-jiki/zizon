@@ -125,7 +125,7 @@
 
 | | 이전 | 이후 |
 |---|---:|---:|
-| 전역 MCP | 4 | 0 |
+| 전역 MCP | 4 | 1 (agentmemory 제거는 결론이 안 나서 보류, 그대로 유지) |
 | 플러그인 | 6 | 3 (superpowers, agentmemory, zizon) |
 | 마켓플레이스 | 6 | 3 |
 | 스킬 (zizon) | 35 (미설치) | 19 (설치됨) |
@@ -176,7 +176,7 @@ zizon/
 
 - 기존 `go-backend-review` 의 project-canon adapter slot 을 실제로 구현한다.
 - **공개 본문**: Go 백엔드 리뷰 원칙 — 경계, 에러 래핑, 컨텍스트 전파, 트랜잭션 경계, 동시성, 관측성.
-- **캐논 슬롯**: `<repo>/docs/review-canon.md` 가 있으면 읽어 프로젝트 규칙을 우선 적용한다.
+- **캐논 슬롯**: `<repo>/docs/review-canon.md` 가 있으면 읽어 프로젝트 규칙을 우선 적용한다. **(참고: 이 고정 파일명 슬롯은 실제 구현에서 project adapter 계약(예: 프로젝트 스코프 agent 파일)으로 대체됐다. 자세한 건 `skills/review/be-review/SKILL.md` 의 "Project adapter contract" 참고.)**
 - **jjan 캐논은 jjan 레포에 생성한다.** jjan 은 private(`jiji-hoon96/jjan`)이므로 zizon 에 들어가지 않는다. 초안은 기존 `docs/reviews/*-be.md` 5개에서 반복 지적 패턴을 추출해 만든다.
 
 ### 8.3 `testing/js-testing`
@@ -211,7 +211,7 @@ zizon/
 
 ## 10. 마이그레이션 순서
 
-1. 스킬 20개 삭제, 남길 17개를 새 버킷 구조로 이동
+1. 스킬 19개 삭제, 남길 16개를 새 버킷 구조로 이동
 2. `.agents/`, `runtimes/{codex,cursor,vscode,opencode}`, `mcp/` 삭제
 3. `.claude-plugin/marketplace.json` 을 플러그인 1개 구조로 재작성
 4. 신규 스킬 3개 작성 (`fe-review`, `be-review`, `js-testing`), `i-have-adhd` 동기화
@@ -223,8 +223,8 @@ zizon/
 ## 11. 검증 기준
 
 - `bootstrap.sh` 를 연속 2회 실행해 두 번째 실행이 아무것도 바꾸지 않는다 (멱등성)
-- 새 세션에서 `/plugin` 목록이 정확히 3개이고, 전역 MCP 가 0개다
-- zizon 스킬 17개가 스킬 목록에 뜬다
+- 새 세션에서 `/plugin` 목록이 정확히 3개이고, 전역 MCP 가 1개다(agentmemory 제거는 결론이 안 나서 보류, 그대로 유지)
+- zizon 스킬 19개가 스킬 목록에 뜬다
 - agentmemory 훅이 이벤트당 1회만 실행된다
 - `check-doc-pairs.yml` 통과
 - jihoon-blog 에서 sentry MCP 가, mutal 에서 figma MCP 가 프로젝트 스코프로 잡힌다
