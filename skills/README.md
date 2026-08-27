@@ -91,5 +91,10 @@ A collection of my own agent skills for daily use. Follows the open [Agent Skill
 ## Upstream sync
 
 Changes from trusted external repos such as [mattpocock/skills](https://github.com/mattpocock/skills) are
-periodically detected by `.github/workflows/sync-upstream-skills.yml` and **proposed as PRs**.
-Review the PRs and merge only the ones that meet your standards.
+picked up every Monday by `.github/workflows/sync-upstream-skills.yml`, which **commits the `.upstream/`
+snapshot straight to main** (no PR). Nothing at runtime consumes `.upstream/`, so refreshing it without
+review is safe.
+
+**Only the snapshot is automatic.** The skills under `skills/` are adaptations, not copies, so whether an
+upstream change reaches your own skill is always your call. Use
+`git diff <previous sync commit>..HEAD -- .upstream/<owner>-<repo>` to see what moved, then pick.

@@ -40,8 +40,19 @@ description: 무엇을 하는지 + 언제 쓰는지. 1024자 이내. 자동 트�
 
 ## 버저닝
 
-- Changesets 사용. 변경 시 `pnpm changeset` 으로 변경분 기록 후 릴리스.
-- upstream(외부 skills 레포) 동기화는 `.github/workflows/sync-upstream-skills.yml` 가 주기적으로 PR 생성. 사람이 선별 머지한다.
+**버전은 관리하지 않는다. 변경 반영은 항상 재설치로 한다.**
+
+`plugin.json` 의 `version` 을 올리지 않으므로 `claude plugin update` 는 동작하지 않는다 — 내용이 바뀌어도 `already at the latest version` 을 반환하고 캐시를 갱신하지 않는다. 실측으로 확인된 동작이다.
+
+| 상황 | 방법 |
+|---|---|
+| 스킬을 자주 고치는 중 | `./bootstrap/bootstrap.sh --dev` — 로컬 소스로 전환, push 없이 다음 세션에 반영 |
+| push 한 변경을 반영 | `claude plugin uninstall zizon@zizon && claude plugin install zizon@zizon` |
+| ~~버전 올린 뒤 갱신~~ | ~~`claude plugin update`~~ — 이 레포에서는 쓰지 않는다 |
+
+버전을 정본으로 관리하고 싶어지면 `plugin.json` 의 `version` 을 기준으로 삼고 스킬을 고칠 때마다 올려야 한다. 그 전까지 `package.json`(0.1.0) 과 `plugin.json`·`marketplace.json`(0.2.0) 의 불일치는 의도된 방치다 — 개인용이라 릴리스가 없고, Changesets 도 `private: true` 라 배포되지 않는다.
+
+- upstream(외부 skills 레포) 동기화는 `.github/workflows/sync-upstream-skills.yml` 가 매주 월요일 `.upstream/` 을 갱신해 **main 에 자동 커밋**한다 (PR 없음). `.upstream/` 은 런타임에서 아무것도 소비하지 않는 참조용 스냅샷이라 승인 없이 갱신해도 안전하다. **다만 `skills/` 는 복사본이 아니라 각색본이므로, upstream 변경을 내 스킬에 반영할지는 항상 별도 판단이다.**
 
 ## 한/영 문서 페어 규칙 (중요)
 
@@ -81,6 +92,7 @@ description: 무엇을 하는지 + 언제 쓰는지. 1024자 이내. 자동 트�
 
 - `.claude-plugin/marketplace.json` 으로 Claude Code 마켓플레이스 배포. 단일 플러그인 `zizon` 하나로 19개 스킬 전부를 묶는다 — 도메인별로 여러 플러그인으로 쪼개지 않는다.
 - 설치: `/plugin marketplace add devjh-jiki/zizon` → `/plugin install zizon@zizon`.
+- 새 머신 전체 재현은 `./bootstrap/bootstrap.sh` — 마켓플레이스·플러그인·전역 MCP·훅까지 한 번에 맞춘다.
 - `.claude-plugin/plugin.json` 의 `skills` 배열과 디스크 상태가 어긋나면 마켓플레이스에 새/삭제된 스킬이 반영되지 않거나 설치가 깨진다 — "Skill 규칙" 절의 `pnpm validate` 대조를 항상 통과시킨다.
 
 ## 검증

@@ -91,5 +91,10 @@
 ## upstream 동기화
 
 [mattpocock/skills](https://github.com/mattpocock/skills) 등 검증된 외부 레포의 변경분은
-`.github/workflows/sync-upstream-skills.yml` 가 주기적으로 감지해 **PR로 제안**합니다.
-PR을 검토하고 내 기준에 맞는 것만 머지하세요.
+`.github/workflows/sync-upstream-skills.yml` 가 매주 월요일 감지해 `.upstream/` 스냅샷을
+**main 에 자동 커밋**합니다 (PR 없음). `.upstream/` 은 런타임에서 아무것도 소비하지 않는
+참조용이라 승인 없이 갱신해도 안전합니다.
+
+**단, 자동 커밋되는 것은 스냅샷뿐입니다.** `skills/` 의 스킬들은 복사본이 아니라 각색본이므로,
+upstream 변경을 내 스킬에 반영할지는 직접 판단합니다.
+`git diff <이전 sync 커밋>..HEAD -- .upstream/<owner>-<repo>` 로 무엇이 바뀌었는지 보고 고르세요.
