@@ -29,7 +29,7 @@
 
 **Model-invoked** (작업에 맞으면 에이전트가 자동 사용)
 
-- [terse-output](./token/terse-output/SKILL.ko.md) — 초압축 커뮤니케이션 모드; lite/full/ultra (JuliusBrussee/caveman 참고)
+- [terse-output](./token/terse-output/SKILL.ko.md) — 초압축 커뮤니케이션 모드; lite/full/ultra (JuliusBrussee/caveman 적응)
 - [context-budget](./token/context-budget/SKILL.ko.md) — 에이전트/스킬/MCP/룰의 상시 컨텍스트 오버헤드를 감사하고 뭘 자를지 순위화 (affaan-m/ecc 적응)
 - [lazy-code](./token/lazy-code/SKILL.ko.md) — 실제로 동작하는 가장 게으른 해법 강제 (YAGNI 사다리, 의존성보다 표준 라이브러리/네이티브); lite/full/ultra (DietrichGebert/ponytail 적응)
 

@@ -55,25 +55,25 @@ Claude Code 플러그인 마켓플레이스에서 설치합니다.
 
 | 스킬 | 버킷 | 단계 | 설명 |
 |------|------|------|------|
-| [terse-output](./skills/token/terse-output) | token | Available | 정확도 유지하며 토큰 절감하는 초압축 출력; lite/full/ultra (JuliusBrussee/caveman 참고) |
+| [terse-output](./skills/token/terse-output) | token | Available | 정확도 유지하며 토큰 절감하는 초압축 출력; lite/full/ultra (JuliusBrussee/caveman 적응) |
 | [context-budget](./skills/token/context-budget) | token | Available | 에이전트/스킬/MCP/룰 상시 컨텍스트 오버헤드 감사·순위화 |
-| [lazy-code](./skills/token/lazy-code) | token | Available | YAGNI 사다리로 가장 게으른 해법 강제; lite/full/ultra (DietrichGebert/ponytail 참고) |
+| [lazy-code](./skills/token/lazy-code) | token | Available | YAGNI 사다리로 가장 게으른 해법 강제; lite/full/ultra (DietrichGebert/ponytail 적응) |
 | [i-have-adhd](./skills/token/i-have-adhd) | token | Available | 다음 행동을 맨 위에, 리스트 5개 캡, 군더더기 제거 응답 모드 |
-| [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | AI 티 나는 프론트엔드 방지: 브리프 읽기·세 다이얼·LLM 기본값 회피·프리플라이트 (Leonxlnx/taste-skill 참고) |
+| [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | AI 티 나는 프론트엔드 방지: 브리프 읽기·세 다이얼·LLM 기본값 회피·프리플라이트 (Leonxlnx/taste-skill 적응) |
 | [grill-me](./skills/planning/grill-me) | planning | Available | 계획·의사결정·사업 아이디어를 스트레스 테스트하는 집요한 인터뷰 |
-| [to-prd](./skills/planning/to-prd) | planning | Available | 현재 대화를 PRD 로 합성 (인터뷰 없음, mattpocock 참고) |
-| [to-issues](./skills/planning/to-issues) | planning | Available | 계획/PRD 를 수직 슬라이스 이슈로 분해 (mattpocock 참고) |
-| [implement](./skills/planning/implement) | planning | Available | 합의된 PRD/이슈/슬라이스를 커밋된 테스트 코드로 구현 (mattpocock 참고) |
-| [codebase-design](./skills/planning/codebase-design) | planning | Available | 깊은 모듈 설계 어휘 (mattpocock 참고) |
-| [domain-modeling](./skills/planning/domain-modeling) | planning | Available | 도메인 모델·용어집·ADR 구축·정밀화 (mattpocock 참고) |
+| [to-prd](./skills/planning/to-prd) | planning | Available | 현재 대화를 PRD 로 합성 (인터뷰 없음, mattpocock 적응) |
+| [to-issues](./skills/planning/to-issues) | planning | Available | 계획/PRD 를 수직 슬라이스 이슈로 분해 (mattpocock 적응) |
+| [implement](./skills/planning/implement) | planning | Available | 합의된 PRD/이슈/슬라이스를 커밋된 테스트 코드로 구현 (mattpocock 적응) |
+| [codebase-design](./skills/planning/codebase-design) | planning | Available | 깊은 모듈 설계 어휘 (mattpocock 적응) |
+| [domain-modeling](./skills/planning/domain-modeling) | planning | Available | 도메인 모델·용어집·ADR 구축·정밀화 (mattpocock 적응) |
 | [fe-review](./skills/review/fe-review) | review | Available | 프론트엔드 diff 를 6렌즈(요구사항 추적성·추상화 비용·상태 위치·인터페이스 예측가능성·비동기 UX·숨은 부작용)로 리뷰 |
 | [be-review](./skills/review/be-review) | review | Available | Go 백엔드 diff 를 아키텍처 경계·데이터 무결성·에러/보안 규율·Go 관용구로 리뷰 (프로젝트 캐논 어댑터 계약) |
 | [js-testing](./skills/testing/js-testing) | testing | Available | JS/TS 코드베이스에서 무엇을 어느 레벨에서 테스트할지 판단 |
-| [webapp-testing](./skills/testing/webapp-testing) | testing | Available | Playwright로 로컬 웹앱 테스트 (anthropics 참고) |
+| [webapp-testing](./skills/testing/webapp-testing) | testing | Available | Playwright로 로컬 웹앱 테스트 (anthropics 적응) |
 | [open-source-reverse-engineering-coach](./skills/learning/open-source-reverse-engineering-coach) | learning | Available | 오픈소스를 인터랙티브 역공학으로 학습 |
 | [technical-book-coach](./skills/learning/technical-book-coach) | learning | Available | 기술 서적·문서 코칭 학습 (한글 번역 + 코칭) |
-| [git-guardrails](./skills/util/git-guardrails) | util | Available | 위험한 git 명령 차단 hook (Claude Code 전용, mattpocock 참고) |
-| [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | merge/rebase 충돌을 의도 복원으로 해소 (mattpocock 참고) |
+| [git-guardrails](./skills/util/git-guardrails) | util | Available | 위험한 git 명령 차단 hook (Claude Code 전용, mattpocock 적응) |
+| [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | merge/rebase 충돌을 의도 복원으로 해소 (mattpocock 적응) |
 
 ## 관련 레포 (Organization)
 
