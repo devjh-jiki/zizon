@@ -1,6 +1,6 @@
 ---
 name: writing-domain-docs
-description: Use when writing or rewriting a document whose job is to explain a business domain, a design judgment, or how a product works to a human reader — project wikis, domain notes, onboarding docs, knowledge-base entries, architecture write-ups. Also use when a doc reads like it was generated from a template, restates the repository, or leaves the reader unable to tell which claims are sourced. Korean triggers 문서 정리, 도메인 문서, 위키 작성, 문서 최신화, 온보딩 문서, "AI 가 쓴 것 같아", "가독성이 떨어져", "정리가 안 되어 있어". Works unattended, so a subagent can follow it alone. NOT for API references, changelogs, or READMEs that exist to be scanned rather than read; NOT for marketing copy (use anti-slop-frontend); NOT for defining a project's glossary and ADRs (use domain-modeling).
+description: Use when writing or rewriting a document whose job is to explain a business domain, a design judgment, or how a product works to a human reader: project wikis, domain notes, onboarding docs, knowledge-base entries, architecture write-ups. Also use when a doc reads like it was generated from a template, restates the repository, or leaves the reader unable to tell which claims are sourced. Korean triggers 문서 정리, 도메인 문서, 위키 작성, 문서 최신화, 온보딩 문서, "AI 가 쓴 것 같아", "가독성이 떨어져", "정리가 안 되어 있어". Works unattended, so a subagent can follow it alone. NOT for API references, changelogs, or READMEs that exist to be scanned rather than read; NOT for marketing copy (use anti-slop-frontend); NOT for defining a project's glossary and ADRs (use domain-modeling).
 ---
 
 # 도메인 문서 쓰기
@@ -20,7 +20,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 **그렇다면 쓰지 마라.** 대신 원본으로 가는 링크 한 줄을 남겨라.
 이 관문 하나가 요구사항 표·기능 목록·설정값 나열의 대부분을 걸러낸다.
 
-**이 관문은 문서에도 섹션에도 적용한다.** 문서 묶음을 손볼 때 실제로 걸리는 것은 대개 파일이 아니라 섹션이다 —
+**이 관문은 문서에도 섹션에도 적용한다.** 문서 묶음을 손볼 때 실제로 걸리는 것은 대개 파일이 아니라 섹션이다.
 같은 열거형이 두 문서에, 같은 권한 표가 세 문서에 있는 형태다. 그때는 사실마다 **정본 주인 하나**를 정하고
 나머지에서는 자기 논지에 필요한 귀결 한 줄 + 링크로 바꾼다. 구조적 파일(인덱스·개요)은 지울 수 없으므로
 섹션 단위 적용이 유일한 수단이기도 하다.
@@ -32,7 +32,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 - 코드 바깥의 **도메인 지식**을 담는다 (제도, 규제, 시장, 업무 흐름)
 
 둘째 항목이 가장 자주 오용된다. **"기존 문서를 꿰맨 것으로 재해석한다"가 아니다.**
-검증 질문은 하나다 — **그 논지가 원본 어느 한 파일에도 없는가.** 없으면 꿰맨 것이고, 있으면 사본이다.
+검증 질문은 하나다. **그 논지가 원본 어느 한 파일에도 없는가.** 없으면 꿰맨 것이고, 있으면 사본이다.
 
 **원본 문서가 낡았으면 코드로 내려간다.** 삭제 후 걸 링크가 레포 문서인데 그 문서가 틀렸으면,
 링크를 코드·스펙·테스트로 옮기고 그 레포 문서가 낡았다는 사실 자체를 한 줄 남긴다.
@@ -50,19 +50,19 @@ description: Use when writing or rewriting a document whose job is to explain a 
 **도메인과 판단이 본체다. 현황은 원본에 두고 링크만 건다.**
 낡을 것을 복사하지 않는 것이 문서가 썩지 않는 유일한 방법이다.
 
-**예외 — 지금 코드의 결함.** 값진 발견이 대개 여기 있는데 이건 현황 층이다. 링크로 빼면 문서가 남길 게 없고,
-다 쓰면 다음 커밋에 낡는다. **운영자 기준으로 가른다 — "오늘 일을 제대로 하려면 알아야 하나, 아니면 티켓인가."**
+**예외가 하나 있다. 지금 코드의 결함이다.** 값진 발견이 대개 여기 있는데 이건 현황 층이다. 링크로 빼면 문서가 남길 게 없고,
+다 쓰면 다음 커밋에 낡는다. **운영자 기준으로 가른다. "오늘 일을 제대로 하려면 알아야 하나, 아니면 티켓인가."**
 전자는 쓴다(예: 이 화면에는 저장 버튼이 없다, 코드명을 고치면 과거 이력이 소급 재해석된다).
 후자는 버린다(예: 이 함수가 빈 DTO 를 돌려준다, 죽은 칼럼이 남아 있다).
 
-## 2. Grounding — 기대기 전에 땅에 닿게 한다
+## 2. 기대기 전에 땅에 닿게 한다 (Grounding)
 
 **어떤 문단도 아직 소개되지 않은 개념에 기댈 수 없다.**
 
 개념이 땅에 닿는 방법은 둘뿐이다:
 
-- **전제** — 독자가 이미 알고 들어온다. 문서 맨 앞에서 무엇을 전제하는지 정한다
-- **도입** — 앞선 문단이 세운다. 그 뒤로는 계속 써도 된다
+- **전제.** 독자가 이미 알고 들어온다. 문서 맨 앞에서 무엇을 전제하는지 정한다
+- **도입.** 앞선 문단이 세운다. 그 뒤로는 계속 써도 된다
 
 용어에 이름이 있으면 **개념과 이름을 같이** 세운다. 이름만 던지면 안 세워진 것이다.
 
@@ -76,7 +76,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 ```
 
 전제를 넓게 잡으면 독자를 잃고, 좁게 잡으면 앞부분이 정의로 가득 찬다.
-**독자를 "6개월 뒤의 나 — 맥락은 잊었지만 배경 지식은 있는 사람"으로 잡으면 대개 맞는다.**
+**독자를 "6개월 뒤의 나, 맥락은 잊었지만 배경 지식은 있는 사람"으로 잡으면 대개 맞는다.**
 
 이 절이 가장 많이 재발한다. 규칙을 읽고 이 절을 겨냥해 쓰는 중에도 흘린다.
 **약어와 식별자를 따로 뽑아 첫 등장 자리를 하나씩 확인하는 것**이 유일하게 듣는 방법이다.
@@ -97,7 +97,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 `## 16일 규정` 아래에는 **16일 규정이 무엇을 요구하는지**가 있어야 한다.
 규칙의 분류나 배경만 있고 규칙이 없으면, 본문을 채우거나 제목을 바꾼다. 둘 중 하나다.
 
-**제목을 넓혀 피하지 마라.** 본문이 제목을 못 지킬 때 제목을 `## 16일 규정 — 무엇을 요구하고 어디서 깨지는가`
+**제목을 넓혀 피하지 마라.** 본문이 제목을 못 지킬 때 제목을 `## 16일 규정: 무엇을 요구하고 어디서 깨지는가`
 로 늘리면 계약이 느슨해져 통과한 것처럼 보인다. 그건 본문을 고치는 대신 채점표를 고치는 것이다.
 
 **숫자를 제목에 박으면 그 숫자가 계약이 된다.** "다섯 칸"·"게이트 여섯 개"·"여섯 개 하위 문서"라고 썼으면
@@ -107,7 +107,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 
 규칙만 아는 사람은 실무를 못 한다. **어디서 돈이 새고, 어디서 사람이 틀리는지**가 도메인 지식이다.
 
-> 15일이면 0원이 아니라 다른 코드로 떨어진다 — 수가는 같지만 **별도 코드이므로 청구 로직이 분기를 알아야 한다.**
+> 15일이면 0원이 아니라 다른 코드로 떨어진다. 수가는 같지만 **별도 코드이므로 청구 로직이 분기를 알아야 한다.**
 
 ### 파급을 한 단계 더 민다
 
@@ -132,16 +132,16 @@ description: Use when writing or rewriting a document whose job is to explain a 
 ```
 ✗ 잔여 마진 CJS 126 B / ESM 221 B
 ✓ 번들 상한 17KB 대비 실측 16.0KB (2026-08 기준, tsup 빌드 산출물 gzip).
-  상한을 올린 이력이 있어 여유는 상시 변한다 — 정확한 값은 CI 로그를 본다.
+  상한을 올린 이력이 있어 여유는 상시 변한다. 정확한 값은 CI 로그를 본다.
 ```
 
 숫자를 문서에 박을수록 문서가 빨리 낡는다. **박을 가치가 있는 숫자만 박고, 나머지는 어디서 보는지를 쓴다.**
 
-**박아도 되는 조건은 셋을 다 붙일 수 있을 때다** — 기준 시점(연도·커밋), 어디서 읽었는지(파일·고시명),
+**박아도 되는 조건은 셋을 다 붙일 수 있을 때다.** 기준 시점(연도·커밋), 어디서 읽었는지(파일·고시명),
 그리고 대조하지 않은 한계("고시 원문과 대조하지 않았다"). 셋을 못 붙이면 박지 않는다.
 
 **출처 없이 상속받은 숫자는 지운다.** 기존 문서에 있던 값에 셋을 붙일 수 없고 기억으로 채우는 것도 금지라면
-남은 수는 삭제뿐이다. **방향 진술로 강등하고 조회처를 남긴다** — "시장 점유율이 과반이다(정확한 값은 KFF 월별 등록 자료)".
+남은 수는 삭제뿐이다. **방향 진술로 강등하고 조회처를 남긴다.** 예를 들면 "시장 점유율이 과반이다(정확한 값은 KFF 월별 등록 자료)".
 지우면 문서가 빈약해 보이고 되돌려 넣고 싶어진다. *"이 값들이 대충은 맞을 텐데"* 가 정확히 F5 를 만드는 사고다.
 
 **계산은 실제로 해본다.** 표의 값을 본문에서 더하거나 곱했으면 그 자리에서 검산한다.
@@ -162,7 +162,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 빈칸을 남기는 게 덮는 것보다 낫다. **다음 사람이 메울 수 있기 때문이다.**
 
 **덮는 문장은 게으름이 아니라 문장 감각 때문에 쓰인다.** 그럴듯한 설명은 문단을 깔끔하게 닫아 주고,
-빈칸은 문단 끝을 어색하게 만든다. 그래서 반대 방향의 실패도 같은 뿌리다 — 모르는 자리를 애매하게 덮는 것과
+빈칸은 문단 끝을 어색하게 만든다. 그래서 반대 방향의 실패도 같은 뿌리다. 모르는 자리를 애매하게 덮는 것과
 **그럴듯하게 채우는 것.** 특히 **두 사실의 숫자가 우연히 일치하면 그 사이 인과를 지어내는 압력이 세다.**
 인과에는 별도 증거가 필요하다.
 
@@ -188,13 +188,17 @@ description: Use when writing or rewriting a document whose job is to explain a 
 - 외래어는 **처음 나올 때만** 원어를 병기한다: 실시간 쌍방향 소통(interactive communication)
 - 조사·띄어쓰기를 확인한다. `CMS Manual 를` 같은 오류는 문서 전체의 신뢰를 깎는다
 - **번역투를 쓰지 않는다**: "~에 대해", "~를 통해", "~에 있어서", "~라고 할 수 있다"
+- **긴 대시(`—`, `–`)를 문장 부호로 쓰지 않는다.** 한국어에서 자연스러운 부호가 아니고,
+  문장을 끊지 않고 이어붙이는 습관을 감춰 준다. 설명을 덧붙일 때는 **문장을 끊고**,
+  짧은 보충은 **괄호**에, 목록의 이름과 설명 사이에는 **마침표나 콜론**을 쓴다.
+  하이픈(`-`)은 복합어·파일명·옵션·목록 기호에서 정상 사용한다
 
 ## 8. 넣지 않는 것
 
 - 작성 지시문·템플릿 질문 (`> 이 프로젝트로 무엇을 이루려는가?`)
 - frontmatter 에 이미 있는 항목의 본문 재기술
 - 내용 없는 제목. 쓸 게 없으면 제목을 지운다
-- "핵심적인", "혁신적인", "매우 중요한" — 형용사 대신 증거를 쓴다
+- "핵심적인", "혁신적인", "매우 중요한". 형용사 대신 증거를 쓴다
 - 문서 끝의 소감·전망 문단. 마지막 문단도 정보를 날라야 한다
 - **자기 개정 이력.** "이전 판본은 이 자리를 ~로 덮었다"는 커밋 메시지에 속한다.
   「아직 모르는 것」 안에서 "되돌려 넣지 말라"는 정보를 나를 때만 예외다
@@ -209,7 +213,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
   순서는 삭제 판정 → 나머지 재작성 → 구조적 파일이다
 - **사실마다 정본 주인 하나.** 다른 문서는 베끼지 말고 링크한다. 자기 논지에 필요한 한 줄 세우기는 중복이 아니다
 - **파일명이 내용과 어긋나면 파일명은 두고 H1·description 을 고친다.** 파일명을 바꾸면 링크가 흔들린다.
-  대신 **어긋났다는 사실을 개요에 한 줄 남긴다** — 그러지 않으면 다음 사람이 파일명을 믿고 열었다가 헛걸음한다
+  대신 **어긋났다는 사실을 개요에 한 줄 남긴다.** 그러지 않으면 다음 사람이 파일명을 믿고 열었다가 헛걸음한다
 - **지운 문서는 기록한다.** 경로·왜 지웠나·대체물·다시 볼 조건. 기록이 없으면 다음 세션이 복구한다
   (자세한 것은 **living-docs-governance** 의 삭제 구역)
 
@@ -218,15 +222,15 @@ description: Use when writing or rewriting a document whose job is to explain a 
 **문서를 저장하기 전에 이 목록을 실제로 훑는다.** 하나라도 걸리면 고치고 다시 훑는다.
 "훑었다"로 처리하고 넘어가려는 압력이 세다. 실제로 grep 을 돌리고 제목을 하나씩 대조해야 걸린다.
 
-- [ ] 삭제 테스트를 통과하는가 — 원본을 읽으면 알 수 있는 것만 담고 있지 않은가 (섹션 단위로도)
+- [ ] 삭제 테스트를 통과하는가. 원본을 읽으면 알 수 있는 것만 담고 있지 않은가 (섹션 단위로도)
 - [ ] 이 문서는 도메인 / 판단 / 현황 중 어느 층인가. 한 층인가
 - [ ] 모든 제목이 약속한 내용을 본문이 갖고 있는가. **제목의 숫자와 본문의 개수가 맞는가**
 - [ ] 소개 없이 등장한 용어·개념이 있는가 (약어·식별자를 뽑아 첫 등장 자리를 하나씩 확인)
 - [ ] 박힌 숫자마다 기준 시점이 있는가. **본문의 계산을 검산했는가**
-- [ ] 박힌 사실을 **주석·커밋 메시지·레포 문서가 아니라 코드·테스트에서** 확인했는가 —
+- [ ] 박힌 사실을 **주석·커밋 메시지·레포 문서가 아니라 코드·테스트에서** 확인했는가.
       개수는 세어 봤는가, 상수는 실제 호출부를 봤는가
 - [ ] 모르는 자리를 애매하게 **덮거나**, 그럴듯하게 **채운** 자리가 있는가 (양쪽 다 F7 이다)
-- [ ] 템플릿 질문·지시문이 남아 있는가 — `grep -n '^> '` 로 **인용 블록 전부를 뽑아 눈으로 본다.**
+- [ ] 템플릿 질문·지시문이 남아 있는가. `grep -n '^> '` 로 **인용 블록 전부를 뽑아 눈으로 본다.**
       좁힌 패턴은 놓친다: `> 어디까지 됐고, 지금 막힌 곳은?` 은 "는가?"·"무엇을" 둘 다 없다.
       질문형만 보려면 `grep -nE '^> .*\?[[:space:]]*$'`
 - [ ] frontmatter 와 본문이 같은 말을 두 번 하는가
@@ -241,7 +245,7 @@ description: Use when writing or rewriting a document whose job is to explain a 
 | "레포에 적혀 있으니 1차 출처다" | 주석·커밋 메시지·레포 문서는 코드보다 낡는다. 세어 보고 실행해 봐야 확인이다 |
 | "표로 정리하면 깔끔하다" | 표는 비교할 때 쓴다. 나열은 표로 만들어도 나열이다 |
 | "이미 있는 표·목록을 버리기 아깝다" | 매몰비용이다. 사본을 최신화하는 건 다음 커밋에 또 낡을 일을 하는 것이다 |
-| "다이어그램이 있으니 원본을 꿰맨 것이다" | 검증 질문은 하나다 — 그 논지가 원본 어느 한 파일에도 없는가 |
+| "다이어그램이 있으니 원본을 꿰맨 것이다" | 검증 질문은 하나다. 그 논지가 원본 어느 한 파일에도 없는가 |
 | "일단 제목 잡고 나중에 채운다" | 빈 제목은 출고된다. 채울 때 만든다 |
 | "이 정도는 다 아는 용어다" | 6개월 뒤의 나는 모른다. 처음 쓸 때 한 줄 |
 | "정확한 수치를 넣어야 신뢰가 간다" | 기준 시점 없는 수치는 신뢰를 깎는다 |
