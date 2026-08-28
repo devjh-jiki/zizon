@@ -74,6 +74,9 @@ Skills are labeled by verification stage:
 | [technical-book-coach](./skills/learning/technical-book-coach) | learning | Available | Coach-style learning from technical books/docs (KO translation + coaching). |
 | [git-guardrails](./skills/util/git-guardrails) | util | Available | Block dangerous git commands via a hook (Claude Code only, adapted from mattpocock). |
 | [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | Resolve merge/rebase conflicts by recovering intent (adapted from mattpocock). |
+| [article-writing](./skills/writing/article-writing) | writing | Review | Draft and tighten long-form writing meant to persuade or teach (posts, essays, guides, talks). |
+| [writing-domain-docs](./skills/writing/writing-domain-docs) | writing | Available | Write domain and design-judgment docs for human readers; blocks template filler, repo restatement, and unsourced claims. |
+| [living-docs-governance](./skills/writing/living-docs-governance) | writing | Review | Govern a long-lived doc set: which doc owns what, what is authoritative, what was intentionally deleted. |
 
 ## Related repos (Organization)
 

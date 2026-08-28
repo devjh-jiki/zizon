@@ -49,9 +49,9 @@ Claude Code 플러그인 마켓플레이스에서 설치합니다.
 
 스킬은 검증 단계로 표시합니다:
 
-- **Available** — 직접 테스트·검증 완료. 외부 설치 권장.
-- **Review** — 평가 중. 검증되면 Available 로 승격.
-- **Private** — 개인 셋업 전용. 마켓플레이스 미포함.
+- **Available**. 직접 테스트·검증 완료. 외부 설치 권장.
+- **Review**. 평가 중. 검증되면 Available 로 승격.
+- **Private**. 개인 셋업 전용. 마켓플레이스 미포함.
 
 | 스킬 | 버킷 | 단계 | 설명 |
 |------|------|------|------|
@@ -74,6 +74,9 @@ Claude Code 플러그인 마켓플레이스에서 설치합니다.
 | [technical-book-coach](./skills/learning/technical-book-coach) | learning | Available | 기술 서적·문서 코칭 학습 (한글 번역 + 코칭) |
 | [git-guardrails](./skills/util/git-guardrails) | util | Available | 위험한 git 명령 차단 hook (Claude Code 전용, mattpocock 적응) |
 | [resolving-merge-conflicts](./skills/util/resolving-merge-conflicts) | util | Available | merge/rebase 충돌을 의도 복원으로 해소 (mattpocock 적응) |
+| [article-writing](./skills/writing/article-writing) | writing | Review | 설득·교육 목적의 롱폼 글을 쓰고 구조·호흡·근거를 조인다 |
+| [writing-domain-docs](./skills/writing/writing-domain-docs) | writing | Available | 도메인·설계 판단을 사람이 읽을 문서로 쓴다. 템플릿 문구·레포 재진술·출처 불명을 막는다 |
+| [living-docs-governance](./skills/writing/living-docs-governance) | writing | Review | 오래 사는 문서 세트의 역할·정본·의도적 삭제를 관리한다 |
 
 ## 관련 레포 (Organization)
 

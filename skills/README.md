@@ -22,6 +22,7 @@ A collection of my own agent skills for daily use. Follows the open [Agent Skill
 | `testing/` | Deciding what/how to test |
 | `learning/` | Coaching-style learning from code or books |
 | `util/` | Git safety and conflict resolution |
+| `writing/` | Writing meant for a human reader: articles, domain docs, doc governance |
 
 ## Listed Skills
 
@@ -87,6 +88,14 @@ A collection of my own agent skills for daily use. Follows the open [Agent Skill
 **User-invoked / Claude Code hook**
 
 - [git-guardrails](./util/git-guardrails/SKILL.md) — Set up a Claude Code PreToolUse hook that blocks dangerous git commands (Claude Code only)
+
+### Writing
+
+**Model-invoked**
+
+- [article-writing](./writing/article-writing/SKILL.md) — Draft and tighten long-form writing meant to persuade or teach (posts, essays, guides, talks).
+- [writing-domain-docs](./writing/writing-domain-docs/SKILL.md) — Write domain and design-judgment docs for human readers; blocks template filler, repo restatement, and unsourced claims.
+- [living-docs-governance](./writing/living-docs-governance/SKILL.md) — Govern a long-lived doc set: which doc owns what, what is authoritative, what was intentionally deleted.
 
 ## Upstream sync
 
