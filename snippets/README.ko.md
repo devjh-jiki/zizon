@@ -7,6 +7,7 @@
 | 파일 | 용도 |
 |------|------|
 | [`discord-notify.mjs`](./discord-notify.mjs) | 디스코드 Webhook 알림 공용 모듈 (text + embed) |
+| [`figma-mcp-node-relay.cjs`](./figma-mcp-node-relay.cjs) | `claude-talk-to-figma-mcp` 의 Bun 전용 WebSocket 릴레이를 Node 로 포팅한 것 |
 
 ## discord-notify.mjs
 
@@ -52,3 +53,26 @@ await sendDiscordEmbed(process.env.DISCORD_WEBHOOK_TOSS, {
 - 또는 각 레포에서 raw URL로 가져와 쓰기
 
 색상 참고: `0x5865F2`(디스코드 블루), `0x2ecc71`(초록/수익), `0xe74c3c`(빨강/손실), `0xf1c40f`(노랑/경고).
+
+## figma-mcp-node-relay.cjs
+
+`claude-talk-to-figma-mcp`(`arinspunk/claude-talk-to-figma-mcp`)는 소켓 서버를 `dist/socket.js` 로 배포하는데
+Bun 이 필요하다. 이 머신에 bun 이 없어서 그 파일을 Node 로 포팅한 것이다.
+
+프로토콜과 로직은 원본과 같다. 채널 join, 채널당 직렬 명령 큐, 플러그인 응답 unicast,
+`progress_update` 전달, stale request 정리.
+
+### 왜 여기 두는가
+
+원래는 남의 레포 클론 안에 untracked 로 있었다. 재클론하거나 그 폴더를 지우면 사라진다.
+upstream 은 우리 것이 아니라 그쪽에 커밋해도 푸시할 곳이 없다.
+
+### 사용
+
+```sh
+npm i ws          # 유일한 의존성
+node figma-mcp-node-relay.cjs
+```
+
+그 다음 Figma 플러그인과 MCP 서버를 원본 릴레이와 같은 채널로 맞춘다.
+나중에 bun 을 설치하면 upstream 의 `dist/socket.js` 를 쓰면 되고 이 파일은 필요 없어진다.
