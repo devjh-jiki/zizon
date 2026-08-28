@@ -1,7 +1,20 @@
 name: Check doc pairs
 
-# 모든 README.md / SKILL.md 계열 문서는 영어 원본 + 한국어 .ko.md 쌍으로 관리한다.
-# 한쪽만 있고 다른 쪽이 없으면 빌드를 실패시켜 동기화 누락을 막는다.
+# 한/영 문서 쌍을 검사한다. 검사 셋 전부 "파일이 있는가"가 아니라
+# "실제로 깨지는 것"을 본다.
+#
+#   A. SKILL.md 의 description 이 영어인가.  Claude 가 스킬을 고를 때 읽는 값이다
+#   B. 짝 없는 .ko.md 가 있는가.             원본을 지우고 번역만 남긴 경우
+#   C. 번역이 원본의 구조를 따라오는가.       원본에 절이 생겼는데 번역에 없으면 실패
+#
+# 옛 판본은 "모든 X.md 에 X.ko.md 가 있어야 한다"만 봤다. 그 검사는
+# 존재만 보고 내용을 안 봐서, 영어에 절을 넣고 한국어를 안 고친 커밋
+# b53f162 를 그대로 통과시켰다. 잡으라고 만든 결함을 놓친 것이다.
+# 반대로 한국어로 쓴 스킬(writing 버킷)은 영어 사본이 없다는 이유로
+# 실패시켰다. 잡을 것은 놓치고 안 잡을 것은 잡았으므로 규칙을 바꿨다.
+#
+# 번역 의무는 없앴다. .ko.md 는 만들지 않아도 된다.
+# 다만 **만들었으면 원본을 따라와야 한다.** 반쯤 낡은 번역이 없는 것보다 나쁘다.
 
 on:
   push:
@@ -14,64 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify EN/KO pairs
-        run: |
-          set -euo pipefail
-          missing=0
 
-          # 제외: CLAUDE.md, LICENSE, THIRD_PARTY_NOTICES.md, Changesets, docs/superpowers/*,
-          # 실행 가능한 command/template 자산, .superpowers/*(gitignore 스크래치 영역),
-          # *.en.md, .upstream, .git, node_modules
-          # 루트 README 는 한글 메인(README.md) + 영어(README.en.md) 로 별도 규칙 적용.
-          # references/ 와 snippets/ 는 예외가 아니다 — 그 아래 문서도 쌍이 있어야 한다.
-          is_exempt() {
-            case "$1" in
-              *CLAUDE.md|*/LICENSE|./LICENSE|*THIRD_PARTY_NOTICES.md) return 0;;
-              ./.changeset/*.md) return 0;;
-              ./docs/superpowers/*) return 0;;
-              ./.superpowers/*) return 0;;
-              */commands/*.md|./templates/*.md|./templates/*/*.md|./templates/*/*/*.md) return 0;;
-              ./README.md|./README.en.md) return 0;;
-              *.en.md) return 0;;
-              *) return 1;;
-            esac
-          }
-
-          # 0) 루트 README 한/영 쌍 (한글 메인)
-          if [ ! -f ./README.md ] || [ ! -f ./README.en.md ]; then
-            echo "::error::루트 README 는 README.md(한글) + README.en.md(영어) 쌍이어야 합니다"
-            missing=1
-          fi
-
-          # 1) 영어 원본(.md, .ko.md/.en.md 아님)에 대응하는 .ko.md 존재 확인
-          while IFS= read -r f; do
-            is_exempt "$f" && continue
-            base="${f%.md}"
-            if [ ! -f "${base}.ko.md" ]; then
-              echo "::error file=$f::영어 원본 $f 에 대응하는 ${base}.ko.md 가 없습니다"
-              missing=1
-            fi
-          done < <(find . -name "*.md" \
-                    -not -name "*.ko.md" \
-                    -not -name "*.en.md" \
-                    -not -path "./.git/*" \
-                    -not -path "./.upstream/*" \
-                    -not -path "*/node_modules/*")
-
-          # 2) .ko.md 에 대응하는 영어 원본 존재 확인
-          while IFS= read -r f; do
-            base="${f%.ko.md}"
-            if [ ! -f "${base}.md" ]; then
-              echo "::error file=$f::한국어 $f 에 대응하는 ${base}.md 가 없습니다"
-              missing=1
-            fi
-          done < <(find . -name "*.ko.md" \
-                    -not -path "./.git/*" \
-                    -not -path "./.upstream/*" \
-                    -not -path "*/node_modules/*")
-
-          if [ "$missing" -ne 0 ]; then
-            echo "한/영 문서 쌍이 맞지 않습니다. CLAUDE.md 의 '한/영 문서 페어 규칙' 을 확인하세요."
-            exit 1
-          fi
-          echo "모든 한/영 문서 쌍이 맞습니다."
+      - name: Verify docs
+        run: python3 .github/scripts/check_doc_pairs.py
