@@ -87,14 +87,27 @@ Mechanical pass — see `references/preflight.md` for the full checklist. The hi
 - Copy self-audit: re-read every visible string; rewrite anything grammatically broken, AI-hallucinated cute wordplay, or fake-precise invented numbers.
 - Button contrast, form contrast, CTA text fits one line, no duplicate-intent CTAs.
 
+## 7. Landing method: subtract, research, purpose
+
+Sections 4 and 5 say what not to reach for. This one says where to start. Full detail in `references/landing-method.md`.
+
+- **Start subtractive.** First pass is two values, near-black and near-white. No accent, no gradient, no icon, no decoration. Settle structure and hierarchy at that state, then add back one element at a time. An element you cannot justify in one sentence does not go back in. Deleting from a busy page is an unbounded search; adding to an empty one is bounded.
+- **Research references before writing code.** When the brief supplies none, go find three to five. Live competitor landing pages first (their layout encodes what the shared audience needs to see first), award galleries second, portfolio galleries third. Pull section order, what the hero asks for, and how many colors are actually used. Deviating from a convention three competitors share is allowed, but you must be able to state why.
+- **Name the page's purpose, then let it delete sections.** One question: what should a visitor do here? The hero carries the device for that action, not a description of it. Every section below is admitted by one test: does it move the reader toward that action? Trust-building counts, decoration does not. A failing section is cut, not shrunk. Do not encode a fixed section sequence; that is itself a tell.
+- **Hierarchy before color.** Exactly one element is the largest and heaviest per viewport; rank by size and weight first. Whitespace is a signal, not leftover space. Color proportion as a sanity check only: roughly 60 ground / 30 supporting surface / 10 accent, sitting under the hard one-accent rule in Section 4.
+- **Social proof is a trust device, placed after evidence.** Show what the product produces before showing who uses it. Trust blocks go below the hero, never inside it. Never fabricate a quote, logo, or user count.
+
 ## Workflow
 
 1. **Read** → state the one-line Design Read.
-2. **Dials** → set VARIANCE / MOTION / DENSITY from the read.
-3. **Foundation** → official system or honest aesthetic build (Section 3).
-4. **Build** → apply anti-default discipline (Section 4) and the non-negotiables (Section 5).
-5. **Pre-flight** → run the mechanical check (Section 6) before declaring done. On a redesign, audit the existing UI first (`references/preflight.md`).
+2. **Research** → if the brief named no references, go find three to five (Section 7). Fix the purpose and the resulting section list before any code.
+3. **Dials** → set VARIANCE / MOTION / DENSITY from the read.
+4. **Foundation** → official system or honest aesthetic build (Section 3).
+5. **Build** → start subtractive (Section 7), then apply anti-default discipline (Section 4) and the non-negotiables (Section 5).
+6. **Pre-flight** → run the mechanical check (Section 6) before declaring done. On a redesign, audit the existing UI first (`references/preflight.md`).
 
 ## Attribution
 
 Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT) — the brief-inference "design read", the three dials, the official-system-vs-aesthetic split, the AI-tell catalogue, and the mechanical pre-flight check. Condensed into this SKILL.md with detail moved to `references/`; renamed and generalized for this repo. See THIRD_PARTY_NOTICES.md.
+
+Section 7 and `references/landing-method.md` are adapted from two Korean vibe-coding design talks by Jay Choi (인디해커 라이프): [바이브코딩 디자인 풀코스](https://www.youtube.com/watch?v=4TNRp0oQ1lQ) and [바이브코딩 UI/UX, 5가지 심리학적 비밀](https://www.youtube.com/watch?v=0ucwgwKoxqo). Claims in those talks that failed verification were dropped rather than softened; the rejected list is at the end of `references/landing-method.md`.

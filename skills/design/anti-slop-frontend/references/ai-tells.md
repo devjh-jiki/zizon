@@ -45,6 +45,7 @@ An eyebrow is the small uppercase wide-tracking label above a section headline (
 - Long lists (> 5 items) need a different component, not a longer list: 2-col split, card grid, tabs/accordion, scroll-snap pills, carousel, marquee. A 10-row spec sheet with a hairline under every row is the worst default (the "Marrow cookware" pattern) — group into 3 clusters or move to card-per-spec.
 - Copy self-audit before ship: re-read every visible string. Rewrite anything grammatically broken, with unclear referents, sounding like AI hallucination (cute-but-wrong wordplay, forced metaphors), or fake-precise invented numbers (`92%`, `4.1×`, `5.8mm`) that don't come from real data.
 - One copy register per page.
+- Icon restraint: do not put an icon on every item of a feature list or card grid. Auto-attaching one icon per item is a signature AI move, and an icon that only restates the label carries no information. If the text alone lands, drop the icon. When icons genuinely help, they belong to a set with one visual logic, not a scatter of stock glyphs.
 
 ## Quotes & testimonials
 - Max 3 lines of quote body. Cut longer quotes. Attribution = name + role + (optionally) company, never name-only. Real typographic quotes or none.
