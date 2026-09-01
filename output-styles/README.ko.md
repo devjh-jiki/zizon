@@ -14,13 +14,36 @@
 이 레포는 버전을 올리지 않으므로 `plugin update` 로는 반영되지 않는다. 재설치한다.
 
 ```
+claude plugin marketplace update zizon
 claude plugin uninstall zizon@zizon && claude plugin install zizon@zizon
 ```
 
-그다음 `/config` 의 **Output style** 항목에서 `fluent-korean` 을 고른다.
-`/output-style` 이라는 슬래시 명령은 없다(2.1.236 기준 확인). 되돌릴 때도 같은 항목에서 기본값을 고른다.
+그다음 `~/.claude/settings.json` 에 이름을 직접 적는다.
+**`fluent-korean` 이 아니라 `zizon:fluent-korean` 이다.** Claude Code 가 플러그인이 공급한 스타일의
+키를 `${플러그인명}:${frontmatter 의 name}` 으로 만든다.
+
+```json
+{ "outputStyle": "zizon:fluent-korean" }
+```
+
+넣은 뒤 새 세션으로 들어가야 한다. 스타일은 시작할 때 읽는다.
+되돌릴 때는 그 키를 지운다.
 
 고치는 중이라면 push 없이 `./bootstrap/bootstrap.sh --dev` 로 로컬 소스를 보게 할 수 있다.
+
+### 2.1.236 에서 확인한 것
+
+이 절이 없으면 다음 사람이 같은 자리에서 세 번 막힌다. 실제로 세 번 막혔다.
+
+- **`/output-style` 슬래시 명령은 없다.** `/config` 안의 항목이다
+- **`/config` 의 드롭다운은 내장 스타일만 나열한다.** 항목 정의가 `options: Object.keys(xke)` 이고
+  `xke` 는 내장 목록이다. 커스텀 스타일은 설정 파일로만 지정된다
+- **이름에 플러그인 접두사가 붙는다.** 번들의 `sDp` 가 `` `${t}:${l}` `` 로 키를 만든다.
+  접두사 없는 이름을 넣으면 조용히 무시되고 기본 스타일로 돌아간다
+
+`~/.claude/output-styles/` 사용자 디렉터리는 쓰지 않는 편이 안전하다. 스타일 목록을 만드는 함수
+(`aDp`)가 활성 플러그인의 `outputStylesPath` 만 훑고 사용자 홈을 보는 코드가 보이지 않는다.
+다만 이것은 코드를 읽은 결과이고 실측으로 확정하지는 못했다.
 
 ## 왜 원본을 그대로 설치하지 않았나
 

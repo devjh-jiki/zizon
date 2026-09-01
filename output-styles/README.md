@@ -15,13 +15,34 @@ so it is the only mechanism that can reach the Korean in an ordinary one-line re
 This repo does not bump versions, so `plugin update` will not pick the change up. Reinstall:
 
 ```
+claude plugin marketplace update zizon
 claude plugin uninstall zizon@zizon && claude plugin install zizon@zizon
 ```
 
-Then set **Output style** to `fluent-korean` under `/config`. There is no `/output-style` slash command
-(verified on 2.1.236). Reverting is the same field set back to the default.
+Then name it directly in `~/.claude/settings.json`. It is **`zizon:fluent-korean`, not `fluent-korean`**:
+Claude Code keys a plugin-supplied style as `${plugin}:${frontmatter name}`.
+
+```json
+{ "outputStyle": "zizon:fluent-korean" }
+```
+
+Start a new session afterwards; styles are read at startup. Remove the key to revert.
 
 While iterating, `./bootstrap/bootstrap.sh --dev` points the install at local source without a push.
+
+### Verified on 2.1.236
+
+Without this section the next person gets stuck in the same three places. Three people did.
+
+- **There is no `/output-style` slash command.** It is a field inside `/config`.
+- **The `/config` dropdown lists built-in styles only** (`options: Object.keys(xke)`, where `xke` holds
+  the built-ins). Custom styles can only be selected through the settings file.
+- **The name carries a plugin prefix.** `sDp` in the bundle builds the key as `` `${t}:${l}` ``.
+  An unprefixed name is silently ignored and the default style stays in effect.
+
+Avoid the `~/.claude/output-styles/` user directory. The function that assembles the style list (`aDp`)
+iterates only over enabled plugins' `outputStylesPath` and has no branch reading the user home.
+That is read from the bundle, not confirmed empirically.
 
 ## Why this one is vendored
 
