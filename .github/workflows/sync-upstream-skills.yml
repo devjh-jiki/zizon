@@ -1,6 +1,6 @@
 name: Sync upstream skills
 
-# 검증된 외부 skills 레포(mattpocock/skills 등)의 변경을 주기적으로 감지해
+# 검증된 외부 레포(mattpocock/skills 등)의 변경을 주기적으로 감지해
 # 변경분을 .upstream/ 에 자동 커밋한다. .upstream/ 은 참조용 스냅샷이라
 # 런타임에 아무것도 소비하지 않으므로(plugin.json 은 skills/ 경로만 싣는다)
 # 사람의 승인 없이 갱신해도 안전하다. 내 skills/ 에 반영할지는 별개 판단이다.
@@ -63,6 +63,11 @@ jobs:
             repo: i-have-adhd
             ref: main
             path: skills
+          # 스킬이 아니라 output-style 이라 path 가 skills 가 아니다
+          - owner: snflkd
+            repo: fluent-korean
+            ref: main
+            path: plugins/fluent-korean/output-styles
           # 추가하고 싶은 검증된 레포를 여기 등록
           # - owner: anthropics
           #   repo: skills

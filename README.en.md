@@ -17,6 +17,7 @@ The goal is to eliminate "where did I write that down again?".
 | Prompts | [`prompts/`](./prompts) | Frequently used prompt commands. |
 | Learning / AI | [`learning/ai/`](./learning/ai) | AI learning roadmap + resources + log, from a frontend developer's view. |
 | Snippets | [`snippets/`](./snippets) | Frequently used code/config snippets. |
+| Output Styles | [`output-styles/`](./output-styles) | Output styles, always on while selected. 1 style. |
 
 ## Install skills
 

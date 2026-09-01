@@ -17,6 +17,7 @@
 | Prompts | [`prompts/`](./prompts) | 자주 쓰는 프롬프트 명령어 |
 | Learning / AI | [`learning/ai/`](./learning/ai) | 프론트엔드 개발자 관점 AI 학습 로드맵 + 자료 + 기록 |
 | Snippets | [`snippets/`](./snippets) | 자주 쓰는 코드/설정 스니펫 |
+| Output Styles | [`output-styles/`](./output-styles) | 켜져 있는 동안 항상 걸리는 출력 스타일. 1개 |
 
 ## 스킬 설치
 

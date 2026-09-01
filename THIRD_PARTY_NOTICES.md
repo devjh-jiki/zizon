@@ -102,6 +102,22 @@ A full snapshot of each upstream repo above is kept under `.upstream/<owner>-<re
   original to this repo; a Korean edition (`readme.kr.md`) was consulted to match terminology in
   `SKILL.ko.md`.
 
+### output-styles/fluent-korean
+
+- Source: https://github.com/snflkd/fluent-korean
+- License: MIT
+- Copyright: Copyright (c) snflkd
+- Baseline: upstream commit `ce8683f` (2026-08-23), file
+  `plugins/fluent-korean/output-styles/fluent-korean.md`
+- Adapted: the body rules are carried over verbatim. Three clauses were appended to the
+  "동작 범위" section so the style can coexist with this repo's own assets: file-bound text defers
+  to the owning project's writing standard (falling back to the body rules when there is none),
+  file-bound drafts shown in chat keep their final form, and an explicit compression request
+  (`token/terse-output`, `token/i-have-adhd`) takes precedence. The `description` field was extended
+  to name the file-text carve-out. The `fluent-korean-not-coding` variant is not vendored.
+- Tracking: registered in `.github/workflows/sync-upstream-skills.yml`; upstream is snapshotted weekly
+  into `.upstream/snflkd-fluent-korean/` and never auto-merged.
+
 ## Notes
 
 - This file is English-only by policy (see CLAUDE.md "한/영 문서 페어 규칙" exemptions).
