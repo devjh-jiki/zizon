@@ -2,16 +2,17 @@
 name: design-brief
 description: >
   Turn a vague project brief into a grounded design direction before any UI code exists.
-  Reads the project, translates it into real filter URLs on Awwwards (aesthetic, motion,
-  tech, color) and SaaSFrame (screen type, section pattern), fetches what is currently
-  there, then proposes three deliberately-distinct directions, each with real reference
-  links, a WCAG-checked palette plus a Coolors URL, and a type pairing. Ends by writing a
-  design brief file that implementation reads. Covers both marketing surfaces and product
-  UI (dashboards, onboarding, settings). Use when starting a new UI, redesigning, picking
-  colors or type, or when the user says "디자인 브레인스토밍", "레퍼런스 찾아줘",
-  "색 조합 뽑아줘", "트렌드 보고 정하자", "design direction", "moodboard",
-  "pick a palette". NOT for reviewing existing UI code, and NOT a replacement for
-  anti-slop-frontend, which implements the direction this skill picks.
+  Translates the project into real filter URLs on Awwwards and SaaSFrame, fetches what is
+  currently there, then proposes three deliberately-distinct directions, each with real
+  reference links, a WCAG-checked palette plus a Coolors URL, and a type pairing. Ends by
+  writing a design brief file that implementation reads. Covers marketing surfaces and
+  product UI (dashboards, onboarding, settings) alike. Use when the direction is not
+  settled yet: starting a new UI, redesigning, choosing a palette or type from scratch, or
+  when the user says "디자인 브레인스토밍", "레퍼런스 찾아줘", "색 조합 뽑아줘",
+  "트렌드 보고 정하자", "design direction", "moodboard". NOT for tweaking colors in code
+  that already has a direction, NOT for reviewing existing UI, and NOT for building a
+  design system (tokens, component library). Such a system encodes a direction; this skill
+  picks it. NOT a replacement for anti-slop-frontend, which implements what this picks.
 ---
 
 # Design Brief
@@ -54,6 +55,12 @@ the real work: "SaaS dashboard" becomes six openable links.
 | Tech constraint already decided | Awwwards technologies | `/websites/<slug>/` |
 | Screen type | SaaSFrame categories | `/categories/<slug>` |
 | Section pattern | SaaSFrame patterns | `/patterns/<slug>` |
+
+**The two sites are not parallel.** Awwwards is an awards corpus: marketing sites,
+portfolios, experimental work. For product UI it contributes type, color, and motion
+vocabulary and almost nothing about layout, so weight SaaSFrame for anything with a
+sidebar and a data table. Verified on a dashboard run 2026-09-02, where the
+`data-visualization` tag returned scroll-storytelling sites built on Three.js and GSAP.
 
 Produce **two or three Awwwards URLs and two or three SaaSFrame URLs**. Not more. A wall
 of links is the same as no links.
@@ -112,14 +119,14 @@ Three quality rules govern this step. All three are in
 
 - **Force distance.** The three must differ on at least two of: color temperature,
   density, type classification, ground (light-first or dark-first). State which axes they
-  split on. Three variations of one
-  idea make the choice meaningless.
+  split on. Three variations of one idea make the choice meaningless.
 - **Compute contrast, never estimate it.** Body text 4.5:1, large text and UI 3:1, in both
   light and dark. This is the one thing here a machine can settle, and it is where
   AI-generated palettes most often fail.
 - **Verify the palette by searching backward.** Awwwards filters by color:
-  `/websites/?tag=<aesthetic>&palette=%23<HEX>`. Empty or off-mood results mean the
-  palette does not belong to that aesthetic.
+  `/websites/?tag=<aesthetic>&palette=%23<HEX>`. Read the *mood* of what comes back, not
+  the count. Three different accents each returned a full page on 2026-09-02, so emptiness
+  almost never fires. Off-mood results mean the palette does not belong to that aesthetic.
 
 Present all three, let the user open links and pick.
 

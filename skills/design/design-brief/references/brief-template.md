@@ -31,6 +31,7 @@ factor was.>
 |---|---|
 | Display face | <name> (<free or paid>) |
 | Body face | <name> (<free or paid>) |
+| Layout variance | <1-10> |
 | Motion intensity | <1-10> |
 | Density | <1-10> |
 
@@ -55,6 +56,11 @@ page rather than read directly. Write "none" only if that is true.>
 ```
 
 ## Why the last two sections exist
+
+**All three dial rows are required.** Layout variance, motion intensity, and density map
+one-to-one onto `anti-slop-frontend`'s DESIGN_VARIANCE, MOTION_INTENSITY, and
+VISUAL_DENSITY. That skill skips its own situation read when this file exists, so a
+missing row leaves its dial sitting on a default that nobody chose.
 
 **Rejected directions.** Without it the next session proposes the same rejected direction
 and the user rejects it again for the same reason. The reason is the reusable part, not

@@ -96,6 +96,11 @@ Read the result as a signal:
 |---|---|
 | Sites that match the intended mood | The palette belongs to this aesthetic. Cite two as references |
 | Nothing, or a handful | Rare pairing. Not automatically wrong, but say so in the brief |
+
+**Weight the mood row, not the count row.** On 2026-09-02 three unrelated accents each
+returned a full page against `tag=minimal`, so the filter is loose enough that emptiness
+almost never fires. The verdict you can actually act on is whether the returned sites feel
+like the direction, and that is a judgment the user makes by opening the link.
 | A completely different mood | The palette is fighting the direction. Revisit the accent |
 
 This is the one place the lookup and the palette meet, and it exists because Awwwards
