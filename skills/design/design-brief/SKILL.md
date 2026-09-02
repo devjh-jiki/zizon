@@ -79,6 +79,21 @@ Because that failure is silent, **the confirmed list is the guard, not a check p
 after the fact.** Use slugs from `references/reference-sites.md`. If you need one that is
 not there, fetch the site's index page and read the real slug off it before you use it.
 
+**A missing slug and a missing corpus are different problems, and only the first has an
+escape hatch.** `brutalism` and `brutalist` are not Awwwards tags, and no industry
+category covers finance. Verified 2026-09-02. Reading the index will not produce them,
+because they are not there. When the aesthetic the user named is absent, do three things
+and do not skip the first:
+
+1. Tell the user the corpus cannot support that word. This is the honest half
+2. Route around it with adjacent axes. `typography` and `colorful` carry part of what
+   people mean by brutalism, and `app-style` carries part of what they mean by product UI
+3. Mark in the brief that those links stand in for the aesthetic rather than demonstrate
+   it
+
+Step 4 asks for real reference URLs. Substitutes are legitimate, but only labeled as
+substitutes.
+
 Do not try to detect the fallback from the fetched page. The page-fetch tool summarizes
 pages through a small model and does not reliably surface the `<title>` tag, which is the
 only thing that distinguishes a live filter (`Best Minimal Websites`) from the fallback
@@ -110,7 +125,7 @@ The only place a human is in the loop. Each direction carries five things:
 1. **A name, not an adjective.** "Calm clinical data", "High-contrast editorial". A name
    is arguable; "modern and clean" is not.
 2. **Two or three real reference URLs.** Openable. From step 2 or 3.
-3. **A palette.** Five hex values, a Coolors URL, and computed contrast ratios.
+3. **A palette.** The seven roles, a Coolors URL, and computed contrast ratios.
 4. **A type pairing.** Display and body. Two families maximum.
 5. **What would make this wrong.** The fact that, if true, kills this direction.
 
@@ -132,6 +147,18 @@ Present all three, let the user open links and pick.
 
 **If they reject all three,** ask what was off and rebuild from step 2's vocabulary. Do not
 regenerate directions against the same search terms; you will produce the same three.
+
+**If the user refuses to choose and asks for one direction,** the gate has been handed to
+you, not removed. Collapse to one and say that you did. Then split the five items by what
+each is for. The three candidates, the distance rule, and a spread of reference links
+exist to give the user a choice, so they can go. The palette roles, the computed
+contrast, the type availability check, and "what would make this wrong" exist to make the
+answer correct, so they stay.
+
+"What would make this wrong" gets heavier, not lighter. With three directions on the
+table it helps the user compare. With one, it is the only thing left that lets them
+notice the choice does not fit their situation.
+
 
 ## Step 5. Freeze into a brief
 

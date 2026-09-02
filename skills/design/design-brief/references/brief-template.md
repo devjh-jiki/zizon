@@ -19,18 +19,23 @@ factor was.>
 
 ## Tokens
 
+Modes: <both / light only on purpose / dark only on purpose>. If only one, say why in
+one line here; a reader who finds one column empty will otherwise assume it was forgotten.
+
 | Role | Light | Dark | Contrast |
 |---|---|---|---|
 | Base | #xxxxxx | #xxxxxx | |
 | Surface | #xxxxxx | #xxxxxx | |
 | Text | #xxxxxx | #xxxxxx | x.x:1 on base, x.x:1 on surface |
-| Accent | #xxxxxx | #xxxxxx | x.x:1 on base |
-| Border | #xxxxxx | #xxxxxx | x.x:1 on base |
+| Muted text | #xxxxxx | #xxxxxx | x.x:1 on base, x.x:1 on surface |
+| Divider | #xxxxxx | #xxxxxx | decorative |
+| Control edge | #xxxxxx | #xxxxxx | x.x:1 on base, x.x:1 on surface |
+| Accent | #xxxxxx | #xxxxxx | x.x:1 on base, x.x:1 as text |
 
 | Setting | Value |
 |---|---|
-| Display face | <name> (<free or paid>) |
-| Body face | <name> (<free or paid>) |
+| Display face | <name> (<free or paid>, <on Google Fonts or not>) |
+| Body face | <name>, or "same as display" |
 | Layout variance | <1-10> |
 | Motion intensity | <1-10> |
 | Density | <1-10> |

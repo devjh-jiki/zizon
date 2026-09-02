@@ -37,9 +37,27 @@ Playwright 세션이거나, 사용자에게 스크린샷을 받는 것이다. �
 **조용한 폴백, 이 사이트의 함정.** 없는 슬러그는 404 가 되지 않는다. 200 과 함께 필터가
 걸리지 않은 전체 목록을 돌려준다. 2026-09-02 에 `/websites/premium-saas-vibe/` 와
 `/websites/zzzz-not-a-real-tag/` 가 둘 다 200 으로 수백 킬로바이트의 진짜 내용을
-돌려줬다. 상태 코드로는 필터가 걸렸는지 알 수 없다. **페이지 제목을 본다.** 필터가 살아
-있으면 슬러그에 맞춰 제목이 붙고(`Best Minimal Websites | Web Design Inspiration`),
-되돌아갔으면 `Awwwards Nominees` 다. 색 질의의 `?tag=` 쪽에도 같은 폴백이 있다고 본다.
+돌려줬다. 상태 코드로는 필터가 걸렸는지 알 수 없다. 신호는 페이지 제목이고, 형태가
+둘이 아니라 셋이다.
+
+| 제목 형태 | 뜻 | 예 |
+|---|---|---|
+| 슬러그를 이름으로 부른다 | 필터가 살아 있다 | `Best Minimal Websites`, `Best Examples of Typography in Web Design` |
+| `Awwwards Nominees` | 조용한 폴백. 그 슬러그는 없다 | `/websites/brutalism/` |
+| 사이트 공통 제목 | 판정 불가. 그 URL 은 버린다 | `graphic-design` 이 `Winning websites. Web Design Inspiration - Awwwards` 를 낸다 |
+
+셋째 형태는 실제로 존재하는 슬러그에서도 나오므로 실패의 증거가 아니다. 가릴 수 없다는
+증거이고, 이 목적에서는 그것이 같은 뜻이다. 추측하지 말고 다른 축을 고른다.
+
+**색 필터는 실제로 거른다.** 2026-09-02 에 `/websites/typography/` 가 결과 카드 46개를,
+같은 태그에 `?tag=typography&palette=%231B36F0` 을 걸면 32개를 돌려줬다. 다섯 번
+연속으로 같았다. 다만 건수는 정확 일치가 아니라 근방으로 뭉쳐지므로, 건수를 그 색이
+얼마나 드문지 재는 값으로 쓰지 않는다.
+
+**한 가지 일시적 현상에 대비한다.** 검증 실행에서 필터 페이지가 200 인데 결과 카드가
+하나도 없고 크기가 평소의 절반쯤인 응답을 한 번 받은 일이 있었다. 재요청하니 정상으로
+돌아왔다. 다섯 번 시도로는 재현되지 않았다. 그래도 카드가 0인 페이지는 정말로 드문
+조합과 구분되지 않으므로, **결과가 비었을 때는 결론을 내기 전에 한 번 재요청한다.**
 
 ### 태그와 스타일
 
@@ -82,25 +100,53 @@ webflow shopify wordpress sanity prismic contentful figma vercel netlify
 - 화면 종류: `https://www.saasframe.io/categories/<슬러그>`
 - 섹션 패턴: `https://www.saasframe.io/patterns/<슬러그>`
 
-### 카테고리, 화면 종류
+2026-09-02 에 카테고리 페이지의 사이드바에서 수확했다. **홈페이지에서 뽑지 않는다.
+홈페이지는 분류 체계의 일부만 보여준다.** 이 파일의 앞 판본은 홈페이지에서 뽑은
+카테고리 41개와 패턴 8개만 담고 있었고, 검증 실행이 정확히 그 빈칸을 밟았다.
+`user-onboarding`, `sign-up-flow`, `verification`, `steps`, `progress-indicator`,
+`social-login` 이 전부 200 인데 하나도 목록에 없었다. 확인된 목록은 사후 점검이 아니라
+예방 장치이므로, 목록이 부족하면 틀리는 방향이 반대가 된다. 다시 수확하는 방법이다.
+
+```sh
+curl -s -A "<브라우저 UA>" https://www.saasframe.io/categories/account-setup \
+  | grep -o 'href="/categories/[a-z0-9-]*"' | sed 's|.*/categories/||;s|"||' | sort -u
+```
+
+CMS 잔여물로 보이는 슬러그 셋은 제외했다. `upgrading-29385`, `maps-c7253`,
+`comparison-d` 다. 열리기는 하지만 실제 슬러그를 중복한다.
+
+### 카테고리, 화면 종류 (76개)
 
 ```
-landing-page pricing-page dashboard account-setup create-element about-page blog-feed
-careers-page features-page case-studies 404-page customers-page demo-request
-affiliate-page contact-page documentation press-page use-cases integrations-page
-blog-template comparison-page download-page security-page academy webinars-page
-enterprise-page events-page podcast-pages product-video ai-page changelog ebook-page
-early-access-page thank-you-page faq impact-page newsletter-page developers-page
-gdpr-compliance-page for-education-page integrations-library templates
+404-page about-page academy account-setup affiliate-page ai-page analytics
+appearance-customization blog-feed blog-template calendar careers-page case-
+studies changelog chat checklist checkout comparison-page confirmation
+contact-page create-element customers-page dashboard delete-account demo-
+request details developers-page documentation download-page early-access-page
+ebook-page empty-state enterprise-page events-page faq features-page flowchart
+for-education-page gdpr-compliance-page impact-page import-export inbox
+integrations integrations-library integrations-page invite-team-members
+landing-page loading-screen login newsletter-page plans playground podcast-
+pages press-page pricing-page product-tour product-video referral-flow search
+security-page settings share sign-up-flow success table team-members templates
+text-editor thank-you-page upgrading usage use-cases user-onboarding
+verification webinars-page welcome-screen
 ```
 
-2026-09-02 기준 수록량이 큰 쪽은 account-setup, 온보딩, landing-page, pricing-page,
-dashboard 였다. 이 순위는 사실이 아니라 실마리다. 요약된 조회에서 나온 값이다.
-
-### 패턴, 페이지 섹션
+### 패턴, 페이지 섹션 (71개)
 
 ```
-bento-grid testimonial footer call-to-action feature pricing stats faq
+add api api-key awards bento-grid blog-cards calculator calendar call-to-
+action call-to-download checkbox clients-logo code-snippet color-picker
+comparison connect-third-party contact-form copy-to-clipboard date-picker
+delete dropdown-menu empty-state faq feature file-uploader flowchart footer
+graph import-export infinite-marquee integrations invite-friends loading-
+placeholder loading-screen maps metrics modal multi-factor-authentication
+newsletter-form notification-banner opt-in pagination persona pricing pricing-
+comparison progress-indicator radio-buttons related-items remove reviews-
+rating segmented-control settings-preferences shortcut side-panel signup
+slider social-login stats steps success-state tabs tag tasks-to-do team
+testimonial text-field tile timeline toggle upgrade-prompt usage-indicator
 ```
 
 ## 어느 축을 어디로 보내는가

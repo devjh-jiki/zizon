@@ -20,22 +20,31 @@ have one direction with three skins, and the user's choice means nothing.
 accessibility-first clinical data, density is fixed and the split has to come from
 temperature and type.
 
-## Rule 2. Five roles, one accent
+## Rule 2. Seven roles, one accent
 
-A palette here is five roles, not five pretty colors:
+A palette here is seven roles, not seven pretty colors. Each one carries its own contrast
+target, which is what makes Rule 3 mechanical rather than a judgment call.
 
-| Role | Job |
-|---|---|
-| Base | Page background |
-| Surface | Cards, panels, raised areas |
-| Text | Body copy on base and on surface |
-| Accent | The one thing that draws the eye. Actions, focus, the single emphasis |
-| Border | Separation at low contrast |
+| Role | Job | Contrast target |
+|---|---|---|
+| Base | Page background | the reference surface |
+| Surface | Cards, panels, raised areas | the reference surface |
+| Text | Body copy | 4.5:1 on base and on surface |
+| Muted text | Secondary labels, timestamps, helper copy | 4.5:1. It is still body copy |
+| Divider | Decorative separation between blocks | none |
+| Control edge | The only thing marking a control's boundary: an unfilled input, an outlined button | 3:1 on base and on surface, per WCAG 1.4.11 |
+| Accent | The one thing that draws the eye. Actions, focus, the single emphasis | 3:1 as a filled surface, 4.5:1 wherever it is used as text |
 
-**One trap in that table.** A border that is the *only* thing marking a control boundary,
-an input field with no fill of its own, is a UI component under WCAG 1.4.11 and needs
-3:1, not the decorative 1.3:1 a divider gets away with. Decide which kind each border is
-before you check it.
+**Two of those rows exist because five was wrong.** Earlier versions of this file had one
+`Border` role and one `Text` role, and two independent verification runs hit the same
+wall: a divider between cards and the edge of an email input are different roles with
+different legal minimums, and secondary text kept getting quietly held to the 3:1 that
+belongs to UI components. Splitting them is not extra ceremony. It is the difference
+between a palette that passes and one that ships broken.
+
+**Decide which kind each border is before you check it.** A line is a divider only if
+removing it would cost nothing but tidiness. If removing it would hide where a control
+begins, it is a control edge and 1.3:1 will not do.
 
 Constraints:
 
@@ -109,13 +118,16 @@ result, not as proof.
 
 ## Exporting to Coolors
 
-Order the five roles light to dark and join them:
+Join the roles in this fixed order, hex values without the `#`:
 
 ```
-https://coolors.co/<base>-<surface>-<border>-<accent>-<text>
+https://coolors.co/<base>-<surface>-<divider>-<control-edge>-<muted>-<accent>-<text>
 ```
 
-Hex values without the `#`. The user opens it and turns the dials by hand. Put the URL in
+An earlier version said to order them light to dark and then gave a fixed role order in
+the same breath. Those two instructions disagree on every dark-first palette, and a
+verification run had to pick one. The role order wins: a stable order is what makes two
+briefs comparable at a glance. The user opens it and turns the dials by hand. Put the URL in
 the brief so the palette stays editable after the session ends.
 
 ## Typography
