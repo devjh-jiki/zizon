@@ -155,8 +155,32 @@ the brief so the palette stays editable after the session ends.
 
 Two families maximum: display and body. One is fine.
 
-- Check Google Fonts availability and say so. If a family is paid, say it is paid.
+- Check Google Fonts availability and say so. If a family is paid, say it is paid. Check
+  it with the method below rather than answering from memory.
 - Do not reach for a serif because the project sounds creative. Serif when the brief is
   editorial, luxury, or heritage, or when the brand already uses one.
 - A geometric sans and a neo-grotesque are not a pairing. They read as one font that
   failed to load consistently.
+
+**Check Google Fonts availability like this.** Replace spaces in the family name with `+`.
+
+```sh
+curl -s -o /dev/null -w '%{http_code} %{size_download}\n' \
+  "https://fonts.googleapis.com/css2?family=<name>:wght@400"
+```
+
+A hosted family returns 200 with a response of roughly 200 bytes. A family that is not
+hosted returns 400. Measured on 2026-09-02: `Inter` and `IBM Plex Sans KR` returned 200,
+while `Pretendard` and an invented name returned 400.
+
+**Hammering it in sequence kills this check silently.** Ask about several families in
+quick succession and Google rate-limits you, and **families that really are hosted start
+returning 400 too.** Read the status code alone and every candidate looks absent from
+Google Fonts. A verification run on 2026-09-02 hit exactly this and concluded that `css2`
+was a useless signal. The problem was the request spacing, not the check.
+
+**What separates them is the response size, not the status code.** A real 400 is a 6KB
+HTML error page; a normal 200 is a couple hundred bytes of CSS. That is why the command
+above prints `size_download` too. A 6KB body is a rate limit rather than an answer about
+the font, so wait and ask again instead of ruling. **Here too, a status code on its own
+settles nothing.**

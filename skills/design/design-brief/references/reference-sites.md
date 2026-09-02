@@ -12,7 +12,7 @@ not scrape trends. It harvests **vocabulary and taxonomy**, which are text, and 
 | Site | Fetch | Readable as text | Not readable |
 |---|---|---|---|
 | Awwwards | 200, no login | Award-winner names, tags, technologies, categories | The actual designs |
-| SaaSFrame | 200, no login | Category names and counts, section patterns, brands featured | The actual screens. Figma files are paid |
+| SaaSFrame | 200, no login | Category names and counts, section patterns, brands featured, desktop screen URLs | Figma files, mobile screens, bookmarking. All three are Pro |
 | Coolors | Trending renders colors in JS, no hex in the HTML | Nothing useful | Trending palettes |
 | Mobbin | 200, but redirects into a login-walled SPA shell | Nothing | Everything |
 
@@ -120,6 +120,20 @@ Two grammars. `/browse` is a 404, so do not use it.
 
 - Screen type: `https://www.saasframe.io/categories/<slug>`
 - Section pattern: `https://www.saasframe.io/patterns/<slug>`
+
+**Only three things are Pro-gated, and the screens are not among them.** Counted item by
+item on 2026-09-02. Figma files, the mobile-version tab, and bookmarking are the whole
+list, and all three are marked `data-ms-content="pro"`. Desktop screens carry their CDN
+URL in both the list card and `og:image`, and those URLs fetch without a login. Item
+pages return 200 as well, with the title, brand name, owning categories, and light or
+dark keying all readable as text.
+
+**An earlier version of this file listed "the actual screens" as blocked.** A verification
+run read that line and, without opening SaaSFrame at all, copied "the actual screens sit
+behind a paid Figma" into the "not verified" section of a brief that went to the user.
+Recording something as unverified is honest; copying a wrong claim out of this file is
+just wrong. **What this file calls blocked gets used as established fact, so do not write
+it without measuring.**
 
 Harvested on 2026-09-02 from a category page's sidebar, **not from the homepage. The
 homepage shows only part of the taxonomy.** An earlier version of this file listed 41
