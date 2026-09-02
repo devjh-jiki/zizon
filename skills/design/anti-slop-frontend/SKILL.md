@@ -22,6 +22,10 @@ Most AI frontend output is bad because the model jumps to a default aesthetic in
 
 ## 1. Read the room before anything else
 
+**If the project already has a `design-brief.md`, read it and skip this section.** The
+`design-brief` skill decided the direction, palette, and type from real references; deriving
+a second read here produces a conflicting one.
+
 Before touching code or dials, infer what the user actually wants. Signals to read:
 
 1. **Page kind** — landing (SaaS / consumer / agency / event), portfolio (dev / designer / studio), redesign (preserve vs overhaul), editorial/blog.

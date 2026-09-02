@@ -4,9 +4,9 @@
 
 ## 디렉토리
 
-- `skills/`: 에이전트 스킬의 단일 원본. 정확히 8개 버킷 폴더로만 분류(22개 스킬, Claude Code 전용):
+- `skills/`: 에이전트 스킬의 단일 원본. 정확히 8개 버킷 폴더로만 분류(23개 스킬, Claude Code 전용):
   - `token/`: 토큰/컨텍스트 소비 절감 (terse-output, context-budget, lazy-code, i-have-adhd)
-  - `design/`: 프론트엔드 디자인 품질·취향 (anti-slop-frontend)
+  - `design/`: 프론트엔드 디자인 품질·취향 (anti-slop-frontend, design-brief)
   - `planning/`: 논의 → 스펙/이슈/도메인 모델 → 실행 (grill-me, to-prd, to-issues, implement, codebase-design, domain-modeling)
   - `review/`: diff 리뷰 (fe-review, be-review)
   - `testing/`: 무엇을·어떻게 테스트할지 (js-testing, webapp-testing)
@@ -34,7 +34,7 @@ description: 무엇을 하는지 + 언제 쓰는지. 1024자 이내. 자동 트�
 ```
 
 - 공개 스킬은 루트 `README`(한/영)와 `skills/README`(한/영)에 등재한다.
-- **`.claude-plugin/plugin.json` 의 `skills` 배열이 22개 스킬 경로를 하나씩 개별 나열한다.** 스킬을 추가·삭제·이동했으면 이 배열도 반드시 같이 고친다. `pnpm validate` 가 디스크(`skills/<bucket>/<name>/`)와 이 배열을 서로 대조해서, 한쪽에만 있는 스킬이 있으면 빌드를 실패시킨다. 잊기 쉬운 단계이자 가장 자주 나오는 실패 원인이니 스킬 작업의 마지막 체크리스트로 삼는다.
+- **`.claude-plugin/plugin.json` 의 `skills` 배열이 23개 스킬 경로를 하나씩 개별 나열한다.** 스킬을 추가·삭제·이동했으면 이 배열도 반드시 같이 고친다. `pnpm validate` 가 디스크(`skills/<bucket>/<name>/`)와 이 배열을 서로 대조해서, 한쪽에만 있는 스킬이 있으면 빌드를 실패시킨다. 잊기 쉬운 단계이자 가장 자주 나오는 실패 원인이니 스킬 작업의 마지막 체크리스트로 삼는다.
 - 사용자-호출(user-invoked) 스킬은 `disable-model-invocation: true` 를 두고 사람만 `/명령`으로 실행.
 - 모델-호출(model-invoked) 스킬은 작업이 맞으면 에이전트가 자동으로 집어듦.
 - 사용자-호출 스킬은 모델-호출 스킬을 부를 수 있으나, 다른 사용자-호출 스킬은 부르지 않는다.
@@ -112,7 +112,7 @@ python3 .github/scripts/check_doc_pairs.py
 
 ## 마켓플레이스 배포
 
-- `.claude-plugin/marketplace.json` 으로 Claude Code 마켓플레이스 배포. 단일 플러그인 `zizon` 하나로 22개 스킬 전부를 묶는다. 도메인별로 여러 플러그인으로 쪼개지 않는다.
+- `.claude-plugin/marketplace.json` 으로 Claude Code 마켓플레이스 배포. 단일 플러그인 `zizon` 하나로 23개 스킬 전부를 묶는다. 도메인별로 여러 플러그인으로 쪼개지 않는다.
 - 설치: `/plugin marketplace add devjh-jiki/zizon` → `/plugin install zizon@zizon`.
 - 새 머신 전체 재현은 `./bootstrap/bootstrap.sh` 하나로 한다. 마켓플레이스·플러그인·전역 MCP·훅까지 한 번에 맞춘다.
 - `.claude-plugin/plugin.json` 의 `skills` 배열과 디스크 상태가 어긋나면 마켓플레이스에 새/삭제된 스킬이 반영되지 않거나 설치가 깨진다. "Skill 규칙" 절의 `pnpm validate` 대조를 항상 통과시킨다.

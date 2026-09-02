@@ -12,7 +12,7 @@ The goal is to eliminate "where did I write that down again?".
 
 | Area | Path | Description |
 |------|------|-------------|
-| Skills | [`skills/`](./skills) | My own agent skills. 8 buckets, 22 skills. Installed as the Claude Code plugin `zizon`. |
+| Skills | [`skills/`](./skills) | My own agent skills. 8 buckets, 23 skills. Installed as the Claude Code plugin `zizon`. |
 | Bootstrap | [`bootstrap/`](./bootstrap) | Idempotent scripts that reproduce machine setup (marketplaces, plugins, MCP servers, hooks) from a declarative manifest. |
 | Prompts | [`prompts/`](./prompts) | Frequently used prompt commands. |
 | Learning / AI | [`learning/ai/`](./learning/ai) | AI learning roadmap + resources + log, from a frontend developer's view. |
@@ -61,6 +61,7 @@ Skills are labeled by verification stage:
 | [lazy-code](./skills/token/lazy-code) | token | Available | Force the laziest working solution via a YAGNI ladder; lite/full/ultra (adapted from DietrichGebert/ponytail). |
 | [i-have-adhd](./skills/token/i-have-adhd) | token | Available | Lead every reply with the next action, cap lists at 5, cut the fluff. |
 | [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | Stop AI-built frontends from looking templated: brief read, three dials, avoid LLM defaults, pre-flight (adapted from Leonxlnx/taste-skill). |
+| [design-brief](./skills/design/design-brief) | design | Review | Pick a design direction from real references and freeze it in a brief file: Awwwards/SaaSFrame filter URLs, contrast-checked palettes, three distinct candidates. |
 | [grill-me](./skills/planning/grill-me) | planning | Available | Relentless interview to stress-test a plan, decision, or business idea. |
 | [to-prd](./skills/planning/to-prd) | planning | Available | Synthesize the current conversation into a PRD, no interview (adapted from mattpocock). |
 | [to-issues](./skills/planning/to-issues) | planning | Available | Break a plan/PRD into vertical-slice issues (adapted from mattpocock). |

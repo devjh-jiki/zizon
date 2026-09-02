@@ -43,6 +43,7 @@ A collection of my own agent skills for daily use. Follows the open [Agent Skill
 **Model-invoked**
 
 - [anti-slop-frontend](./design/anti-slop-frontend/SKILL.md) — Stop AI-built marketing/landing/portfolio frontends from looking templated (read the brief, three dials, avoid LLM defaults, pre-flight)
+- [design-brief](./design/design-brief/SKILL.md). Pick a design direction from real references before any UI code, then freeze it in `design-brief.md` (Awwwards/SaaSFrame filter URLs, contrast-checked palette, three distinct candidates)
 
 ### Planning
 

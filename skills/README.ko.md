@@ -43,6 +43,7 @@
 **Model-invoked**
 
 - [anti-slop-frontend](./design/anti-slop-frontend/SKILL.ko.md). AI가 만든 마케팅/랜딩/포트폴리오 프론트엔드가 템플릿처럼 안 보이게 (브리프 읽기, 세 다이얼, LLM 기본값 회피, 프리플라이트)
+- [design-brief](./design/design-brief/SKILL.ko.md). UI 코드 이전에 실제 레퍼런스에서 디자인 방향을 정하고 `design-brief.md` 로 굳힘 (Awwwards·SaaSFrame 필터 URL, 대비 검증 팔레트, 서로 다른 후보 셋)
 
 ### Planning
 
