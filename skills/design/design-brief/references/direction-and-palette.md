@@ -179,8 +179,17 @@ returning 400 too.** Read the status code alone and every candidate looks absent
 Google Fonts. A verification run on 2026-09-02 hit exactly this and concluded that `css2`
 was a useless signal. The problem was the request spacing, not the check.
 
-**What separates them is the response size, not the status code.** A real 400 is a 6KB
-HTML error page; a normal 200 is a couple hundred bytes of CSS. That is why the command
-above prints `size_download` too. A 6KB body is a rate limit rather than an answer about
-the font, so wait and ask again instead of ruling. **Here too, a status code on its own
-settles nothing.**
+**The only conclusive signal is a 200.** A 200 means the family is hosted, and the body is
+a couple hundred bytes of CSS. **A 400 concludes nothing.** A family that is not hosted
+returns 400, a rate limit returns 400, and **the response size does not separate those two
+either.** Measured on 2026-09-02: the rate-limited body was 6416 bytes and the not-hosted
+bodies were 6495 and 6506, all of them 6KB-class HTML error pages.
+
+So **when you get a 400, do not rule. Wait and ask again.** If it turns into a 200 the
+family is hosted; if it stays 400 it is not. The command prints `size_download` not to
+separate the two kinds of 400, but to catch a 200 that came back with an empty body.
+
+**An earlier version of this paragraph asserted that 6KB means a rate limit, and that was
+wrong.** A run that read it diagnosed a not-hosted family's 6KB response as a rate limit
+and wrote that into its brief. What this file records as a discriminator gets executed
+verbatim, so only record what actually discriminates.
