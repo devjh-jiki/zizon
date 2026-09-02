@@ -116,10 +116,16 @@ curl -s -A "<browser UA>" https://www.saasframe.io/categories/account-setup \
   | grep -o 'href="/categories/[a-z0-9-]*"' | sed 's|.*/categories/||;s|"||' | sort -u
 ```
 
-Three slugs are left out as CMS artifacts: `upgrading-29385`, `maps-c7253` and
-`comparison-d`. They resolve but duplicate a real slug.
+**Three slugs look like CMS artifacts and are not.** `upgrading-29385`, `maps-c7253` and
+`comparison-d` carry random suffixes, and an earlier version of this file dropped them on
+sight. Checking the titles killed that: `/categories/upgrading` is the Billing collection
+and `/categories/upgrading-29385` is the actual Upgrading one; `/patterns/comparison` is
+the Table collection and `/patterns/comparison-d` is the actual Comparison one. The clean
+name points somewhere else. **Do not prune this list by eye.** SaaSFrame returns 404 on a
+slug that does not exist, so resolving is the test, and a title read settles what a slug
+actually holds.
 
-### Categories, screen types (76)
+### Categories, screen types (77)
 
 ```
 404-page about-page academy account-setup affiliate-page ai-page analytics
@@ -133,24 +139,25 @@ integrations integrations-library integrations-page invite-team-members
 landing-page loading-screen login newsletter-page plans playground podcast-
 pages press-page pricing-page product-tour product-video referral-flow search
 security-page settings share sign-up-flow success table team-members templates
-text-editor thank-you-page upgrading usage use-cases user-onboarding
-verification webinars-page welcome-screen
+text-editor thank-you-page upgrading upgrading-29385 usage use-cases user-
+onboarding verification webinars-page welcome-screen
 ```
 
-### Patterns, page sections (71)
+### Patterns, page sections (73)
 
 ```
 add api api-key awards bento-grid blog-cards calculator calendar call-to-
 action call-to-download checkbox clients-logo code-snippet color-picker
-comparison connect-third-party contact-form copy-to-clipboard date-picker
-delete dropdown-menu empty-state faq feature file-uploader flowchart footer
-graph import-export infinite-marquee integrations invite-friends loading-
-placeholder loading-screen maps metrics modal multi-factor-authentication
-newsletter-form notification-banner opt-in pagination persona pricing pricing-
-comparison progress-indicator radio-buttons related-items remove reviews-
-rating segmented-control settings-preferences shortcut side-panel signup
-slider social-login stats steps success-state tabs tag tasks-to-do team
-testimonial text-field tile timeline toggle upgrade-prompt usage-indicator
+comparison comparison-d connect-third-party contact-form copy-to-clipboard
+date-picker delete dropdown-menu empty-state faq feature file-uploader
+flowchart footer graph import-export infinite-marquee integrations invite-
+friends loading-placeholder loading-screen maps maps-c7253 metrics modal
+multi-factor-authentication newsletter-form notification-banner opt-in
+pagination persona pricing pricing-comparison progress-indicator radio-buttons
+related-items remove reviews-rating segmented-control settings-preferences
+shortcut side-panel signup slider social-login stats steps success-state tabs
+tag tasks-to-do team testimonial text-field tile timeline toggle upgrade-
+prompt usage-indicator
 ```
 
 ## Choosing which axis goes where

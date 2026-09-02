@@ -79,12 +79,26 @@ def ratio(fg, bg):
     hi, lo = max(a, b), min(a, b)
     return (hi + 0.05) / (lo + 0.05)
 
-# check every text-on-background pair you are shipping
-for fg, bg, label in [("#1a1a1a", "#fafafa", "body on base"),
-                      ("#1a1a1a", "#ffffff", "body on surface"),
-                      ("#2563eb", "#fafafa", "accent on base")]:
+BASE, SURFACE, ACCENT = "#fafafa", "#ffffff", "#1d68c4"
+
+# one row per pair you actually ship, each carrying its own role's target
+checks = [
+    ("text on base",          "#1a1a1a", BASE,    4.5),
+    ("text on surface",       "#1a1a1a", SURFACE, 4.5),
+    ("muted on base",         "#595959", BASE,    4.5),
+    ("muted on surface",      "#595959", SURFACE, 4.5),
+    ("control edge on base",  "#767676", BASE,    3.0),
+    ("control edge on surface", "#767676", SURFACE, 3.0),
+    ("accent as fill vs base", ACCENT,   BASE,    3.0),
+    ("accent as text on base", ACCENT,   BASE,    4.5),
+    ("label on accent fill",  "#ffffff", ACCENT,  4.5),
+]
+for label, fg, bg, target in checks:
     r = ratio(fg, bg)
-    print(f"{label}: {r:.2f}:1 {'PASS' if r >= 4.5 else 'FAIL'}")
+    print(f"{label:26s} {r:5.2f}:1  needs {target}  {'PASS' if r >= target else 'FAIL'}")
+
+# The divider role carries no target. Do not invent one for it.
+# Run this again for the dark mode values before you write the brief.
 ```
 
 **When a pair fails, change lightness, not hue.** Hue is what the direction chose;

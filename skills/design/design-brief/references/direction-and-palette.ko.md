@@ -76,12 +76,26 @@ def ratio(fg, bg):
     hi, lo = max(a, b), min(a, b)
     return (hi + 0.05) / (lo + 0.05)
 
-# 실제로 내보낼 글자와 배경 쌍을 전부 확인한다
-for fg, bg, label in [("#1a1a1a", "#fafafa", "베이스 위 본문"),
-                      ("#1a1a1a", "#ffffff", "표면 위 본문"),
-                      ("#2563eb", "#fafafa", "베이스 위 액센트")]:
+BASE, SURFACE, ACCENT = "#fafafa", "#ffffff", "#1d68c4"
+
+# 실제로 내보낼 쌍마다 한 줄씩. 목표값은 그 역할이 가진 것을 쓴다
+checks = [
+    ("글자 / 베이스",        "#1a1a1a", BASE,    4.5),
+    ("글자 / 표면",          "#1a1a1a", SURFACE, 4.5),
+    ("보조 글자 / 베이스",    "#595959", BASE,    4.5),
+    ("보조 글자 / 표면",      "#595959", SURFACE, 4.5),
+    ("컨트롤 경계 / 베이스",  "#767676", BASE,    3.0),
+    ("컨트롤 경계 / 표면",    "#767676", SURFACE, 3.0),
+    ("액센트 면 / 베이스",    ACCENT,    BASE,    3.0),
+    ("액센트 글자 / 베이스",  ACCENT,    BASE,    4.5),
+    ("액센트 위 라벨",        "#ffffff", ACCENT,  4.5),
+]
+for label, fg, bg, target in checks:
     r = ratio(fg, bg)
-    print(f"{label}: {r:.2f}:1 {'PASS' if r >= 4.5 else 'FAIL'}")
+    print(f"{label:22s} {r:5.2f}:1  목표 {target}  {'PASS' if r >= target else 'FAIL'}")
+
+# 구분선 역할에는 목표값이 없다. 없는 목표를 지어내지 않는다.
+# 브리프를 쓰기 전에 다크 모드 값으로 한 번 더 돌린다.
 ```
 
 **기준을 못 맞추면 색상이 아니라 명도를 바꾼다.** 색상은 방향이 고른 것이고 명도는

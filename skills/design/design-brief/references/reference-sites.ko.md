@@ -112,10 +112,15 @@ curl -s -A "<브라우저 UA>" https://www.saasframe.io/categories/account-setup
   | grep -o 'href="/categories/[a-z0-9-]*"' | sed 's|.*/categories/||;s|"||' | sort -u
 ```
 
-CMS 잔여물로 보이는 슬러그 셋은 제외했다. `upgrading-29385`, `maps-c7253`,
-`comparison-d` 다. 열리기는 하지만 실제 슬러그를 중복한다.
+**CMS 잔여물처럼 보이는 슬러그 셋이 있는데 잔여물이 아니다.** `upgrading-29385`,
+`maps-c7253`, `comparison-d` 는 무작위 접미사를 달고 있어서, 이 파일의 앞 판본이 보자마자
+빼 버렸다. 제목을 확인하니 그 판단이 틀렸다. `/categories/upgrading` 은 Billing 모음이고
+`/categories/upgrading-29385` 가 실제 Upgrading 이다. `/patterns/comparison` 은 Table
+모음이고 `/patterns/comparison-d` 가 실제 Comparison 이다. 깔끔한 이름이 다른 곳을
+가리킨다. **이 목록을 눈으로 쳐내지 않는다.** SaaSFrame 은 없는 슬러그에 404 를 주므로
+열리는지가 검사이고, 무엇이 들었는지는 제목을 읽어야 정해진다.
 
-### 카테고리, 화면 종류 (76개)
+### 카테고리, 화면 종류 (77개)
 
 ```
 404-page about-page academy account-setup affiliate-page ai-page analytics
@@ -129,24 +134,25 @@ integrations integrations-library integrations-page invite-team-members
 landing-page loading-screen login newsletter-page plans playground podcast-
 pages press-page pricing-page product-tour product-video referral-flow search
 security-page settings share sign-up-flow success table team-members templates
-text-editor thank-you-page upgrading usage use-cases user-onboarding
-verification webinars-page welcome-screen
+text-editor thank-you-page upgrading upgrading-29385 usage use-cases user-
+onboarding verification webinars-page welcome-screen
 ```
 
-### 패턴, 페이지 섹션 (71개)
+### 패턴, 페이지 섹션 (73개)
 
 ```
 add api api-key awards bento-grid blog-cards calculator calendar call-to-
 action call-to-download checkbox clients-logo code-snippet color-picker
-comparison connect-third-party contact-form copy-to-clipboard date-picker
-delete dropdown-menu empty-state faq feature file-uploader flowchart footer
-graph import-export infinite-marquee integrations invite-friends loading-
-placeholder loading-screen maps metrics modal multi-factor-authentication
-newsletter-form notification-banner opt-in pagination persona pricing pricing-
-comparison progress-indicator radio-buttons related-items remove reviews-
-rating segmented-control settings-preferences shortcut side-panel signup
-slider social-login stats steps success-state tabs tag tasks-to-do team
-testimonial text-field tile timeline toggle upgrade-prompt usage-indicator
+comparison comparison-d connect-third-party contact-form copy-to-clipboard
+date-picker delete dropdown-menu empty-state faq feature file-uploader
+flowchart footer graph import-export infinite-marquee integrations invite-
+friends loading-placeholder loading-screen maps maps-c7253 metrics modal
+multi-factor-authentication newsletter-form notification-banner opt-in
+pagination persona pricing pricing-comparison progress-indicator radio-buttons
+related-items remove reviews-rating segmented-control settings-preferences
+shortcut side-panel signup slider social-login stats steps success-state tabs
+tag tasks-to-do team testimonial text-field tile timeline toggle upgrade-
+prompt usage-indicator
 ```
 
 ## 어느 축을 어디로 보내는가
