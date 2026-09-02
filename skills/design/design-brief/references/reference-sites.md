@@ -14,12 +14,19 @@ not scrape trends. It harvests **vocabulary and taxonomy**, which are text, and 
 | Awwwards | 200, no login | Award-winner names, tags, technologies, categories | The actual designs |
 | SaaSFrame | 200, no login | Category names and counts, section patterns, brands featured | The actual screens. Figma files are paid |
 | Coolors | Trending renders colors in JS, no hex in the HTML | Nothing useful | Trending palettes |
-| Mobbin | **403, bot-blocked** | Nothing | Everything |
+| Mobbin | 200, but redirects into a login-walled SPA shell | Nothing | Everything |
 
-**Mobbin is deliberately excluded.** It returns 403 to fetches, and driving a real browser
-against a paid product was considered and declined. If you want it back, the options are a
-logged-in Playwright session or asking the user to paste screenshots. Do not add it
-without deciding that again.
+**Mobbin is deliberately excluded.** Fetching it is not blocked, it is pointless. A content
+URL such as `/search/ios/flows?filter=kyc` answers 307 and lands on a login-walled SPA
+shell holding two images, zero app links, and nothing but `Log in` and `Join for free`.
+Driving a real browser against a paid product was considered and declined. If you want it
+back, the options are a logged-in Playwright session or asking the user to paste
+screenshots. Do not add it without deciding that again.
+
+**This row used to say "403, bot-blocked", and that is no longer true.** Re-verified
+2026-09-02. The decision to exclude it stands, but the reason is a login wall rather than
+a bot block. Recording a status code was the mistake: 200 tells you as little here as it
+does on Awwwards.
 
 **Coolors is for generating, not reading.** `coolors.co/<hex>-<hex>-<hex>-<hex>-<hex>`
 returns 200 and opens the palette in the editor. Build the palette yourself, then export
@@ -51,10 +58,21 @@ The third shape appears on slugs that do exist, so it is not proof of failure. I
 proof that you cannot tell, which for this purpose is the same thing. Pick a different
 axis rather than guessing.
 
-**The color filter does filter.** On 2026-09-02 `/websites/typography/` returned 46 result
-cards and `?tag=typography&palette=%231B36F0` returned 32 from the same tag, five requests
-running, identical every time. Result counts bucket by proximity rather than exact match,
-so a count is not a measure of how rare a color is.
+**The color filter works, but only in the query form.** `?tag=<slug>&palette=%23<HEX>`
+filters. `/websites/<slug>/?palette=%23<HEX>` does not: the parameter is dropped and you
+get the unfiltered tag straight back. Verified 2026-09-02, where the path form returned a
+result set identical to the unfiltered tag while the query form replaced 12 of 31 entries.
+**This is the silent-200 trap wearing a second costume,** and the title does not catch this
+one either, because both forms keep the live filter title. Always build the URL in query
+form.
+
+**Never read the filter off a result count.** The first page renders 31 distinct sites
+whether or not a palette is applied. Counting raw `/sites/` links gives 46 against 32, but
+that gap is duplicate markup rather than filtering, so an earlier version of this file
+cited it as evidence and was measuring nothing. The signal that does work is **how far the
+result set moves**. Verified 2026-09-02: against `tag=minimal`, accent `#0E5A63` kept 19 of
+31 and brought 12 new; against `tag=typography`, a deliberately foreign `#1B36F0` shared
+only 2 and replaced 29. Compare the sets, never the counts.
 
 **One transient to guard against.** A verification run once saw a filter page come back
 200 with zero result cards, at roughly half the usual page size, and a retry returned a
@@ -120,8 +138,10 @@ curl -s -A "<browser UA>" https://www.saasframe.io/categories/account-setup \
 `comparison-d` carry random suffixes, and an earlier version of this file dropped them on
 sight. Checking the titles killed that: `/categories/upgrading` is the Billing collection
 and `/categories/upgrading-29385` is the actual Upgrading one; `/patterns/comparison` is
-the Table collection and `/patterns/comparison-d` is the actual Comparison one. The clean
-name points somewhere else. **Do not prune this list by eye.** SaaSFrame returns 404 on a
+the Table collection and `/patterns/comparison-d` is the actual Comparison one. For those
+two the clean name points somewhere else entirely. `maps` and `maps-c7253` are a third
+shape: both are Maps collections, 18 entries against 16, so neither name is wrong and the
+suffixed one is simply a second collection. **Do not prune this list by eye.** SaaSFrame returns 404 on a
 slug that does not exist, so resolving is the test, and a title read settles what a slug
 actually holds.
 

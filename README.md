@@ -61,7 +61,7 @@ Claude Code 플러그인 마켓플레이스에서 설치합니다.
 | [lazy-code](./skills/token/lazy-code) | token | Available | YAGNI 사다리로 가장 게으른 해법 강제; lite/full/ultra (DietrichGebert/ponytail 적응) |
 | [i-have-adhd](./skills/token/i-have-adhd) | token | Available | 다음 행동을 맨 위에, 리스트 5개 캡, 군더더기 제거 응답 모드 |
 | [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | AI 티 나는 프론트엔드 방지: 브리프 읽기·세 다이얼·LLM 기본값 회피·프리플라이트 (Leonxlnx/taste-skill 적응) |
-| [design-brief](./skills/design/design-brief) | design | Review | 레퍼런스 사이트를 1차 조회해 디자인 방향을 정하고 브리프 파일로 남김: Awwwards·SaaSFrame 필터 URL, 대비 검증 팔레트, 후보 셋 |
+| [design-brief](./skills/design/design-brief) | design | Available | 레퍼런스 사이트를 1차 조회해 디자인 방향을 정하고 브리프 파일로 남김: Awwwards·SaaSFrame 필터 URL, 대비 검증 팔레트, 후보 셋 |
 | [grill-me](./skills/planning/grill-me) | planning | Available | 계획·의사결정·사업 아이디어를 스트레스 테스트하는 집요한 인터뷰 |
 | [to-prd](./skills/planning/to-prd) | planning | Available | 현재 대화를 PRD 로 합성 (인터뷰 없음, mattpocock 적응) |
 | [to-issues](./skills/planning/to-issues) | planning | Available | 계획/PRD 를 수직 슬라이스 이슈로 분해 (mattpocock 적응) |

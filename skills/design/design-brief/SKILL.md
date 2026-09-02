@@ -114,6 +114,18 @@ pages through a small model, so tag strings are not guaranteed verbatim and resu
 cached for 15 minutes. Write "Awwwards currently surfaces a lot of X" and never "the tag
 is exactly X". The user confirms by opening the link.
 
+**If the user asks what is trending right now, answer the limit before the question.**
+"Which colors are hot in <category> this year" is the one thing these corpora cannot tell
+you: they carry their value in images, and color names appear nowhere in the text. Say so
+plainly, hand over the vocabulary you did read, and keep the non-answer out of the palette
+decision so the two do not contaminate each other. Secondary sources are worse than they
+look here. Verified 2026-09-02 on two fintech-trend articles: neither named a color as a
+trend, and the hex values sitting in their HTML (`#774DFF`, `#0DB89E`) were the
+publishers' own brand colors, one of them a CSS custom property called
+`--New-Color-Violet` on a focus style. Harvest a hex from a page like that and you report
+a violet trend the article never claimed, in roughly the shade `anti-slop-frontend`
+already flags as an AI tell.
+
 **If a fetch fails, do not stop.** Go to step 4 without it and record the gap in the
 brief's "what we could not check" section. The lookup adds material; it is not a
 precondition.

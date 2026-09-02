@@ -61,7 +61,7 @@ Skills are labeled by verification stage:
 | [lazy-code](./skills/token/lazy-code) | token | Available | Force the laziest working solution via a YAGNI ladder; lite/full/ultra (adapted from DietrichGebert/ponytail). |
 | [i-have-adhd](./skills/token/i-have-adhd) | token | Available | Lead every reply with the next action, cap lists at 5, cut the fluff. |
 | [anti-slop-frontend](./skills/design/anti-slop-frontend) | design | Available | Stop AI-built frontends from looking templated: brief read, three dials, avoid LLM defaults, pre-flight (adapted from Leonxlnx/taste-skill). |
-| [design-brief](./skills/design/design-brief) | design | Review | Pick a design direction from real references and freeze it in a brief file: Awwwards/SaaSFrame filter URLs, contrast-checked palettes, three distinct candidates. |
+| [design-brief](./skills/design/design-brief) | design | Available | Pick a design direction from real references and freeze it in a brief file: Awwwards/SaaSFrame filter URLs, contrast-checked palettes, three distinct candidates. |
 | [grill-me](./skills/planning/grill-me) | planning | Available | Relentless interview to stress-test a plan, decision, or business idea. |
 | [to-prd](./skills/planning/to-prd) | planning | Available | Synthesize the current conversation into a PRD, no interview (adapted from mattpocock). |
 | [to-issues](./skills/planning/to-issues) | planning | Available | Break a plan/PRD into vertical-slice issues (adapted from mattpocock). |

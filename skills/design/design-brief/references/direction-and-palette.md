@@ -118,13 +118,20 @@ Read the result as a signal:
 | Result | Reading |
 |---|---|
 | Sites that match the intended mood | The palette belongs to this aesthetic. Cite two as references |
-| Nothing, or a handful | Rare pairing. Not automatically wrong, but say so in the brief |
+| A set that does not move against the unfiltered tag | The filter never engaged. Check the URL form before reading anything into the result |
 | A completely different mood | The palette is fighting the direction. Revisit the accent |
 
-**Weight the mood row, not the count row.** On 2026-09-02 three unrelated accents each
-returned a full page against `tag=minimal`, so the filter is loose enough that emptiness
-almost never fires. The verdict you can actually act on is whether the returned sites feel
-like the direction, and that is a judgment the user makes by opening the link.
+**The query form is not optional here.** `/websites/<slug>/?palette=%23<HEX>` drops the
+parameter and hands back the unfiltered tag with the same title and the same status code,
+so a path-form URL produces a confident reading of a filter that never ran.
+`reference-sites.md` carries the measurement.
+
+**Weight the mood row, not the count row.** The first page renders 31 sites whether or not
+a palette is applied, so emptiness almost never fires and a count measures nothing. If you
+want a mechanical check that the filter engaged, compare the result set against the
+unfiltered tag: a plausible accent moves part of the list, a foreign one moves nearly all
+of it. The verdict you actually act on is still whether the returned sites feel like the
+direction, and that is a judgment the user makes by opening the link.
 
 This is the one place the lookup and the palette meet, and it exists because Awwwards
 turned out to have a color filter. Treat the verdict as a lead like any other fetch

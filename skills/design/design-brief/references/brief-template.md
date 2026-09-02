@@ -17,6 +17,11 @@ As of <date the lookup ran>. Direction: <direction name>
 <Why this one. Which axes it split from the other candidates on. What the deciding
 factor was.>
 
+## What would make this wrong
+
+<The fact that, if true, kills this direction. Not a risk register: one or two things
+that are actually checkable, each with what to switch to if it turns out true.>
+
 ## Tokens
 
 Modes: <both / light only on purpose / dark only on purpose>. If only one, say why in
@@ -60,7 +65,15 @@ Coolors: <url>
 page rather than read directly. Write "none" only if that is true.>
 ```
 
-## Why the last two sections exist
+## Why these sections exist
+
+**"What would make this wrong" is not optional, and it is heaviest when the brief holds
+one direction.** Step 4 attaches it to every candidate so the user can compare. When the
+user hands the choice over and the three collapse to one, it becomes the only thing left
+that lets them notice the answer does not fit their situation. Two independent
+verification runs on 2026-09-02 reached that branch, found no section for it here, and
+each invented one under a different name. A section the template omits is a section the
+next brief will omit.
 
 **All three dial rows are required.** Layout variance, motion intensity, and density map
 one-to-one onto `anti-slop-frontend`'s DESIGN_VARIANCE, MOTION_INTENSITY, and
